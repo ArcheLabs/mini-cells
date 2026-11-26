@@ -1,0 +1,89 @@
+{
+  "status": "FULL PASS",
+  "reason": null,
+  "model_identity": {
+    "model_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+    "model_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+    "architecture": "mom-gated-deltanet",
+    "mom_revision": "125038087b71b635c171cec857bd0f21d10955b6",
+    "tokenizer_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+    "tokenizer_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+    "tokenizer_hash": "90e3e115a745594abd2167554dcf472ea00d4852465c03b5482309d9036f4c49",
+    "tokenizer_files": {
+      "special_tokens_map.json": "4452b845ab9ca2afa863f59f1411a959e8a32bb4334e264b0e71d5d17dd4dcb9",
+      "tokenizer.json": "a2699839c243202a04a90537576fc719283f638e90fe80feb469888275289575",
+      "tokenizer_config.json": "cc3fdc5126e4d2e3a3934bc29779bf811c2eeefb60237017cddfd03acf9a7562"
+    },
+    "config_hash": "b99c19cdd75493abb6dfe0d5e991ebaac8d5af963b75c0ea2f73a6f496204341",
+    "weights_sha256": "08820287a91c2bc10f1fafe8b149dbf027ae51768530027c711dc240f7d53771",
+    "dtype": "float16",
+    "num_hidden_layers": 24,
+    "num_memories": 4,
+    "shared_memory": true,
+    "topk": 2,
+    "torch": "2.11.0+cu130",
+    "triton": "3.6.0",
+    "transformers": "4.51.3",
+    "flash-linear-attention": "0.2.2",
+    "parameters": 1552884000
+  },
+  "joined_artifacts": {
+    "model": "model_manifest.json",
+    "environment": "environment.json",
+    "schema": "cell_schema.json"
+  },
+  "gates": {
+    "A": "PASS",
+    "B": "PASS",
+    "C": "PASS",
+    "D": "PASS",
+    "E": "PASS",
+    "F": "PASS"
+  },
+  "maximum_measured_configurations": {
+    "auto": [
+      [
+        8,
+        1024,
+        128
+      ]
+    ],
+    "manual": [
+      [
+        8,
+        1024,
+        128
+      ]
+    ],
+    "no_memory": [
+      [
+        0,
+        1024,
+        128
+      ]
+    ]
+  },
+  "peak_device_bytes": 4472373248,
+  "peak_other_process_bytes": 0,
+  "runtime_gpu": {
+    "name": "Tesla T4",
+    "compute_capability": [
+      7,
+      5
+    ],
+    "cuda_runtime": "13.0",
+    "torch": "2.11.0+cu130",
+    "free_bytes": 15526068224,
+    "device_used": 473104384,
+    "device_total": 16106127360,
+    "other_processes": {},
+    "other_process_bytes": 0,
+    "allocated": 0,
+    "reserved": 0,
+    "cpu_rss": 526434304,
+    "threshold_bytes": 12884901888
+  },
+  "generation_quality": "NOT_EVALUATED",
+  "run_id": "minicells-t4-1b-capacity-001-33c9856baf45",
+  "timestamp": "2026-11-26T01:38:59.019948+00:00"
+}

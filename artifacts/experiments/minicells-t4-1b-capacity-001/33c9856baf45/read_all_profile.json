@@ -1,0 +1,2312 @@
+[
+  {
+    "registered_cells": 1,
+    "prompt_tokens": 128,
+    "requested_new_tokens": 0,
+    "mode": "auto",
+    "repetitions_expected": 1,
+    "trials": [
+      {
+        "kind": "warm_up",
+        "index": -1,
+        "seconds": 16.03253456499999,
+        "before": {
+          "device_used": 3700621312,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3106852864,
+          "reserved": 3120562176,
+          "cpu_rss": 2883801088
+        },
+        "after": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2921979904
+        },
+        "peak": {
+          "allocated": 3516725760,
+          "reserved": 3531603968,
+          "device_used": 4338155520
+        },
+        "peak_increase": {
+          "allocated": 3516725760,
+          "reserved": 3531603968,
+          "device_used": 3865051136
+        },
+        "other_process_peak": 0,
+        "device_sampler_errors": [],
+        "status": "PASS",
+        "scores": {
+          "177be714-0053-49d3-ba04-729c214f2793": 0.023468293249607086
+        },
+        "ranking": [
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "phases_seconds": {
+          "cell_load": 0.5381491760000472,
+          "independent_read": 15.475279394999916,
+          "norm_reduce": 0.00037547999988873926,
+          "selector": 2.5983999989875883e-05
+        },
+        "per_cell_seconds": {
+          "177be714-0053-49d3-ba04-729c214f2793": {
+            "cell_load": 0.5381491760000472,
+            "independent_read": 15.475279394999916,
+            "norm_reduce": 0.00037547999988873926
+          }
+        },
+        "selected_cell_ids": [
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "output_token_ids": [],
+        "eos_positions": [],
+        "peak_observed_recurrent_bytes": 125829120
+      },
+      {
+        "kind": "measured",
+        "index": 0,
+        "seconds": 0.9206696699999384,
+        "before": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2922041344
+        },
+        "after": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2922213376
+        },
+        "peak": {
+          "allocated": 3256119808,
+          "reserved": 3531603968,
+          "device_used": 4338155520
+        },
+        "peak_increase": {
+          "allocated": 3256119808,
+          "reserved": 3531603968,
+          "device_used": 3865051136
+        },
+        "other_process_peak": 0,
+        "device_sampler_errors": [],
+        "status": "PASS",
+        "scores": {
+          "177be714-0053-49d3-ba04-729c214f2793": 0.023468293249607086
+        },
+        "ranking": [
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "phases_seconds": {
+          "cell_load": 0.5218494030000329,
+          "independent_read": 0.3891229429999612,
+          "norm_reduce": 0.00026091400002314913,
+          "selector": 2.275299993925728e-05
+        },
+        "per_cell_seconds": {
+          "177be714-0053-49d3-ba04-729c214f2793": {
+            "cell_load": 0.5218494030000329,
+            "independent_read": 0.3891229429999612,
+            "norm_reduce": 0.00026091400002314913
+          }
+        },
+        "selected_cell_ids": [
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "output_token_ids": [],
+        "eos_positions": [],
+        "peak_observed_recurrent_bytes": 125829120
+      }
+    ],
+    "median_seconds": 0.9206696699999384,
+    "max_seconds": 0.9206696699999384,
+    "stddev_seconds": null
+  },
+  {
+    "registered_cells": 1,
+    "prompt_tokens": 512,
+    "requested_new_tokens": 0,
+    "mode": "auto",
+    "repetitions_expected": 1,
+    "trials": [
+      {
+        "kind": "warm_up",
+        "index": -1,
+        "seconds": 2.1328308220000736,
+        "before": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2922229760
+        },
+        "after": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2922852352
+        },
+        "peak": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 4338155520
+        },
+        "peak_increase": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 3865051136
+        },
+        "other_process_peak": 0,
+        "device_sampler_errors": [],
+        "status": "PASS",
+        "scores": {
+          "177be714-0053-49d3-ba04-729c214f2793": 0.023940190207213163
+        },
+        "ranking": [
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "phases_seconds": {
+          "cell_load": 0.5301610089999258,
+          "independent_read": 1.5903761080001004,
+          "norm_reduce": 0.0010236430000531982,
+          "selector": 2.0325000036791607e-05
+        },
+        "per_cell_seconds": {
+          "177be714-0053-49d3-ba04-729c214f2793": {
+            "cell_load": 0.5301610089999258,
+            "independent_read": 1.5903761080001004,
+            "norm_reduce": 0.0010236430000531982
+          }
+        },
+        "selected_cell_ids": [
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "output_token_ids": [],
+        "eos_positions": [],
+        "peak_observed_recurrent_bytes": 125829120
+      },
+      {
+        "kind": "measured",
+        "index": 0,
+        "seconds": 2.11494853399995,
+        "before": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2922864640
+        },
+        "after": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923139072
+        },
+        "peak": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 4338155520
+        },
+        "peak_increase": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 3865051136
+        },
+        "other_process_peak": 0,
+        "device_sampler_errors": [],
+        "status": "PASS",
+        "scores": {
+          "177be714-0053-49d3-ba04-729c214f2793": 0.023940190207213163
+        },
+        "ranking": [
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "phases_seconds": {
+          "cell_load": 0.5453567670000439,
+          "independent_read": 1.5576038550000249,
+          "norm_reduce": 0.0010564230000227326,
+          "selector": 1.8445000023348257e-05
+        },
+        "per_cell_seconds": {
+          "177be714-0053-49d3-ba04-729c214f2793": {
+            "cell_load": 0.5453567670000439,
+            "independent_read": 1.5576038550000249,
+            "norm_reduce": 0.0010564230000227326
+          }
+        },
+        "selected_cell_ids": [
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "output_token_ids": [],
+        "eos_positions": [],
+        "peak_observed_recurrent_bytes": 125829120
+      }
+    ],
+    "median_seconds": 2.11494853399995,
+    "max_seconds": 2.11494853399995,
+    "stddev_seconds": null
+  },
+  {
+    "registered_cells": 1,
+    "prompt_tokens": 1024,
+    "requested_new_tokens": 0,
+    "mode": "auto",
+    "repetitions_expected": 1,
+    "trials": [
+      {
+        "kind": "warm_up",
+        "index": -1,
+        "seconds": 3.695899914999927,
+        "before": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923151360
+        },
+        "after": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923397120
+        },
+        "peak": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 4338155520
+        },
+        "peak_increase": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 3865051136
+        },
+        "other_process_peak": 0,
+        "device_sampler_errors": [],
+        "status": "PASS",
+        "scores": {
+          "177be714-0053-49d3-ba04-729c214f2793": 0.024188058567233384
+        },
+        "ranking": [
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "phases_seconds": {
+          "cell_load": 0.5363521220000393,
+          "independent_read": 3.1463871320000862,
+          "norm_reduce": 0.0020796509999172486,
+          "selector": 1.816799999687646e-05
+        },
+        "per_cell_seconds": {
+          "177be714-0053-49d3-ba04-729c214f2793": {
+            "cell_load": 0.5363521220000393,
+            "independent_read": 3.1463871320000862,
+            "norm_reduce": 0.0020796509999172486
+          }
+        },
+        "selected_cell_ids": [
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "output_token_ids": [],
+        "eos_positions": [],
+        "peak_observed_recurrent_bytes": 125829120
+      },
+      {
+        "kind": "measured",
+        "index": 0,
+        "seconds": 3.67816520100007,
+        "before": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923397120
+        },
+        "after": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923491328
+        },
+        "peak": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 4338155520
+        },
+        "peak_increase": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 3865051136
+        },
+        "other_process_peak": 0,
+        "device_sampler_errors": [],
+        "status": "PASS",
+        "scores": {
+          "177be714-0053-49d3-ba04-729c214f2793": 0.024188058567233384
+        },
+        "ranking": [
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "phases_seconds": {
+          "cell_load": 0.5332454960000632,
+          "independent_read": 3.131042409000088,
+          "norm_reduce": 0.0020610779998833095,
+          "selector": 1.9909000002371613e-05
+        },
+        "per_cell_seconds": {
+          "177be714-0053-49d3-ba04-729c214f2793": {
+            "cell_load": 0.5332454960000632,
+            "independent_read": 3.131042409000088,
+            "norm_reduce": 0.0020610779998833095
+          }
+        },
+        "selected_cell_ids": [
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "output_token_ids": [],
+        "eos_positions": [],
+        "peak_observed_recurrent_bytes": 125829120
+      }
+    ],
+    "median_seconds": 3.67816520100007,
+    "max_seconds": 3.67816520100007,
+    "stddev_seconds": null
+  },
+  {
+    "registered_cells": 2,
+    "prompt_tokens": 128,
+    "requested_new_tokens": 0,
+    "mode": "auto",
+    "repetitions_expected": 1,
+    "trials": [
+      {
+        "kind": "warm_up",
+        "index": -1,
+        "seconds": 1.9068915450000077,
+        "before": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923548672
+        },
+        "after": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923548672
+        },
+        "peak": {
+          "allocated": 3256119808,
+          "reserved": 3531603968,
+          "device_used": 4338155520
+        },
+        "peak_increase": {
+          "allocated": 3256119808,
+          "reserved": 3531603968,
+          "device_used": 3865051136
+        },
+        "other_process_peak": 0,
+        "device_sampler_errors": [],
+        "status": "PASS",
+        "scores": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": 0.023468293249607086,
+          "177be714-0053-49d3-ba04-729c214f2793": 0.023468293249607086
+        },
+        "ranking": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "phases_seconds": {
+          "cell_load": 1.0820649979999644,
+          "independent_read": 0.8028384190000679,
+          "norm_reduce": 0.000566414999866538,
+          "selector": 2.125799994701083e-05
+        },
+        "per_cell_seconds": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": {
+            "cell_load": 0.5209912200000417,
+            "independent_read": 0.4145098300000427,
+            "norm_reduce": 0.00028981299988117826
+          },
+          "177be714-0053-49d3-ba04-729c214f2793": {
+            "cell_load": 0.5610737779999226,
+            "independent_read": 0.3883285890000252,
+            "norm_reduce": 0.0002766019999853597
+          }
+        },
+        "selected_cell_ids": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "output_token_ids": [],
+        "eos_positions": [],
+        "peak_observed_recurrent_bytes": 125829120
+      },
+      {
+        "kind": "measured",
+        "index": 0,
+        "seconds": 1.8699601299999813,
+        "before": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923548672
+        },
+        "after": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923565056
+        },
+        "peak": {
+          "allocated": 3256119808,
+          "reserved": 3531603968,
+          "device_used": 4338155520
+        },
+        "peak_increase": {
+          "allocated": 3256119808,
+          "reserved": 3531603968,
+          "device_used": 3865051136
+        },
+        "other_process_peak": 0,
+        "device_sampler_errors": [],
+        "status": "PASS",
+        "scores": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": 0.023468293249607086,
+          "177be714-0053-49d3-ba04-729c214f2793": 0.023468293249607086
+        },
+        "ranking": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "phases_seconds": {
+          "cell_load": 1.076916385000004,
+          "independent_read": 0.771952156999987,
+          "norm_reduce": 0.0005335140000397587,
+          "selector": 2.1730999947067176e-05
+        },
+        "per_cell_seconds": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": {
+            "cell_load": 0.5386010409999926,
+            "independent_read": 0.3859967339999457,
+            "norm_reduce": 0.0002541080000355578
+          },
+          "177be714-0053-49d3-ba04-729c214f2793": {
+            "cell_load": 0.5383153440000115,
+            "independent_read": 0.38595542300004126,
+            "norm_reduce": 0.0002794060000042009
+          }
+        },
+        "selected_cell_ids": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "output_token_ids": [],
+        "eos_positions": [],
+        "peak_observed_recurrent_bytes": 125829120
+      }
+    ],
+    "median_seconds": 1.8699601299999813,
+    "max_seconds": 1.8699601299999813,
+    "stddev_seconds": null
+  },
+  {
+    "registered_cells": 2,
+    "prompt_tokens": 512,
+    "requested_new_tokens": 0,
+    "mode": "auto",
+    "repetitions_expected": 1,
+    "trials": [
+      {
+        "kind": "warm_up",
+        "index": -1,
+        "seconds": 4.2280933880000475,
+        "before": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923597824
+        },
+        "after": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923679744
+        },
+        "peak": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 4338155520
+        },
+        "peak_increase": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 3865051136
+        },
+        "other_process_peak": 0,
+        "device_sampler_errors": [],
+        "status": "PASS",
+        "scores": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": 0.023940190207213163,
+          "177be714-0053-49d3-ba04-729c214f2793": 0.023940190207213163
+        },
+        "ranking": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "phases_seconds": {
+          "cell_load": 1.0598796540000421,
+          "independent_read": 3.1445323390000794,
+          "norm_reduce": 0.002034315999935643,
+          "selector": 1.8824999983735324e-05
+        },
+        "per_cell_seconds": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": {
+            "cell_load": 0.5331654039999876,
+            "independent_read": 1.6037064740000915,
+            "norm_reduce": 0.0010123309999698904
+          },
+          "177be714-0053-49d3-ba04-729c214f2793": {
+            "cell_load": 0.5267142500000546,
+            "independent_read": 1.540825864999988,
+            "norm_reduce": 0.0010219849999657526
+          }
+        },
+        "selected_cell_ids": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "output_token_ids": [],
+        "eos_positions": [],
+        "peak_observed_recurrent_bytes": 125829120
+      },
+      {
+        "kind": "measured",
+        "index": 0,
+        "seconds": 4.093619454999953,
+        "before": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923720704
+        },
+        "after": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923782144
+        },
+        "peak": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 4338155520
+        },
+        "peak_increase": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 3865051136
+        },
+        "other_process_peak": 0,
+        "device_sampler_errors": [],
+        "status": "PASS",
+        "scores": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": 0.023940190207213163,
+          "177be714-0053-49d3-ba04-729c214f2793": 0.023940190207213163
+        },
+        "ranking": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "phases_seconds": {
+          "cell_load": 1.0364355929999647,
+          "independent_read": 3.0340274970001246,
+          "norm_reduce": 0.00208655300002647,
+          "selector": 2.0411000036801852e-05
+        },
+        "per_cell_seconds": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": {
+            "cell_load": 0.5171136559999923,
+            "independent_read": 1.5236896849997947,
+            "norm_reduce": 0.0010635199998887401
+          },
+          "177be714-0053-49d3-ba04-729c214f2793": {
+            "cell_load": 0.5193219369999724,
+            "independent_read": 1.51033781200033,
+            "norm_reduce": 0.0010230330001377297
+          }
+        },
+        "selected_cell_ids": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "output_token_ids": [],
+        "eos_positions": [],
+        "peak_observed_recurrent_bytes": 125829120
+      }
+    ],
+    "median_seconds": 4.093619454999953,
+    "max_seconds": 4.093619454999953,
+    "stddev_seconds": null
+  },
+  {
+    "registered_cells": 2,
+    "prompt_tokens": 1024,
+    "requested_new_tokens": 0,
+    "mode": "auto",
+    "repetitions_expected": 1,
+    "trials": [
+      {
+        "kind": "warm_up",
+        "index": -1,
+        "seconds": 7.29289393199997,
+        "before": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923782144
+        },
+        "after": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923786240
+        },
+        "peak": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 4338155520
+        },
+        "peak_increase": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 3865051136
+        },
+        "other_process_peak": 0,
+        "device_sampler_errors": [],
+        "status": "PASS",
+        "scores": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": 0.024188058567233384,
+          "177be714-0053-49d3-ba04-729c214f2793": 0.024188058567233384
+        },
+        "ranking": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "phases_seconds": {
+          "cell_load": 1.0617111120000118,
+          "independent_read": 6.204452223000317,
+          "norm_reduce": 0.004239151000319907,
+          "selector": 1.9533999989107542e-05
+        },
+        "per_cell_seconds": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": {
+            "cell_load": 0.5318035599999575,
+            "independent_read": 3.1583734130002767,
+            "norm_reduce": 0.0021204670002816783
+          },
+          "177be714-0053-49d3-ba04-729c214f2793": {
+            "cell_load": 0.5299075520000542,
+            "independent_read": 3.04607881000004,
+            "norm_reduce": 0.002118684000038229
+          }
+        },
+        "selected_cell_ids": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "output_token_ids": [],
+        "eos_positions": [],
+        "peak_observed_recurrent_bytes": 125829120
+      },
+      {
+        "kind": "measured",
+        "index": 0,
+        "seconds": 7.2539095939999925,
+        "before": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923786240
+        },
+        "after": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923786240
+        },
+        "peak": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 4338155520
+        },
+        "peak_increase": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 3865051136
+        },
+        "other_process_peak": 0,
+        "device_sampler_errors": [],
+        "status": "PASS",
+        "scores": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": 0.024188058567233384,
+          "177be714-0053-49d3-ba04-729c214f2793": 0.024188058567233384
+        },
+        "ranking": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "phases_seconds": {
+          "cell_load": 1.042034445000013,
+          "independent_read": 6.185160863999727,
+          "norm_reduce": 0.004140859000244745,
+          "selector": 2.173600000787701e-05
+        },
+        "per_cell_seconds": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": {
+            "cell_load": 0.5244043400000464,
+            "independent_read": 3.0947100259998024,
+            "norm_reduce": 0.0020519309999826874
+          },
+          "177be714-0053-49d3-ba04-729c214f2793": {
+            "cell_load": 0.5176301049999665,
+            "independent_read": 3.0904508379999243,
+            "norm_reduce": 0.002088928000262058
+          }
+        },
+        "selected_cell_ids": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "output_token_ids": [],
+        "eos_positions": [],
+        "peak_observed_recurrent_bytes": 125829120
+      }
+    ],
+    "median_seconds": 7.2539095939999925,
+    "max_seconds": 7.2539095939999925,
+    "stddev_seconds": null
+  },
+  {
+    "registered_cells": 4,
+    "prompt_tokens": 128,
+    "requested_new_tokens": 0,
+    "mode": "auto",
+    "repetitions_expected": 1,
+    "trials": [
+      {
+        "kind": "warm_up",
+        "index": -1,
+        "seconds": 3.753930557999979,
+        "before": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923790336
+        },
+        "after": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923814912
+        },
+        "peak": {
+          "allocated": 3256119808,
+          "reserved": 3531603968,
+          "device_used": 4338155520
+        },
+        "peak_increase": {
+          "allocated": 3256119808,
+          "reserved": 3531603968,
+          "device_used": 3865051136
+        },
+        "other_process_peak": 0,
+        "device_sampler_errors": [],
+        "status": "PASS",
+        "scores": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": 0.023468293249607086,
+          "177be714-0053-49d3-ba04-729c214f2793": 0.023468293249607086,
+          "8c210d4c-27e9-4265-9f5b-563089389169": 0.023468293249607086,
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": 0.023468293249607086
+        },
+        "ranking": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "177be714-0053-49d3-ba04-729c214f2793",
+          "8c210d4c-27e9-4265-9f5b-563089389169",
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51"
+        ],
+        "phases_seconds": {
+          "cell_load": 2.126807817000099,
+          "independent_read": 1.5849133529998198,
+          "norm_reduce": 0.0010501769997972588,
+          "selector": 2.6868000077229226e-05
+        },
+        "per_cell_seconds": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": {
+            "cell_load": 0.522493207000025,
+            "independent_read": 0.3960606559999178,
+            "norm_reduce": 0.00024629999995795515
+          },
+          "177be714-0053-49d3-ba04-729c214f2793": {
+            "cell_load": 0.537495272000001,
+            "independent_read": 0.40187572099989666,
+            "norm_reduce": 0.0002555930000198714
+          },
+          "8c210d4c-27e9-4265-9f5b-563089389169": {
+            "cell_load": 0.5375722840000208,
+            "independent_read": 0.3898424149999755,
+            "norm_reduce": 0.0003059639999491992
+          },
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": {
+            "cell_load": 0.5292470540000522,
+            "independent_read": 0.39713456100002986,
+            "norm_reduce": 0.000242319999870233
+          }
+        },
+        "selected_cell_ids": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "output_token_ids": [],
+        "eos_positions": [],
+        "peak_observed_recurrent_bytes": 125829120
+      },
+      {
+        "kind": "measured",
+        "index": 0,
+        "seconds": 3.7731121709999798,
+        "before": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923855872
+        },
+        "after": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923925504
+        },
+        "peak": {
+          "allocated": 3256119808,
+          "reserved": 3531603968,
+          "device_used": 4338155520
+        },
+        "peak_increase": {
+          "allocated": 3256119808,
+          "reserved": 3531603968,
+          "device_used": 3865051136
+        },
+        "other_process_peak": 0,
+        "device_sampler_errors": [],
+        "status": "PASS",
+        "scores": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": 0.023468293249607086,
+          "177be714-0053-49d3-ba04-729c214f2793": 0.023468293249607086,
+          "8c210d4c-27e9-4265-9f5b-563089389169": 0.023468293249607086,
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": 0.023468293249607086
+        },
+        "ranking": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "177be714-0053-49d3-ba04-729c214f2793",
+          "8c210d4c-27e9-4265-9f5b-563089389169",
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51"
+        ],
+        "phases_seconds": {
+          "cell_load": 2.105523428999959,
+          "independent_read": 1.6251372819999688,
+          "norm_reduce": 0.0010134020002396937,
+          "selector": 2.2037999997337465e-05
+        },
+        "per_cell_seconds": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": {
+            "cell_load": 0.5217188230000147,
+            "independent_read": 0.39030702900004144,
+            "norm_reduce": 0.0002685310000742902
+          },
+          "177be714-0053-49d3-ba04-729c214f2793": {
+            "cell_load": 0.5157460660000197,
+            "independent_read": 0.40800825999997414,
+            "norm_reduce": 0.00024185100005524873
+          },
+          "8c210d4c-27e9-4265-9f5b-563089389169": {
+            "cell_load": 0.5249832939999806,
+            "independent_read": 0.42200638199994955,
+            "norm_reduce": 0.00024782500008768693
+          },
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": {
+            "cell_load": 0.543075245999944,
+            "independent_read": 0.40481561100000363,
+            "norm_reduce": 0.00025519500002246787
+          }
+        },
+        "selected_cell_ids": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "output_token_ids": [],
+        "eos_positions": [],
+        "peak_observed_recurrent_bytes": 125829120
+      }
+    ],
+    "median_seconds": 3.7731121709999798,
+    "max_seconds": 3.7731121709999798,
+    "stddev_seconds": null
+  },
+  {
+    "registered_cells": 4,
+    "prompt_tokens": 512,
+    "requested_new_tokens": 0,
+    "mode": "auto",
+    "repetitions_expected": 1,
+    "trials": [
+      {
+        "kind": "warm_up",
+        "index": -1,
+        "seconds": 8.444372966999936,
+        "before": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923925504
+        },
+        "after": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923929600
+        },
+        "peak": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 4338155520
+        },
+        "peak_increase": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 3865051136
+        },
+        "other_process_peak": 0,
+        "device_sampler_errors": [],
+        "status": "PASS",
+        "scores": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": 0.023940190207213163,
+          "177be714-0053-49d3-ba04-729c214f2793": 0.023940190207213163,
+          "8c210d4c-27e9-4265-9f5b-563089389169": 0.023940190207213163,
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": 0.023940190207213163
+        },
+        "ranking": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "177be714-0053-49d3-ba04-729c214f2793",
+          "8c210d4c-27e9-4265-9f5b-563089389169",
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51"
+        ],
+        "phases_seconds": {
+          "cell_load": 2.108919080000078,
+          "independent_read": 6.287256102999777,
+          "norm_reduce": 0.004566063999618564,
+          "selector": 2.2037999997337465e-05
+        },
+        "per_cell_seconds": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": {
+            "cell_load": 0.5182452210000292,
+            "independent_read": 1.536590373000081,
+            "norm_reduce": 0.001022433999878558
+          },
+          "177be714-0053-49d3-ba04-729c214f2793": {
+            "cell_load": 0.5281913850000137,
+            "independent_read": 1.5796607009997388,
+            "norm_reduce": 0.0011171029999559323
+          },
+          "8c210d4c-27e9-4265-9f5b-563089389169": {
+            "cell_load": 0.5352902050000239,
+            "independent_read": 1.6222512639998286,
+            "norm_reduce": 0.0012857829999575188
+          },
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": {
+            "cell_load": 0.527192269000011,
+            "independent_read": 1.5487537650001286,
+            "norm_reduce": 0.0011407439998265545
+          }
+        },
+        "selected_cell_ids": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "output_token_ids": [],
+        "eos_positions": [],
+        "peak_observed_recurrent_bytes": 125829120
+      },
+      {
+        "kind": "measured",
+        "index": 0,
+        "seconds": 8.350772948999975,
+        "before": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923929600
+        },
+        "after": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923933696
+        },
+        "peak": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 4338155520
+        },
+        "peak_increase": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 3865051136
+        },
+        "other_process_peak": 0,
+        "device_sampler_errors": [],
+        "status": "PASS",
+        "scores": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": 0.023940190207213163,
+          "177be714-0053-49d3-ba04-729c214f2793": 0.023940190207213163,
+          "8c210d4c-27e9-4265-9f5b-563089389169": 0.023940190207213163,
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": 0.023940190207213163
+        },
+        "ranking": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "177be714-0053-49d3-ba04-729c214f2793",
+          "8c210d4c-27e9-4265-9f5b-563089389169",
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51"
+        ],
+        "phases_seconds": {
+          "cell_load": 2.105404318000069,
+          "independent_read": 6.198861674000341,
+          "norm_reduce": 0.004218722000246089,
+          "selector": 2.1704000005229318e-05
+        },
+        "per_cell_seconds": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": {
+            "cell_load": 0.5152878970000074,
+            "independent_read": 1.5414945030000808,
+            "norm_reduce": 0.001029281000114679
+          },
+          "177be714-0053-49d3-ba04-729c214f2793": {
+            "cell_load": 0.5122526840000319,
+            "independent_read": 1.5335651530000405,
+            "norm_reduce": 0.0009993080000185728
+          },
+          "8c210d4c-27e9-4265-9f5b-563089389169": {
+            "cell_load": 0.5546598219999623,
+            "independent_read": 1.5839752440001575,
+            "norm_reduce": 0.0011268150001342292
+          },
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": {
+            "cell_load": 0.5232039150000674,
+            "independent_read": 1.539826774000062,
+            "norm_reduce": 0.001063317999978608
+          }
+        },
+        "selected_cell_ids": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "output_token_ids": [],
+        "eos_positions": [],
+        "peak_observed_recurrent_bytes": 125829120
+      }
+    ],
+    "median_seconds": 8.350772948999975,
+    "max_seconds": 8.350772948999975,
+    "stddev_seconds": null
+  },
+  {
+    "registered_cells": 4,
+    "prompt_tokens": 1024,
+    "requested_new_tokens": 0,
+    "mode": "auto",
+    "repetitions_expected": 1,
+    "trials": [
+      {
+        "kind": "warm_up",
+        "index": -1,
+        "seconds": 14.509426673999997,
+        "before": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923933696
+        },
+        "after": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923937792
+        },
+        "peak": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 4338155520
+        },
+        "peak_increase": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 3865051136
+        },
+        "other_process_peak": 0,
+        "device_sampler_errors": [],
+        "status": "PASS",
+        "scores": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": 0.024188058567233384,
+          "177be714-0053-49d3-ba04-729c214f2793": 0.024188058567233384,
+          "8c210d4c-27e9-4265-9f5b-563089389169": 0.024188058567233384,
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": 0.024188058567233384
+        },
+        "ranking": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "177be714-0053-49d3-ba04-729c214f2793",
+          "8c210d4c-27e9-4265-9f5b-563089389169",
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51"
+        ],
+        "phases_seconds": {
+          "cell_load": 2.1032959930000743,
+          "independent_read": 12.349629442999912,
+          "norm_reduce": 0.008414099000106035,
+          "selector": 2.2299999955066596e-05
+        },
+        "per_cell_seconds": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": {
+            "cell_load": 0.5167630400000007,
+            "independent_read": 3.0905052490001026,
+            "norm_reduce": 0.0020992769999566008
+          },
+          "177be714-0053-49d3-ba04-729c214f2793": {
+            "cell_load": 0.5361062719999836,
+            "independent_read": 3.0657641010000134,
+            "norm_reduce": 0.002213813000139453
+          },
+          "8c210d4c-27e9-4265-9f5b-563089389169": {
+            "cell_load": 0.5216564360000575,
+            "independent_read": 3.0701704020000307,
+            "norm_reduce": 0.0020460689999026727
+          },
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": {
+            "cell_load": 0.5287702450000324,
+            "independent_read": 3.123189690999766,
+            "norm_reduce": 0.002054940000107308
+          }
+        },
+        "selected_cell_ids": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "output_token_ids": [],
+        "eos_positions": [],
+        "peak_observed_recurrent_bytes": 125829120
+      },
+      {
+        "kind": "measured",
+        "index": 0,
+        "seconds": 14.41842856300002,
+        "before": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923941888
+        },
+        "after": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923954176
+        },
+        "peak": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 4338155520
+        },
+        "peak_increase": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 3865051136
+        },
+        "other_process_peak": 0,
+        "device_sampler_errors": [],
+        "status": "PASS",
+        "scores": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": 0.024188058567233384,
+          "177be714-0053-49d3-ba04-729c214f2793": 0.024188058567233384,
+          "8c210d4c-27e9-4265-9f5b-563089389169": 0.024188058567233384,
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": 0.024188058567233384
+        },
+        "ranking": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "177be714-0053-49d3-ba04-729c214f2793",
+          "8c210d4c-27e9-4265-9f5b-563089389169",
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51"
+        ],
+        "phases_seconds": {
+          "cell_load": 2.0755613650001123,
+          "independent_read": 12.290888648999612,
+          "norm_reduce": 0.008313801999975112,
+          "selector": 2.0225000071150134e-05
+        },
+        "per_cell_seconds": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": {
+            "cell_load": 0.5132170680000172,
+            "independent_read": 3.0578788369999756,
+            "norm_reduce": 0.002018705999944359
+          },
+          "177be714-0053-49d3-ba04-729c214f2793": {
+            "cell_load": 0.5326249800000369,
+            "independent_read": 3.152932160999967,
+            "norm_reduce": 0.002104331999930764
+          },
+          "8c210d4c-27e9-4265-9f5b-563089389169": {
+            "cell_load": 0.5171433049999905,
+            "independent_read": 3.049977056999751,
+            "norm_reduce": 0.002032949000067674
+          },
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": {
+            "cell_load": 0.5125760120000677,
+            "independent_read": 3.0301005939999186,
+            "norm_reduce": 0.002157815000032315
+          }
+        },
+        "selected_cell_ids": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "177be714-0053-49d3-ba04-729c214f2793"
+        ],
+        "output_token_ids": [],
+        "eos_positions": [],
+        "peak_observed_recurrent_bytes": 125829120
+      }
+    ],
+    "median_seconds": 14.41842856300002,
+    "max_seconds": 14.41842856300002,
+    "stddev_seconds": null
+  },
+  {
+    "registered_cells": 8,
+    "prompt_tokens": 128,
+    "requested_new_tokens": 0,
+    "mode": "auto",
+    "repetitions_expected": 1,
+    "trials": [
+      {
+        "kind": "warm_up",
+        "index": -1,
+        "seconds": 7.323568841999986,
+        "before": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923954176
+        },
+        "after": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923954176
+        },
+        "peak": {
+          "allocated": 3256119808,
+          "reserved": 3531603968,
+          "device_used": 4338155520
+        },
+        "peak_increase": {
+          "allocated": 3256119808,
+          "reserved": 3531603968,
+          "device_used": 3865051136
+        },
+        "other_process_peak": 0,
+        "device_sampler_errors": [],
+        "status": "PASS",
+        "scores": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": 0.023468293249607086,
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1": 0.023468293249607086,
+          "177be714-0053-49d3-ba04-729c214f2793": 0.023468293249607086,
+          "6f4f893f-8e52-4415-8918-fbd986610d76": 0.023468293249607086,
+          "8c210d4c-27e9-4265-9f5b-563089389169": 0.023468293249607086,
+          "9442f8aa-5502-40ca-bbb1-aa708c93721d": 0.023468293249607086,
+          "aed68a37-3a9b-4b64-8d47-2c9518805f4c": 0.023468293249607086,
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": 0.023468293249607086
+        },
+        "ranking": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1",
+          "177be714-0053-49d3-ba04-729c214f2793",
+          "6f4f893f-8e52-4415-8918-fbd986610d76",
+          "8c210d4c-27e9-4265-9f5b-563089389169",
+          "9442f8aa-5502-40ca-bbb1-aa708c93721d",
+          "aed68a37-3a9b-4b64-8d47-2c9518805f4c",
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51"
+        ],
+        "phases_seconds": {
+          "cell_load": 4.132109319999927,
+          "independent_read": 3.1081178269998873,
+          "norm_reduce": 0.0020694230000799507,
+          "selector": 2.4376000055781333e-05
+        },
+        "per_cell_seconds": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": {
+            "cell_load": 0.5131333169999834,
+            "independent_read": 0.38462224000011247,
+            "norm_reduce": 0.00027910500000416505
+          },
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1": {
+            "cell_load": 0.5169838430000482,
+            "independent_read": 0.38452522900001895,
+            "norm_reduce": 0.00024088300006042118
+          },
+          "177be714-0053-49d3-ba04-729c214f2793": {
+            "cell_load": 0.5174117830000569,
+            "independent_read": 0.38976900900001965,
+            "norm_reduce": 0.0002471960000320905
+          },
+          "6f4f893f-8e52-4415-8918-fbd986610d76": {
+            "cell_load": 0.528110854999909,
+            "independent_read": 0.3855042200000298,
+            "norm_reduce": 0.0002795949999381264
+          },
+          "8c210d4c-27e9-4265-9f5b-563089389169": {
+            "cell_load": 0.513192940999943,
+            "independent_read": 0.3874038199999177,
+            "norm_reduce": 0.00024441599987312657
+          },
+          "9442f8aa-5502-40ca-bbb1-aa708c93721d": {
+            "cell_load": 0.5170652110000447,
+            "independent_read": 0.3910788649999404,
+            "norm_reduce": 0.00024537800004509336
+          },
+          "aed68a37-3a9b-4b64-8d47-2c9518805f4c": {
+            "cell_load": 0.5153478419999828,
+            "independent_read": 0.3902579659999219,
+            "norm_reduce": 0.0002490210000587467
+          },
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": {
+            "cell_load": 0.5108635279999589,
+            "independent_read": 0.3949564779999264,
+            "norm_reduce": 0.0002838290000681809
+          }
+        },
+        "selected_cell_ids": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1"
+        ],
+        "output_token_ids": [],
+        "eos_positions": [],
+        "peak_observed_recurrent_bytes": 125829120
+      },
+      {
+        "kind": "measured",
+        "index": 0,
+        "seconds": 7.498419117000026,
+        "before": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923954176
+        },
+        "after": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923958272
+        },
+        "peak": {
+          "allocated": 3256119808,
+          "reserved": 3531603968,
+          "device_used": 4338155520
+        },
+        "peak_increase": {
+          "allocated": 3256119808,
+          "reserved": 3531603968,
+          "device_used": 3865051136
+        },
+        "other_process_peak": 0,
+        "device_sampler_errors": [],
+        "status": "PASS",
+        "scores": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": 0.023468293249607086,
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1": 0.023468293249607086,
+          "177be714-0053-49d3-ba04-729c214f2793": 0.023468293249607086,
+          "6f4f893f-8e52-4415-8918-fbd986610d76": 0.023468293249607086,
+          "8c210d4c-27e9-4265-9f5b-563089389169": 0.023468293249607086,
+          "9442f8aa-5502-40ca-bbb1-aa708c93721d": 0.023468293249607086,
+          "aed68a37-3a9b-4b64-8d47-2c9518805f4c": 0.023468293249607086,
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": 0.023468293249607086
+        },
+        "ranking": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1",
+          "177be714-0053-49d3-ba04-729c214f2793",
+          "6f4f893f-8e52-4415-8918-fbd986610d76",
+          "8c210d4c-27e9-4265-9f5b-563089389169",
+          "9442f8aa-5502-40ca-bbb1-aa708c93721d",
+          "aed68a37-3a9b-4b64-8d47-2c9518805f4c",
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51"
+        ],
+        "phases_seconds": {
+          "cell_load": 4.259504210000273,
+          "independent_read": 3.1533781060001047,
+          "norm_reduce": 0.002243496000119194,
+          "selector": 2.326599997104495e-05
+        },
+        "per_cell_seconds": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": {
+            "cell_load": 0.5194220939999923,
+            "independent_read": 0.3935481810000283,
+            "norm_reduce": 0.00030242200000429875
+          },
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1": {
+            "cell_load": 0.5214149660000658,
+            "independent_read": 0.39132499600009396,
+            "norm_reduce": 0.00038980300007551705
+          },
+          "177be714-0053-49d3-ba04-729c214f2793": {
+            "cell_load": 0.5236176620001061,
+            "independent_read": 0.39438002200006395,
+            "norm_reduce": 0.00023810899995169166
+          },
+          "6f4f893f-8e52-4415-8918-fbd986610d76": {
+            "cell_load": 0.5232745830001022,
+            "independent_read": 0.39173294099998657,
+            "norm_reduce": 0.0002647370000659066
+          },
+          "8c210d4c-27e9-4265-9f5b-563089389169": {
+            "cell_load": 0.5472643699999935,
+            "independent_read": 0.40489222299993344,
+            "norm_reduce": 0.0002822830000468457
+          },
+          "9442f8aa-5502-40ca-bbb1-aa708c93721d": {
+            "cell_load": 0.5769460349999918,
+            "independent_read": 0.4001031899999816,
+            "norm_reduce": 0.00025283200000103534
+          },
+          "aed68a37-3a9b-4b64-8d47-2c9518805f4c": {
+            "cell_load": 0.5267096300000276,
+            "independent_read": 0.3877551020000283,
+            "norm_reduce": 0.000264680999976008
+          },
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": {
+            "cell_load": 0.5208548699999938,
+            "independent_read": 0.3896414509999886,
+            "norm_reduce": 0.0002486289999978908
+          }
+        },
+        "selected_cell_ids": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1"
+        ],
+        "output_token_ids": [],
+        "eos_positions": [],
+        "peak_observed_recurrent_bytes": 125829120
+      }
+    ],
+    "median_seconds": 7.498419117000026,
+    "max_seconds": 7.498419117000026,
+    "stddev_seconds": null
+  },
+  {
+    "registered_cells": 8,
+    "prompt_tokens": 512,
+    "requested_new_tokens": 0,
+    "mode": "auto",
+    "repetitions_expected": 1,
+    "trials": [
+      {
+        "kind": "warm_up",
+        "index": -1,
+        "seconds": 16.684385550000002,
+        "before": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923958272
+        },
+        "after": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923962368
+        },
+        "peak": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 4338155520
+        },
+        "peak_increase": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 3865051136
+        },
+        "other_process_peak": 0,
+        "device_sampler_errors": [],
+        "status": "PASS",
+        "scores": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": 0.023940190207213163,
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1": 0.023940190207213163,
+          "177be714-0053-49d3-ba04-729c214f2793": 0.023940190207213163,
+          "6f4f893f-8e52-4415-8918-fbd986610d76": 0.023940190207213163,
+          "8c210d4c-27e9-4265-9f5b-563089389169": 0.023940190207213163,
+          "9442f8aa-5502-40ca-bbb1-aa708c93721d": 0.023940190207213163,
+          "aed68a37-3a9b-4b64-8d47-2c9518805f4c": 0.023940190207213163,
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": 0.023940190207213163
+        },
+        "ranking": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1",
+          "177be714-0053-49d3-ba04-729c214f2793",
+          "6f4f893f-8e52-4415-8918-fbd986610d76",
+          "8c210d4c-27e9-4265-9f5b-563089389169",
+          "9442f8aa-5502-40ca-bbb1-aa708c93721d",
+          "aed68a37-3a9b-4b64-8d47-2c9518805f4c",
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51"
+        ],
+        "phases_seconds": {
+          "cell_load": 4.183973683000204,
+          "independent_read": 12.397602799999731,
+          "norm_reduce": 0.00865498300049694,
+          "selector": 2.3734000023978297e-05
+        },
+        "per_cell_seconds": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": {
+            "cell_load": 0.5223107990000244,
+            "independent_read": 1.5712954919998765,
+            "norm_reduce": 0.0010930050000297342
+          },
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1": {
+            "cell_load": 0.5278594530000191,
+            "independent_read": 1.532136957000148,
+            "norm_reduce": 0.001046599000119386
+          },
+          "177be714-0053-49d3-ba04-729c214f2793": {
+            "cell_load": 0.5311729080000305,
+            "independent_read": 1.5682005700001582,
+            "norm_reduce": 0.0012936170001012215
+          },
+          "6f4f893f-8e52-4415-8918-fbd986610d76": {
+            "cell_load": 0.5255907990000424,
+            "independent_read": 1.5340653020000445,
+            "norm_reduce": 0.0010306409999429889
+          },
+          "8c210d4c-27e9-4265-9f5b-563089389169": {
+            "cell_load": 0.5183772619999445,
+            "independent_read": 1.5580950299997767,
+            "norm_reduce": 0.0010287620001463438
+          },
+          "9442f8aa-5502-40ca-bbb1-aa708c93721d": {
+            "cell_load": 0.519311812000069,
+            "independent_read": 1.5578692020000062,
+            "norm_reduce": 0.00108879199990497
+          },
+          "aed68a37-3a9b-4b64-8d47-2c9518805f4c": {
+            "cell_load": 0.5182296790000009,
+            "independent_read": 1.5290467169999147,
+            "norm_reduce": 0.0009583910001538243
+          },
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": {
+            "cell_load": 0.521120971000073,
+            "independent_read": 1.5468935299998066,
+            "norm_reduce": 0.0011151760000984723
+          }
+        },
+        "selected_cell_ids": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1"
+        ],
+        "output_token_ids": [],
+        "eos_positions": [],
+        "peak_observed_recurrent_bytes": 125829120
+      },
+      {
+        "kind": "measured",
+        "index": 0,
+        "seconds": 16.708292131999997,
+        "before": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923962368
+        },
+        "after": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923995136
+        },
+        "peak": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 4338155520
+        },
+        "peak_increase": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 3865051136
+        },
+        "other_process_peak": 0,
+        "device_sampler_errors": [],
+        "status": "PASS",
+        "scores": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": 0.023940190207213163,
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1": 0.023940190207213163,
+          "177be714-0053-49d3-ba04-729c214f2793": 0.023940190207213163,
+          "6f4f893f-8e52-4415-8918-fbd986610d76": 0.023940190207213163,
+          "8c210d4c-27e9-4265-9f5b-563089389169": 0.023940190207213163,
+          "9442f8aa-5502-40ca-bbb1-aa708c93721d": 0.023940190207213163,
+          "aed68a37-3a9b-4b64-8d47-2c9518805f4c": 0.023940190207213163,
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": 0.023940190207213163
+        },
+        "ranking": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1",
+          "177be714-0053-49d3-ba04-729c214f2793",
+          "6f4f893f-8e52-4415-8918-fbd986610d76",
+          "8c210d4c-27e9-4265-9f5b-563089389169",
+          "9442f8aa-5502-40ca-bbb1-aa708c93721d",
+          "aed68a37-3a9b-4b64-8d47-2c9518805f4c",
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51"
+        ],
+        "phases_seconds": {
+          "cell_load": 4.197199375000082,
+          "independent_read": 12.418128266000394,
+          "norm_reduce": 0.00835591900010968,
+          "selector": 2.4295000002894085e-05
+        },
+        "per_cell_seconds": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": {
+            "cell_load": 0.5281343179999567,
+            "independent_read": 1.562816120999969,
+            "norm_reduce": 0.0010156280000046536
+          },
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1": {
+            "cell_load": 0.534960020000085,
+            "independent_read": 1.5593000600001687,
+            "norm_reduce": 0.00119963400004508
+          },
+          "177be714-0053-49d3-ba04-729c214f2793": {
+            "cell_load": 0.5261300299999903,
+            "independent_read": 1.5795008430000053,
+            "norm_reduce": 0.0010161890000972562
+          },
+          "6f4f893f-8e52-4415-8918-fbd986610d76": {
+            "cell_load": 0.5284546030000001,
+            "independent_read": 1.5415390389999857,
+            "norm_reduce": 0.0010353540000096473
+          },
+          "8c210d4c-27e9-4265-9f5b-563089389169": {
+            "cell_load": 0.5116998800000374,
+            "independent_read": 1.577804434000086,
+            "norm_reduce": 0.0009941009999465678
+          },
+          "9442f8aa-5502-40ca-bbb1-aa708c93721d": {
+            "cell_load": 0.5276674780000121,
+            "independent_read": 1.5202665509998496,
+            "norm_reduce": 0.0009971550000500429
+          },
+          "aed68a37-3a9b-4b64-8d47-2c9518805f4c": {
+            "cell_load": 0.5215850509999882,
+            "independent_read": 1.5551968850003277,
+            "norm_reduce": 0.0010110149999036366
+          },
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": {
+            "cell_load": 0.5185679950000122,
+            "independent_read": 1.5217043330000024,
+            "norm_reduce": 0.001086843000052795
+          }
+        },
+        "selected_cell_ids": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1"
+        ],
+        "output_token_ids": [],
+        "eos_positions": [],
+        "peak_observed_recurrent_bytes": 125829120
+      }
+    ],
+    "median_seconds": 16.708292131999997,
+    "max_seconds": 16.708292131999997,
+    "stddev_seconds": null
+  },
+  {
+    "registered_cells": 8,
+    "prompt_tokens": 1024,
+    "requested_new_tokens": 0,
+    "mode": "auto",
+    "repetitions_expected": 3,
+    "trials": [
+      {
+        "kind": "warm_up",
+        "index": -1,
+        "seconds": 28.864207274000023,
+        "before": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923995136
+        },
+        "after": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923995136
+        },
+        "peak": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 4338155520
+        },
+        "peak_increase": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 3865051136
+        },
+        "other_process_peak": 0,
+        "device_sampler_errors": [],
+        "status": "PASS",
+        "scores": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": 0.024188058567233384,
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1": 0.024188058567233384,
+          "177be714-0053-49d3-ba04-729c214f2793": 0.024188058567233384,
+          "6f4f893f-8e52-4415-8918-fbd986610d76": 0.024188058567233384,
+          "8c210d4c-27e9-4265-9f5b-563089389169": 0.024188058567233384,
+          "9442f8aa-5502-40ca-bbb1-aa708c93721d": 0.024188058567233384,
+          "aed68a37-3a9b-4b64-8d47-2c9518805f4c": 0.024188058567233384,
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": 0.024188058567233384
+        },
+        "ranking": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1",
+          "177be714-0053-49d3-ba04-729c214f2793",
+          "6f4f893f-8e52-4415-8918-fbd986610d76",
+          "8c210d4c-27e9-4265-9f5b-563089389169",
+          "9442f8aa-5502-40ca-bbb1-aa708c93721d",
+          "aed68a37-3a9b-4b64-8d47-2c9518805f4c",
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51"
+        ],
+        "phases_seconds": {
+          "cell_load": 4.246455443999935,
+          "independent_read": 24.512053318000653,
+          "norm_reduce": 0.016835541000205012,
+          "selector": 2.497200000561861e-05
+        },
+        "per_cell_seconds": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": {
+            "cell_load": 0.516746633999901,
+            "independent_read": 3.0728120400001444,
+            "norm_reduce": 0.0022046400004001043
+          },
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1": {
+            "cell_load": 0.5248277420000704,
+            "independent_read": 3.068009581000183,
+            "norm_reduce": 0.001974903000245831
+          },
+          "177be714-0053-49d3-ba04-729c214f2793": {
+            "cell_load": 0.5863680150000619,
+            "independent_read": 3.012493827999947,
+            "norm_reduce": 0.00202652300004047
+          },
+          "6f4f893f-8e52-4415-8918-fbd986610d76": {
+            "cell_load": 0.516861075999941,
+            "independent_read": 3.033363007000389,
+            "norm_reduce": 0.001937801000053696
+          },
+          "8c210d4c-27e9-4265-9f5b-563089389169": {
+            "cell_load": 0.5306905659999757,
+            "independent_read": 3.1452531200000067,
+            "norm_reduce": 0.002216271999714081
+          },
+          "9442f8aa-5502-40ca-bbb1-aa708c93721d": {
+            "cell_load": 0.5255899569999656,
+            "independent_read": 3.050685323000039,
+            "norm_reduce": 0.0020125520001101904
+          },
+          "aed68a37-3a9b-4b64-8d47-2c9518805f4c": {
+            "cell_load": 0.522484228000053,
+            "independent_read": 3.039811936999854,
+            "norm_reduce": 0.0022047449997444346
+          },
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": {
+            "cell_load": 0.5228872259999662,
+            "independent_read": 3.08962448200009,
+            "norm_reduce": 0.0022581049998962044
+          }
+        },
+        "selected_cell_ids": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1"
+        ],
+        "output_token_ids": [],
+        "eos_positions": [],
+        "peak_observed_recurrent_bytes": 125829120
+      },
+      {
+        "kind": "measured",
+        "index": 0,
+        "seconds": 28.894356168999934,
+        "before": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923995136
+        },
+        "after": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923995136
+        },
+        "peak": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 4338155520
+        },
+        "peak_increase": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 3865051136
+        },
+        "other_process_peak": 0,
+        "device_sampler_errors": [],
+        "status": "PASS",
+        "scores": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": 0.024188058567233384,
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1": 0.024188058567233384,
+          "177be714-0053-49d3-ba04-729c214f2793": 0.024188058567233384,
+          "6f4f893f-8e52-4415-8918-fbd986610d76": 0.024188058567233384,
+          "8c210d4c-27e9-4265-9f5b-563089389169": 0.024188058567233384,
+          "9442f8aa-5502-40ca-bbb1-aa708c93721d": 0.024188058567233384,
+          "aed68a37-3a9b-4b64-8d47-2c9518805f4c": 0.024188058567233384,
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": 0.024188058567233384
+        },
+        "ranking": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1",
+          "177be714-0053-49d3-ba04-729c214f2793",
+          "6f4f893f-8e52-4415-8918-fbd986610d76",
+          "8c210d4c-27e9-4265-9f5b-563089389169",
+          "9442f8aa-5502-40ca-bbb1-aa708c93721d",
+          "aed68a37-3a9b-4b64-8d47-2c9518805f4c",
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51"
+        ],
+        "phases_seconds": {
+          "cell_load": 4.2100172330000305,
+          "independent_read": 24.57817193700066,
+          "norm_reduce": 0.016617920999351554,
+          "selector": 3.477600000678649e-05
+        },
+        "per_cell_seconds": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": {
+            "cell_load": 0.5247999870000513,
+            "independent_read": 3.0922343350002848,
+            "norm_reduce": 0.0021474209999041705
+          },
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1": {
+            "cell_load": 0.5349902909999855,
+            "independent_read": 3.1019429960001617,
+            "norm_reduce": 0.002121825000017452
+          },
+          "177be714-0053-49d3-ba04-729c214f2793": {
+            "cell_load": 0.5217698320000181,
+            "independent_read": 3.0647655390004047,
+            "norm_reduce": 0.002047063999953025
+          },
+          "6f4f893f-8e52-4415-8918-fbd986610d76": {
+            "cell_load": 0.535968536999917,
+            "independent_read": 3.1231082159999914,
+            "norm_reduce": 0.0019928589998698953
+          },
+          "8c210d4c-27e9-4265-9f5b-563089389169": {
+            "cell_load": 0.517179613000053,
+            "independent_read": 3.034321751999869,
+            "norm_reduce": 0.0020781359999091364
+          },
+          "9442f8aa-5502-40ca-bbb1-aa708c93721d": {
+            "cell_load": 0.5224943489999987,
+            "independent_read": 3.073779406999847,
+            "norm_reduce": 0.002009385000064867
+          },
+          "aed68a37-3a9b-4b64-8d47-2c9518805f4c": {
+            "cell_load": 0.5275173380000524,
+            "independent_read": 3.0774961370003666,
+            "norm_reduce": 0.002136860999939927
+          },
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": {
+            "cell_load": 0.5252972859999545,
+            "independent_read": 3.010523554999736,
+            "norm_reduce": 0.002084369999693081
+          }
+        },
+        "selected_cell_ids": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1"
+        ],
+        "output_token_ids": [],
+        "eos_positions": [],
+        "peak_observed_recurrent_bytes": 125829120
+      },
+      {
+        "kind": "measured",
+        "index": 1,
+        "seconds": 28.6297745359999,
+        "before": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923995136
+        },
+        "after": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923995136
+        },
+        "peak": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 4338155520
+        },
+        "peak_increase": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 3865051136
+        },
+        "other_process_peak": 0,
+        "device_sampler_errors": [],
+        "status": "PASS",
+        "scores": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": 0.024188058567233384,
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1": 0.024188058567233384,
+          "177be714-0053-49d3-ba04-729c214f2793": 0.024188058567233384,
+          "6f4f893f-8e52-4415-8918-fbd986610d76": 0.024188058567233384,
+          "8c210d4c-27e9-4265-9f5b-563089389169": 0.024188058567233384,
+          "9442f8aa-5502-40ca-bbb1-aa708c93721d": 0.024188058567233384,
+          "aed68a37-3a9b-4b64-8d47-2c9518805f4c": 0.024188058567233384,
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": 0.024188058567233384
+        },
+        "ranking": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1",
+          "177be714-0053-49d3-ba04-729c214f2793",
+          "6f4f893f-8e52-4415-8918-fbd986610d76",
+          "8c210d4c-27e9-4265-9f5b-563089389169",
+          "9442f8aa-5502-40ca-bbb1-aa708c93721d",
+          "aed68a37-3a9b-4b64-8d47-2c9518805f4c",
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51"
+        ],
+        "phases_seconds": {
+          "cell_load": 4.177171031000171,
+          "independent_read": 24.34725282399984,
+          "norm_reduce": 0.016146381999760706,
+          "selector": 2.1480999976120074e-05
+        },
+        "per_cell_seconds": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": {
+            "cell_load": 0.5412543119999782,
+            "independent_read": 3.0394204289999607,
+            "norm_reduce": 0.001973641999825304
+          },
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1": {
+            "cell_load": 0.5372300970000197,
+            "independent_read": 3.111602219999895,
+            "norm_reduce": 0.002244246999907773
+          },
+          "177be714-0053-49d3-ba04-729c214f2793": {
+            "cell_load": 0.5146447969999599,
+            "independent_read": 3.0901181279997445,
+            "norm_reduce": 0.0020910630000798847
+          },
+          "6f4f893f-8e52-4415-8918-fbd986610d76": {
+            "cell_load": 0.5292410570000357,
+            "independent_read": 3.0273116089999803,
+            "norm_reduce": 0.0019900080000070375
+          },
+          "8c210d4c-27e9-4265-9f5b-563089389169": {
+            "cell_load": 0.5224501980000014,
+            "independent_read": 2.9947016050003867,
+            "norm_reduce": 0.0020548109997662323
+          },
+          "9442f8aa-5502-40ca-bbb1-aa708c93721d": {
+            "cell_load": 0.5074880850000909,
+            "independent_read": 3.0713925259998405,
+            "norm_reduce": 0.0019819240001197613
+          },
+          "aed68a37-3a9b-4b64-8d47-2c9518805f4c": {
+            "cell_load": 0.5110673310000493,
+            "independent_read": 3.0125342970001157,
+            "norm_reduce": 0.0018510140002945263
+          },
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": {
+            "cell_load": 0.5137951540000358,
+            "independent_read": 3.0001720099999147,
+            "norm_reduce": 0.001959672999760187
+          }
+        },
+        "selected_cell_ids": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1"
+        ],
+        "output_token_ids": [],
+        "eos_positions": [],
+        "peak_observed_recurrent_bytes": 125829120
+      },
+      {
+        "kind": "measured",
+        "index": 2,
+        "seconds": 28.767687649999857,
+        "before": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2923995136
+        },
+        "after": {
+          "device_used": 4338155520,
+          "device_total": 16106127360,
+          "other_processes": {},
+          "other_process_bytes": 0,
+          "allocated": 3115372544,
+          "reserved": 3531603968,
+          "cpu_rss": 2924027904
+        },
+        "peak": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 4338155520
+        },
+        "peak_increase": {
+          "allocated": 3256120320,
+          "reserved": 3531603968,
+          "device_used": 3865051136
+        },
+        "other_process_peak": 0,
+        "device_sampler_errors": [],
+        "status": "PASS",
+        "scores": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": 0.024188058567233384,
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1": 0.024188058567233384,
+          "177be714-0053-49d3-ba04-729c214f2793": 0.024188058567233384,
+          "6f4f893f-8e52-4415-8918-fbd986610d76": 0.024188058567233384,
+          "8c210d4c-27e9-4265-9f5b-563089389169": 0.024188058567233384,
+          "9442f8aa-5502-40ca-bbb1-aa708c93721d": 0.024188058567233384,
+          "aed68a37-3a9b-4b64-8d47-2c9518805f4c": 0.024188058567233384,
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": 0.024188058567233384
+        },
+        "ranking": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1",
+          "177be714-0053-49d3-ba04-729c214f2793",
+          "6f4f893f-8e52-4415-8918-fbd986610d76",
+          "8c210d4c-27e9-4265-9f5b-563089389169",
+          "9442f8aa-5502-40ca-bbb1-aa708c93721d",
+          "aed68a37-3a9b-4b64-8d47-2c9518805f4c",
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51"
+        ],
+        "phases_seconds": {
+          "cell_load": 4.219387943000129,
+          "independent_read": 24.44409631899964,
+          "norm_reduce": 0.016232763997663824,
+          "selector": 3.8829000004625414e-05
+        },
+        "per_cell_seconds": {
+          "061113c1-b01c-43a8-9cff-8dac13fd071f": {
+            "cell_load": 0.5187488620000522,
+            "independent_read": 3.0549211509996894,
+            "norm_reduce": 0.001997426999992058
+          },
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1": {
+            "cell_load": 0.5279901469999686,
+            "independent_read": 3.0848116490000166,
+            "norm_reduce": 0.0021199269997396186
+          },
+          "177be714-0053-49d3-ba04-729c214f2793": {
+            "cell_load": 0.5342936619999819,
+            "independent_read": 3.063807529999849,
+            "norm_reduce": 0.0021286539997618092
+          },
+          "6f4f893f-8e52-4415-8918-fbd986610d76": {
+            "cell_load": 0.5283739779999905,
+            "independent_read": 3.097816198000146,
+            "norm_reduce": 0.002050977999715542
+          },
+          "8c210d4c-27e9-4265-9f5b-563089389169": {
+            "cell_load": 0.5592605690001164,
+            "independent_read": 3.03289552500064,
+            "norm_reduce": 0.0019081309994817275
+          },
+          "9442f8aa-5502-40ca-bbb1-aa708c93721d": {
+            "cell_load": 0.5134303199999977,
+            "independent_read": 3.035578918000283,
+            "norm_reduce": 0.002002616999561724
+          },
+          "aed68a37-3a9b-4b64-8d47-2c9518805f4c": {
+            "cell_load": 0.5246877049999057,
+            "independent_read": 3.073920949999547,
+            "norm_reduce": 0.0020773119995283196
+          },
+          "ef32bff3-f210-489c-bf88-7f1f7b43dc51": {
+            "cell_load": 0.5126027000001159,
+            "independent_read": 3.00034439799947,
+            "norm_reduce": 0.0019477179998830252
+          }
+        },
+        "selected_cell_ids": [
+          "061113c1-b01c-43a8-9cff-8dac13fd071f",
+          "06d03f77-97da-4321-843a-3cb2b4b3fff1"
+        ],
+        "output_token_ids": [],
+        "eos_positions": [],
+        "peak_observed_recurrent_bytes": 125829120
+      }
+    ],
+    "median_seconds": 28.767687649999857,
+    "max_seconds": 28.894356168999934,
+    "stddev_seconds": 0.13233063467429035
+  }
+]
