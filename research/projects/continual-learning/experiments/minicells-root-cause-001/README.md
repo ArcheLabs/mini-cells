@@ -54,3 +54,48 @@ enable Internet and use the existing `GITHUB_TOKEN` secret. The job selects
 one GPU by UUID and publishes `phase_a.json`, `phase_a_rows.jsonl`,
 `report.md`, the decision, and manifest to a verified result branch.
 It does not run the previous MVP held-out or capacity experiments.
+
+## Published Phase A result
+
+**Engineering PASS · Phase A FAIL.** On the single T4, all 48 matched-schedule
+SDK/reference logit comparisons had zero absolute difference. The matching
+cache checks passed, and the six reference greedy comparisons agreed. The
+12 cross-schedule upstream comparisons failed the frozen tolerance, with a
+maximum observed logit difference of 33.789. The official no-label CausalLM
+wrapper separately raised the expected None-plus-Tensor error.
+[Published Phase A receipts](https://github.com/ArcheLabs/mini-cells/tree/965eb81959a7f840940b76613a62976c72c6ff95/artifacts/experiments/minicells-root-cause-001/1988d78d3166).
+
+| Format | Without BOS | With BOS |
+| --- | ---: | ---: |
+| Plain continuation | 2/6 | 3/6 |
+| Fact in context | 4/6 | 3/6 |
+| Question/answer | 1/6 | 1/6 |
+
+The BOS continuation arm missed its frozen 4/6 gate. The cross-schedule and
+generation gates prevent advancing to Phase B.
+
+## Phase A.1 component diagnostic
+
+Run [kaggle_phase_a1.py](kaggle_phase_a1.py) on one T4 with Internet and the
+existing GitHub secret. This runs three isolated probes with no model download.
+It executes the pinned FLA Triton ShortConvolution, the fused recurrent Delta
+operator on fixed synthetic Q/K/V tensors, and the pinned MoM packer on
+known token positions. The convolution also has an independent Torch causal
+convolution oracle. Split schedules are measured independently for outputs
+and final state, with fixed absolute and relative tolerances of 0.002.
+
+The FLA short-convolution source writes the new suffix into its cache for
+multi-token updates and invokes the convolution without passing prior cache
+values. The single-token path invokes the streaming update. The MoM packer
+uses an unstable sort for equal expert assignments. The probes separate
+these issues from the Delta recurrence. Standalone failures identify
+component limits. Attribution of the full-model logit gap still needs a
+layer-level intervention.
+
+Local source replays established two concrete behaviors. The unmodified
+MoM packer produced nonchronological expert streams in 6/10 CPU fixtures.
+Executing the pinned ShortConvolution Python dispatch with CPU substitutes
+for its CUDA operators reproduced the missing-prefix effect for a 5+7
+split. Under that same substitute, 5+single-token decode and all-single
+schedules matched the whole convolution. The CPU replay cannot explain
+the entire model-level difference or certify native CUDA behavior.
