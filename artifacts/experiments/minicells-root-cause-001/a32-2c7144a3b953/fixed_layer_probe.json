@@ -1,0 +1,104 @@
+{
+  "layer": 1,
+  "offset": 2,
+  "fixed_top2": [
+    [
+      2,
+      3
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      3,
+      2
+    ]
+  ],
+  "experts": [
+    {
+      "incoming_state_max_abs": 3.9917922019958496,
+      "padding_positions": [
+        0
+      ],
+      "native_padding_log_decay_max_abs": 0.5828850269317627,
+      "native_padding_update_gate_max_abs": 0.5,
+      "native": {
+        "output": {
+          "pass_": false,
+          "max_abs": 0.03143310546875,
+          "mean_abs": 0.00011797909246524796
+        },
+        "final_state": {
+          "pass_": false,
+          "max_abs": 2.8458895683288574,
+          "mean_abs": 0.00046067338553257287
+        }
+      },
+      "candidate": {
+        "output": {
+          "pass_": true,
+          "max_abs": 0.0,
+          "mean_abs": 0.0
+        },
+        "final_state": {
+          "pass_": true,
+          "max_abs": 0.0,
+          "mean_abs": 0.0
+        }
+      },
+      "expert": 2,
+      "packed_tokens": [
+        null,
+        2,
+        4,
+        5
+      ]
+    },
+    {
+      "incoming_state_max_abs": 2.539767026901245,
+      "padding_positions": [
+        0
+      ],
+      "native_padding_log_decay_max_abs": 0.5828850269317627,
+      "native_padding_update_gate_max_abs": 0.5,
+      "native": {
+        "output": {
+          "pass_": false,
+          "max_abs": 0.0489501953125,
+          "mean_abs": 0.00011937945237150416
+        },
+        "final_state": {
+          "pass_": false,
+          "max_abs": 3.4393625259399414,
+          "mean_abs": 0.0010577121283859015
+        }
+      },
+      "candidate": {
+        "output": {
+          "pass_": true,
+          "max_abs": 0.0,
+          "mean_abs": 0.0
+        },
+        "final_state": {
+          "pass_": true,
+          "max_abs": 0.0,
+          "mean_abs": 0.0
+        }
+      },
+      "expert": 3,
+      "packed_tokens": [
+        null,
+        2,
+        4,
+        5
+      ]
+    }
+  ],
+  "candidate_pass": true,
+  "native_mismatch": true
+}

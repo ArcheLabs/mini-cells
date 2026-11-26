@@ -1,0 +1,1194 @@
+{
+  "format": "minicells.root-cause.001.phase-a32.v1",
+  "status": "INCONCLUSIVE",
+  "engineering_status": "PASS",
+  "model_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+  "tolerance": {
+    "atol": 0.25,
+    "rtol": 0.02
+  },
+  "environment": {
+    "timestamp": "2026-11-26T12:38:16.899322+00:00",
+    "python": "3.13.16 (main, Oct  1 2026, 15:40:24) [GCC 13.3.0]",
+    "torch": "2.11.0+cu130",
+    "physical_devices": [
+      {
+        "name": "Tesla T4",
+        "total_mib": "15360",
+        "free_mib": "14912",
+        "driver": "580.178.04",
+        "compute_capability": "7.5"
+      },
+      {
+        "name": "Tesla T4",
+        "total_mib": "15360",
+        "free_mib": "14912",
+        "driver": "580.178.04",
+        "compute_capability": "7.5"
+      }
+    ],
+    "hardware_status": "T4_PRESENT",
+    "cuda_runtime": "13.0",
+    "fla": "0.2.2",
+    "triton": "3.6.0"
+  },
+  "a31_results_commit": "96941e148aea43f6791708cfc33fbca1d05d95c1",
+  "identity": {
+    "model_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+    "model_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+    "architecture": "mom-gated-deltanet",
+    "mom_revision": "125038087b71b635c171cec857bd0f21d10955b6",
+    "tokenizer_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+    "tokenizer_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+    "tokenizer_hash": "90e3e115a745594abd2167554dcf472ea00d4852465c03b5482309d9036f4c49",
+    "tokenizer_files": {
+      "special_tokens_map.json": "4452b845ab9ca2afa863f59f1411a959e8a32bb4334e264b0e71d5d17dd4dcb9",
+      "tokenizer.json": "a2699839c243202a04a90537576fc719283f638e90fe80feb469888275289575",
+      "tokenizer_config.json": "cc3fdc5126e4d2e3a3934bc29779bf811c2eeefb60237017cddfd03acf9a7562"
+    },
+    "config_hash": "b99c19cdd75493abb6dfe0d5e991ebaac8d5af963b75c0ea2f73a6f496204341",
+    "weights_sha256": "08820287a91c2bc10f1fafe8b149dbf027ae51768530027c711dc240f7d53771",
+    "dtype": "float16",
+    "num_hidden_layers": 24,
+    "num_memories": 4,
+    "shared_memory": true,
+    "topk": 2,
+    "torch": "2.11.0+cu130",
+    "triton": "3.6.0",
+    "transformers": "4.51.3",
+    "flash-linear-attention": "0.2.2",
+    "parameters": 1552884000
+  },
+  "fixture": {
+    "id": "france",
+    "style": "continuation",
+    "text": "The capital of France is",
+    "target": "Paris"
+  },
+  "tokens": [
+    1,
+    415,
+    5565,
+    302,
+    4843,
+    349
+  ],
+  "arms": {
+    "a31": {
+      "whole": {
+        "calls": 24,
+        "nonchronological": 0,
+        "convolution_backends": [
+          "fla_triton_decode",
+          "fla_triton_prefill"
+        ]
+      },
+      "splits": {
+        "prefill_decode": {
+          "chunks": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "packing": {
+            "calls": 120,
+            "nonchronological": 0,
+            "convolution_backends": [
+              "fla_triton_decode",
+              "fla_triton_prefill"
+            ]
+          },
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              6,
+              32000
+            ],
+            "max_abs": 0.03125,
+            "mean_abs": 0.004852106794714928,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "first_exact_difference": {
+            "layer": 0,
+            "stage": "router_logits",
+            "exact": false,
+            "first_changed_token": 3,
+            "first_outside_tolerance_token": null,
+            "comparison": {
+              "pass_": true,
+              "shape": [
+                1,
+                6,
+                4
+              ],
+              "max_abs": 0.00048828125,
+              "mean_abs": 2.8133392333984375e-05,
+              "within_fraction": 1.0,
+              "top1_agreement": 1.0
+            }
+          },
+          "first_outside_tolerance": null,
+          "routing": {
+            "layer_tokens": 144,
+            "set_agreement": 1.0,
+            "order_agreement": 1.0,
+            "changed_sets": 0,
+            "same_set_different_order": 0,
+            "first_set_change": null,
+            "first_rank_only_change": null,
+            "set_changes": []
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 251,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.015625
+          },
+          "cache_cursor": 6,
+          "whole_cache_cursor": 6,
+          "focused_stages": [
+            {
+              "layer": 0,
+              "stage": "attention_output",
+              "exact": false,
+              "first_changed_token": 2,
+              "first_outside_tolerance_token": null,
+              "comparison": {
+                "pass_": true,
+                "shape": [
+                  1,
+                  6,
+                  2048
+                ],
+                "max_abs": 3.0517578125e-05,
+                "mean_abs": 1.4442097153732902e-06,
+                "within_fraction": 1.0,
+                "top1_agreement": 1.0
+              }
+            },
+            {
+              "layer": 1,
+              "stage": "attention_output",
+              "exact": false,
+              "first_changed_token": 2,
+              "first_outside_tolerance_token": null,
+              "comparison": {
+                "pass_": true,
+                "shape": [
+                  1,
+                  6,
+                  2048
+                ],
+                "max_abs": 0.001953125,
+                "mean_abs": 2.8710332117043436e-05,
+                "within_fraction": 1.0,
+                "top1_agreement": 1.0
+              }
+            }
+          ]
+        },
+        "two_chunks": {
+          "chunks": [
+            2,
+            4
+          ],
+          "packing": {
+            "calls": 48,
+            "nonchronological": 0,
+            "convolution_backends": [
+              "fla_triton_decode",
+              "fla_triton_prefill"
+            ]
+          },
+          "logits": {
+            "pass_": false,
+            "shape": [
+              1,
+              6,
+              32000
+            ],
+            "max_abs": 0.9140625,
+            "mean_abs": 0.048492733389139175,
+            "within_fraction": 0.9907135367393494,
+            "top1_agreement": 1.0
+          },
+          "first_exact_difference": {
+            "layer": 0,
+            "stage": "attention_output",
+            "exact": false,
+            "first_changed_token": 3,
+            "first_outside_tolerance_token": null,
+            "comparison": {
+              "pass_": true,
+              "shape": [
+                1,
+                6,
+                2048
+              ],
+              "max_abs": 0.009912490844726562,
+              "mean_abs": 0.0007388901431113482,
+              "within_fraction": 1.0,
+              "top1_agreement": 0.8333333134651184
+            }
+          },
+          "first_outside_tolerance": {
+            "layer": 1,
+            "stage": "attention_output",
+            "exact": false,
+            "first_changed_token": 2,
+            "first_outside_tolerance_token": 4,
+            "comparison": {
+              "pass_": false,
+              "shape": [
+                1,
+                6,
+                2048
+              ],
+              "max_abs": 0.369140625,
+              "mean_abs": 0.00455063721165061,
+              "within_fraction": 0.9998372197151184,
+              "top1_agreement": 1.0
+            }
+          },
+          "routing": {
+            "layer_tokens": 144,
+            "set_agreement": 0.9791666666666666,
+            "order_agreement": 0.9652777777777778,
+            "changed_sets": 3,
+            "same_set_different_order": 2,
+            "first_set_change": {
+              "layer": 5,
+              "token": 2,
+              "whole": [
+                2,
+                1
+              ],
+              "split": [
+                2,
+                0
+              ],
+              "whole_probability_margin": 0.00245802104473114,
+              "split_probability_margin": 0.01003161072731018,
+              "whole_logit_margin": 0.01007080078125,
+              "split_logit_margin": 0.041412353515625
+            },
+            "first_rank_only_change": {
+              "layer": 7,
+              "token": 4,
+              "whole": [
+                0,
+                2
+              ],
+              "split": [
+                2,
+                0
+              ]
+            },
+            "set_changes": [
+              {
+                "layer": 5,
+                "token": 2,
+                "whole": [
+                  2,
+                  1
+                ],
+                "split": [
+                  2,
+                  0
+                ],
+                "whole_probability_margin": 0.00245802104473114,
+                "split_probability_margin": 0.01003161072731018,
+                "whole_logit_margin": 0.01007080078125,
+                "split_logit_margin": 0.041412353515625
+              },
+              {
+                "layer": 8,
+                "token": 2,
+                "whole": [
+                  0,
+                  3
+                ],
+                "split": [
+                  0,
+                  2
+                ],
+                "whole_probability_margin": 0.006477221846580505,
+                "split_probability_margin": 0.03012867271900177,
+                "whole_logit_margin": 0.02558135986328125,
+                "split_logit_margin": 0.1192626953125
+              },
+              {
+                "layer": 15,
+                "token": 4,
+                "whole": [
+                  1,
+                  0
+                ],
+                "split": [
+                  1,
+                  2
+                ],
+                "whole_probability_margin": 0.0032777786254882812,
+                "split_probability_margin": 0.00706896185874939,
+                "whole_logit_margin": 0.012939453125,
+                "split_logit_margin": 0.028076171875
+              }
+            ]
+          },
+          "cache": {
+            "pass_": false,
+            "tensor_count": 251,
+            "missing": [],
+            "unexpected": [
+              "8.recurrent_state.2"
+            ],
+            "mismatched": [
+              "0.recurrent_state.0",
+              "0.recurrent_state.3",
+              "1.conv_state.0.0",
+              "1.conv_state.0.1",
+              "1.conv_state.1.0",
+              "1.conv_state.1.1",
+              "1.conv_state.2.0",
+              "1.conv_state.2.1",
+              "1.recurrent_state.2",
+              "1.recurrent_state.3",
+              "10.conv_state.0.0",
+              "10.conv_state.0.1",
+              "10.conv_state.1.0",
+              "10.conv_state.1.1",
+              "10.conv_state.2.0",
+              "10.conv_state.2.1",
+              "10.recurrent_state.1",
+              "10.recurrent_state.3",
+              "11.conv_state.0.0",
+              "11.conv_state.0.1",
+              "11.conv_state.1.0",
+              "11.conv_state.1.1",
+              "11.conv_state.2.0",
+              "11.conv_state.2.1",
+              "11.recurrent_state.3",
+              "12.conv_state.0.0",
+              "12.conv_state.0.1",
+              "12.conv_state.1.0",
+              "12.conv_state.1.1",
+              "12.conv_state.2.0",
+              "12.conv_state.2.1",
+              "12.recurrent_state.3",
+              "13.conv_state.0.0",
+              "13.conv_state.0.1",
+              "13.conv_state.1.0",
+              "13.conv_state.1.1",
+              "13.conv_state.2.0",
+              "13.conv_state.2.1",
+              "13.recurrent_state.2",
+              "14.conv_state.0.0",
+              "14.conv_state.0.1",
+              "14.conv_state.1.0",
+              "14.conv_state.1.1",
+              "14.conv_state.2.0",
+              "14.conv_state.2.1",
+              "15.conv_state.0.0",
+              "15.conv_state.0.1",
+              "15.conv_state.1.0",
+              "15.conv_state.1.1",
+              "15.conv_state.2.0",
+              "15.conv_state.2.1",
+              "15.recurrent_state.0",
+              "15.recurrent_state.1",
+              "15.recurrent_state.2",
+              "16.conv_state.0.0",
+              "16.conv_state.0.1",
+              "16.conv_state.1.0",
+              "16.conv_state.1.1",
+              "16.conv_state.2.0",
+              "16.conv_state.2.1",
+              "17.conv_state.0.0",
+              "17.conv_state.0.1",
+              "17.conv_state.1.0",
+              "17.conv_state.1.1",
+              "17.conv_state.2.0",
+              "17.conv_state.2.1",
+              "17.recurrent_state.0",
+              "17.recurrent_state.1",
+              "17.recurrent_state.2",
+              "17.recurrent_state.3",
+              "17.recurrent_state.4",
+              "18.conv_state.0.0",
+              "18.conv_state.0.1",
+              "18.conv_state.1.0",
+              "18.conv_state.1.1",
+              "18.conv_state.2.0",
+              "18.conv_state.2.1",
+              "18.recurrent_state.3",
+              "19.conv_state.0.0",
+              "19.conv_state.0.1",
+              "19.conv_state.1.0",
+              "19.conv_state.1.1",
+              "19.conv_state.2.0",
+              "19.conv_state.2.1",
+              "19.recurrent_state.1",
+              "19.recurrent_state.2",
+              "2.conv_state.0.0",
+              "2.conv_state.0.1",
+              "2.conv_state.1.0",
+              "2.conv_state.1.1",
+              "2.conv_state.2.0",
+              "2.conv_state.2.1",
+              "2.recurrent_state.0",
+              "2.recurrent_state.2",
+              "2.recurrent_state.3",
+              "20.conv_state.0.0",
+              "20.conv_state.0.1",
+              "20.conv_state.1.0",
+              "20.conv_state.1.1",
+              "20.conv_state.2.0",
+              "20.conv_state.2.1",
+              "20.recurrent_state.0",
+              "20.recurrent_state.2",
+              "20.recurrent_state.3",
+              "21.conv_state.0.0",
+              "21.conv_state.0.1",
+              "21.conv_state.1.0",
+              "21.conv_state.1.1",
+              "21.conv_state.2.0",
+              "21.conv_state.2.1",
+              "21.recurrent_state.0",
+              "21.recurrent_state.2",
+              "21.recurrent_state.3",
+              "21.recurrent_state.4",
+              "22.conv_state.0.0",
+              "22.conv_state.0.1",
+              "22.conv_state.1.0",
+              "22.conv_state.1.1",
+              "22.conv_state.2.0",
+              "22.conv_state.2.1",
+              "22.recurrent_state.1",
+              "22.recurrent_state.2",
+              "23.conv_state.0.0",
+              "23.conv_state.0.1",
+              "23.conv_state.1.0",
+              "23.conv_state.1.1",
+              "23.conv_state.2.0",
+              "23.conv_state.2.1",
+              "23.recurrent_state.2",
+              "3.conv_state.0.0",
+              "3.conv_state.0.1",
+              "3.conv_state.1.0",
+              "3.conv_state.1.1",
+              "3.conv_state.2.0",
+              "3.conv_state.2.1",
+              "3.recurrent_state.1",
+              "4.conv_state.0.0",
+              "4.conv_state.0.1",
+              "4.conv_state.1.0",
+              "4.conv_state.1.1",
+              "4.conv_state.2.0",
+              "4.conv_state.2.1",
+              "4.recurrent_state.0",
+              "4.recurrent_state.1",
+              "5.conv_state.0.0",
+              "5.conv_state.0.1",
+              "5.conv_state.1.0",
+              "5.conv_state.1.1",
+              "5.conv_state.2.0",
+              "5.conv_state.2.1",
+              "5.recurrent_state.0",
+              "5.recurrent_state.1",
+              "5.recurrent_state.2",
+              "6.conv_state.0.0",
+              "6.conv_state.0.1",
+              "6.conv_state.1.0",
+              "6.conv_state.1.1",
+              "6.conv_state.2.0",
+              "6.conv_state.2.1",
+              "6.recurrent_state.0",
+              "6.recurrent_state.3",
+              "7.conv_state.0.0",
+              "7.conv_state.0.1",
+              "7.conv_state.1.0",
+              "7.conv_state.1.1",
+              "7.conv_state.2.0",
+              "7.conv_state.2.1",
+              "7.recurrent_state.0",
+              "7.recurrent_state.3",
+              "8.conv_state.0.0",
+              "8.conv_state.0.1",
+              "8.conv_state.1.0",
+              "8.conv_state.1.1",
+              "8.conv_state.2.0",
+              "8.conv_state.2.1",
+              "8.recurrent_state.0",
+              "8.recurrent_state.1",
+              "8.recurrent_state.3",
+              "9.conv_state.0.0",
+              "9.conv_state.0.1",
+              "9.conv_state.1.0",
+              "9.conv_state.1.1",
+              "9.conv_state.2.0",
+              "9.conv_state.2.1",
+              "9.recurrent_state.2",
+              "9.recurrent_state.3"
+            ],
+            "max_abs": 20.5625
+          },
+          "cache_cursor": 6,
+          "whole_cache_cursor": 6,
+          "focused_stages": [
+            {
+              "layer": 0,
+              "stage": "attention_output",
+              "exact": false,
+              "first_changed_token": 3,
+              "first_outside_tolerance_token": null,
+              "comparison": {
+                "pass_": true,
+                "shape": [
+                  1,
+                  6,
+                  2048
+                ],
+                "max_abs": 0.009912490844726562,
+                "mean_abs": 0.0007388901431113482,
+                "within_fraction": 1.0,
+                "top1_agreement": 0.8333333134651184
+              }
+            },
+            {
+              "layer": 1,
+              "stage": "attention_output",
+              "exact": false,
+              "first_changed_token": 2,
+              "first_outside_tolerance_token": 4,
+              "comparison": {
+                "pass_": false,
+                "shape": [
+                  1,
+                  6,
+                  2048
+                ],
+                "max_abs": 0.369140625,
+                "mean_abs": 0.00455063721165061,
+                "within_fraction": 0.9998372197151184,
+                "top1_agreement": 1.0
+              }
+            }
+          ]
+        },
+        "tokenwise": {
+          "chunks": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "packing": {
+            "calls": 144,
+            "nonchronological": 0,
+            "convolution_backends": [
+              "fla_triton_decode"
+            ]
+          },
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              6,
+              32000
+            ],
+            "max_abs": 0.0234375,
+            "mean_abs": 0.004342440515756607,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "first_exact_difference": {
+            "layer": 0,
+            "stage": "router_logits",
+            "exact": false,
+            "first_changed_token": 0,
+            "first_outside_tolerance_token": null,
+            "comparison": {
+              "pass_": true,
+              "shape": [
+                1,
+                6,
+                4
+              ],
+              "max_abs": 0.00048828125,
+              "mean_abs": 7.009506225585938e-05,
+              "within_fraction": 1.0,
+              "top1_agreement": 1.0
+            }
+          },
+          "first_outside_tolerance": null,
+          "routing": {
+            "layer_tokens": 144,
+            "set_agreement": 1.0,
+            "order_agreement": 1.0,
+            "changed_sets": 0,
+            "same_set_different_order": 0,
+            "first_set_change": null,
+            "first_rank_only_change": null,
+            "set_changes": []
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 251,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.03125
+          },
+          "cache_cursor": 6,
+          "whole_cache_cursor": 6,
+          "focused_stages": [
+            {
+              "layer": 0,
+              "stage": "attention_output",
+              "exact": false,
+              "first_changed_token": 0,
+              "first_outside_tolerance_token": null,
+              "comparison": {
+                "pass_": true,
+                "shape": [
+                  1,
+                  6,
+                  2048
+                ],
+                "max_abs": 3.0517578125e-05,
+                "mean_abs": 1.8767896108329296e-06,
+                "within_fraction": 1.0,
+                "top1_agreement": 1.0
+              }
+            },
+            {
+              "layer": 1,
+              "stage": "attention_output",
+              "exact": false,
+              "first_changed_token": 0,
+              "first_outside_tolerance_token": null,
+              "comparison": {
+                "pass_": true,
+                "shape": [
+                  1,
+                  6,
+                  2048
+                ],
+                "max_abs": 0.001953125,
+                "mean_abs": 5.0437203753972426e-05,
+                "within_fraction": 1.0,
+                "top1_agreement": 1.0
+              }
+            }
+          ]
+        }
+      }
+    },
+    "skip_padded_delta": {
+      "whole": {
+        "calls": 24,
+        "nonchronological": 0,
+        "convolution_backends": [
+          "fla_triton_decode",
+          "fla_triton_prefill"
+        ]
+      },
+      "splits": {
+        "prefill_decode": {
+          "chunks": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "packing": {
+            "calls": 120,
+            "nonchronological": 0,
+            "convolution_backends": [
+              "fla_triton_decode",
+              "fla_triton_prefill"
+            ]
+          },
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              6,
+              32000
+            ],
+            "max_abs": 0.03125,
+            "mean_abs": 0.004852106794714928,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "first_exact_difference": {
+            "layer": 0,
+            "stage": "router_logits",
+            "exact": false,
+            "first_changed_token": 3,
+            "first_outside_tolerance_token": null,
+            "comparison": {
+              "pass_": true,
+              "shape": [
+                1,
+                6,
+                4
+              ],
+              "max_abs": 0.00048828125,
+              "mean_abs": 2.8133392333984375e-05,
+              "within_fraction": 1.0,
+              "top1_agreement": 1.0
+            }
+          },
+          "first_outside_tolerance": null,
+          "routing": {
+            "layer_tokens": 144,
+            "set_agreement": 1.0,
+            "order_agreement": 1.0,
+            "changed_sets": 0,
+            "same_set_different_order": 0,
+            "first_set_change": null,
+            "first_rank_only_change": null,
+            "set_changes": []
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 251,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.015625
+          },
+          "cache_cursor": 6,
+          "whole_cache_cursor": 6,
+          "focused_stages": [
+            {
+              "layer": 0,
+              "stage": "attention_output",
+              "exact": false,
+              "first_changed_token": 2,
+              "first_outside_tolerance_token": null,
+              "comparison": {
+                "pass_": true,
+                "shape": [
+                  1,
+                  6,
+                  2048
+                ],
+                "max_abs": 3.0517578125e-05,
+                "mean_abs": 1.4442097153732902e-06,
+                "within_fraction": 1.0,
+                "top1_agreement": 1.0
+              }
+            },
+            {
+              "layer": 1,
+              "stage": "attention_output",
+              "exact": false,
+              "first_changed_token": 2,
+              "first_outside_tolerance_token": null,
+              "comparison": {
+                "pass_": true,
+                "shape": [
+                  1,
+                  6,
+                  2048
+                ],
+                "max_abs": 0.001953125,
+                "mean_abs": 2.8710332117043436e-05,
+                "within_fraction": 1.0,
+                "top1_agreement": 1.0
+              }
+            }
+          ]
+        },
+        "two_chunks": {
+          "chunks": [
+            2,
+            4
+          ],
+          "packing": {
+            "calls": 48,
+            "nonchronological": 0,
+            "convolution_backends": [
+              "fla_triton_decode",
+              "fla_triton_prefill"
+            ]
+          },
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              6,
+              32000
+            ],
+            "max_abs": 0.0234375,
+            "mean_abs": 0.002599639818072319,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "first_exact_difference": {
+            "layer": 1,
+            "stage": "attention_output",
+            "exact": false,
+            "first_changed_token": 2,
+            "first_outside_tolerance_token": null,
+            "comparison": {
+              "pass_": true,
+              "shape": [
+                1,
+                6,
+                2048
+              ],
+              "max_abs": 3.0517578125e-05,
+              "mean_abs": 3.725290298461914e-09,
+              "within_fraction": 1.0,
+              "top1_agreement": 1.0
+            }
+          },
+          "first_outside_tolerance": null,
+          "routing": {
+            "layer_tokens": 144,
+            "set_agreement": 1.0,
+            "order_agreement": 1.0,
+            "changed_sets": 0,
+            "same_set_different_order": 0,
+            "first_set_change": null,
+            "first_rank_only_change": null,
+            "set_changes": []
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 251,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.015625
+          },
+          "cache_cursor": 6,
+          "whole_cache_cursor": 6,
+          "focused_stages": [
+            {
+              "layer": 0,
+              "stage": "attention_output",
+              "exact": true,
+              "first_changed_token": null,
+              "first_outside_tolerance_token": null,
+              "comparison": {
+                "pass_": true,
+                "shape": [
+                  1,
+                  6,
+                  2048
+                ],
+                "max_abs": 0.0,
+                "mean_abs": 0.0,
+                "within_fraction": 1.0,
+                "top1_agreement": 1.0
+              }
+            },
+            {
+              "layer": 1,
+              "stage": "attention_output",
+              "exact": false,
+              "first_changed_token": 2,
+              "first_outside_tolerance_token": null,
+              "comparison": {
+                "pass_": true,
+                "shape": [
+                  1,
+                  6,
+                  2048
+                ],
+                "max_abs": 3.0517578125e-05,
+                "mean_abs": 3.725290298461914e-09,
+                "within_fraction": 1.0,
+                "top1_agreement": 1.0
+              }
+            }
+          ]
+        },
+        "tokenwise": {
+          "chunks": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "packing": {
+            "calls": 144,
+            "nonchronological": 0,
+            "convolution_backends": [
+              "fla_triton_decode"
+            ]
+          },
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              6,
+              32000
+            ],
+            "max_abs": 0.0234375,
+            "mean_abs": 0.004342440515756607,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "first_exact_difference": {
+            "layer": 0,
+            "stage": "router_logits",
+            "exact": false,
+            "first_changed_token": 0,
+            "first_outside_tolerance_token": null,
+            "comparison": {
+              "pass_": true,
+              "shape": [
+                1,
+                6,
+                4
+              ],
+              "max_abs": 0.00048828125,
+              "mean_abs": 7.009506225585938e-05,
+              "within_fraction": 1.0,
+              "top1_agreement": 1.0
+            }
+          },
+          "first_outside_tolerance": null,
+          "routing": {
+            "layer_tokens": 144,
+            "set_agreement": 1.0,
+            "order_agreement": 1.0,
+            "changed_sets": 0,
+            "same_set_different_order": 0,
+            "first_set_change": null,
+            "first_rank_only_change": null,
+            "set_changes": []
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 251,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.03125
+          },
+          "cache_cursor": 6,
+          "whole_cache_cursor": 6,
+          "focused_stages": [
+            {
+              "layer": 0,
+              "stage": "attention_output",
+              "exact": false,
+              "first_changed_token": 0,
+              "first_outside_tolerance_token": null,
+              "comparison": {
+                "pass_": true,
+                "shape": [
+                  1,
+                  6,
+                  2048
+                ],
+                "max_abs": 3.0517578125e-05,
+                "mean_abs": 1.8767896108329296e-06,
+                "within_fraction": 1.0,
+                "top1_agreement": 1.0
+              }
+            },
+            {
+              "layer": 1,
+              "stage": "attention_output",
+              "exact": false,
+              "first_changed_token": 0,
+              "first_outside_tolerance_token": null,
+              "comparison": {
+                "pass_": true,
+                "shape": [
+                  1,
+                  6,
+                  2048
+                ],
+                "max_abs": 0.001953125,
+                "mean_abs": 5.0437203753972426e-05,
+                "within_fraction": 1.0,
+                "top1_agreement": 1.0
+              }
+            }
+          ]
+        }
+      },
+      "same_schedule_vs_original": {
+        "whole": {
+          "pass_": true,
+          "shape": [
+            1,
+            6,
+            32000
+          ],
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "within_fraction": 1.0,
+          "top1_agreement": 1.0
+        },
+        "prefill_decode": {
+          "pass_": true,
+          "shape": [
+            1,
+            6,
+            32000
+          ],
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "within_fraction": 1.0,
+          "top1_agreement": 1.0
+        },
+        "two_chunks": {
+          "pass_": false,
+          "shape": [
+            1,
+            6,
+            32000
+          ],
+          "max_abs": 0.921875,
+          "mean_abs": 0.04910566657781601,
+          "within_fraction": 0.9895260334014893,
+          "top1_agreement": 1.0
+        },
+        "tokenwise": {
+          "pass_": true,
+          "shape": [
+            1,
+            6,
+            32000
+          ],
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "within_fraction": 1.0,
+          "top1_agreement": 1.0
+        }
+      }
+    }
+  },
+  "fixed_layer_probe": {
+    "layer": 1,
+    "offset": 2,
+    "fixed_top2": [
+      [
+        2,
+        3
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        2
+      ]
+    ],
+    "experts": [
+      {
+        "incoming_state_max_abs": 3.9917922019958496,
+        "padding_positions": [
+          0
+        ],
+        "native_padding_log_decay_max_abs": 0.5828850269317627,
+        "native_padding_update_gate_max_abs": 0.5,
+        "native": {
+          "output": {
+            "pass_": false,
+            "max_abs": 0.03143310546875,
+            "mean_abs": 0.00011797909246524796
+          },
+          "final_state": {
+            "pass_": false,
+            "max_abs": 2.8458895683288574,
+            "mean_abs": 0.00046067338553257287
+          }
+        },
+        "candidate": {
+          "output": {
+            "pass_": true,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "final_state": {
+            "pass_": true,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          }
+        },
+        "expert": 2,
+        "packed_tokens": [
+          null,
+          2,
+          4,
+          5
+        ]
+      },
+      {
+        "incoming_state_max_abs": 2.539767026901245,
+        "padding_positions": [
+          0
+        ],
+        "native_padding_log_decay_max_abs": 0.5828850269317627,
+        "native_padding_update_gate_max_abs": 0.5,
+        "native": {
+          "output": {
+            "pass_": false,
+            "max_abs": 0.0489501953125,
+            "mean_abs": 0.00011937945237150416
+          },
+          "final_state": {
+            "pass_": false,
+            "max_abs": 3.4393625259399414,
+            "mean_abs": 0.0010577121283859015
+          }
+        },
+        "candidate": {
+          "output": {
+            "pass_": true,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          },
+          "final_state": {
+            "pass_": true,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          }
+        },
+        "expert": 3,
+        "packed_tokens": [
+          null,
+          2,
+          4,
+          5
+        ]
+      }
+    ],
+    "candidate_pass": true,
+    "native_mismatch": true
+  },
+  "mean_abs_logit_error_reduction": {
+    "prefill_decode": 0.0,
+    "two_chunks": 0.045893093571066856,
+    "tokenwise": 0.0
+  },
+  "candidate_logit_gate": true,
+  "diagnosis": "A.3.2 expert recurrence intervention measured. A.4 remains a separate gate.",
+  "elapsed_seconds": 140.007105438
+}
