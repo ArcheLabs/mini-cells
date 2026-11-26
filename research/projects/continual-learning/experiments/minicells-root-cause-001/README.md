@@ -99,3 +99,42 @@ for its CUDA operators reproduced the missing-prefix effect for a 5+7
 split. Under that same substitute, 5+single-token decode and all-single
 schedules matched the whole convolution. The CPU replay cannot explain
 the entire model-level difference or certify native CUDA behavior.
+
+## Published Phase A.1 result
+
+**Engineering PASS · Phase A.1 FAIL.** On one Tesla T4, whole
+ShortConvolution matched the independent oracle exactly. The table reports
+maximum absolute errors against whole execution. Delta values come from a
+separate fused-recurrent probe under the same schedules.
+
+| Schedule | Conv output | Conv final state | Delta output | Delta final state |
+| --- | ---: | ---: | ---: | ---: |
+| Prefill + decode | 2.9921875 | 0.875 | 5.96e-8 | 2.24e-8 |
+| Two chunks | 0.80078125 | 0 | 5.96e-8 | 2.24e-8 |
+| Tokenwise | 2.9921875 | 1.4921875 | 5.96e-8 | 2.24e-8 |
+
+Expert packing broke chronology in 6/10 CPU and 4/10 CUDA cases. The
+T4 failures occurred at lengths 5 and 13 for both assignment patterns.
+Packing outcomes are recorded under `cpu_packing` and `cuda_packing`.
+The published `mismatches` list contains only numerical operator failures.
+[Published Phase A.1 receipts](https://github.com/ArcheLabs/mini-cells/tree/a4fa7d713e600e519dd5f05933deac2032eb7c12/artifacts/experiments/minicells-root-cause-001/a1-ad842dcd369f).
+
+## Phase A.2 full-model trace
+
+Run [kaggle_phase_a2.py](kaggle_phase_a2.py) in Kaggle Script mode with
+T4, Internet, and the existing GitHub secret. The diagnostic uses the
+audited 1.3B FP16 checkpoint and the BOS plain France continuation fixture
+from Phase A. Four independent caches cover whole prefill, two chunks,
+prefill plus tokenwise decode, and all-tokenwise execution. Zero-based
+token positions align per-layer router logits, expert assignments and
+actual packing order, shared Q/K/V before and after convolution, and
+attention, block and head outputs. Comparisons report the first measured
+exact difference and the first difference outside the frozen Phase A
+bound. Final cache fields and cursors use the existing Phase A comparison.
+
+Routed expert tensors include padding and different recurrence contexts.
+This trace captures their order explicitly and compares numerical Q/K/V
+only on the token-aligned shared path. The first measured difference is
+limited to the recorded observation points. No source or dependency
+patch, training, or later phase is applied. This short trace uses fused
+recurrent execution and leaves longer chunk-kernel behavior open.
