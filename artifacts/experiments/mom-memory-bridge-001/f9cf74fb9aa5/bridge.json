@@ -1,0 +1,688 @@
+{
+  "format": "minicells.mom-memory-bridge.001.v1",
+  "status": "INVALID",
+  "engineering_status": "FAIL",
+  "environment": {
+    "timestamp": "2026-11-26T15:57:47.189874+00:00",
+    "python": "3.13.16 (main, Oct  1 2026, 15:40:24) [GCC 13.3.0]",
+    "torch": "2.11.0+cu130",
+    "physical_devices": [
+      {
+        "name": "Tesla T4",
+        "total_mib": "15360",
+        "free_mib": "14912",
+        "driver": "580.178.04",
+        "compute_capability": "7.5"
+      },
+      {
+        "name": "Tesla T4",
+        "total_mib": "15360",
+        "free_mib": "14912",
+        "driver": "580.178.04",
+        "compute_capability": "7.5"
+      }
+    ],
+    "hardware_status": "T4_PRESENT",
+    "cuda_runtime": "13.0",
+    "fla": "0.2.2",
+    "triton": "3.6.0"
+  },
+  "model_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+  "historical_source": "2a0d0d70d2445ad04257ac544ea44147c1cffec6",
+  "runtime_evidence": {
+    "a32": "6db20d54ee066816e2319e71be390fb32a026dbc",
+    "a4": "a0a873ca4ceee4513af09237afd9551be8fa99d8"
+  },
+  "write_chunk": 64,
+  "bos": false,
+  "arms": [
+    "A_empty",
+    "B_live_exact",
+    "C_recurrent_exact",
+    "D_full_exact",
+    "E_recurrent_domain",
+    "E_live_domain",
+    "E_full_domain"
+  ],
+  "score_tolerance": {
+    "atol": 0.0625,
+    "rtol": 0.005
+  },
+  "identity": {
+    "model_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+    "model_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+    "architecture": "mom-gated-deltanet",
+    "mom_revision": "125038087b71b635c171cec857bd0f21d10955b6",
+    "tokenizer_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+    "tokenizer_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+    "tokenizer_hash": "90e3e115a745594abd2167554dcf472ea00d4852465c03b5482309d9036f4c49",
+    "tokenizer_files": {
+      "special_tokens_map.json": "4452b845ab9ca2afa863f59f1411a959e8a32bb4334e264b0e71d5d17dd4dcb9",
+      "tokenizer.json": "a2699839c243202a04a90537576fc719283f638e90fe80feb469888275289575",
+      "tokenizer_config.json": "cc3fdc5126e4d2e3a3934bc29779bf811c2eeefb60237017cddfd03acf9a7562"
+    },
+    "config_hash": "b99c19cdd75493abb6dfe0d5e991ebaac8d5af963b75c0ea2f73a6f496204341",
+    "weights_sha256": "08820287a91c2bc10f1fafe8b149dbf027ae51768530027c711dc240f7d53771",
+    "dtype": "float16",
+    "num_hidden_layers": 24,
+    "num_memories": 4,
+    "shared_memory": true,
+    "topk": 2,
+    "torch": "2.11.0+cu130",
+    "triton": "3.6.0",
+    "transformers": "4.51.3",
+    "flash-linear-attention": "0.2.2",
+    "parameters": 1552884000
+  },
+  "rows": [
+    {
+      "case": {
+        "index": 0,
+        "domain": "minijam",
+        "label": "test gateway alias",
+        "gold": "veka-27",
+        "distractor": "nalo-27"
+      },
+      "question": "\nQuestion: What is the current test gateway alias?\nAnswer:",
+      "query_ids": [
+        28705,
+        13,
+        24994,
+        28747,
+        1824,
+        349,
+        272,
+        1868,
+        1369,
+        9862,
+        1128,
+        18960,
+        28804,
+        13,
+        2820,
+        16981,
+        28747
+      ],
+      "targets": {
+        "gold": [
+          1773,
+          2117,
+          28733,
+          28750,
+          28787
+        ],
+        "distractor": [
+          307,
+          8344,
+          28733,
+          28750,
+          28787
+        ]
+      },
+      "equal_target_lengths": true,
+      "exact": {
+        "write_tokens": [
+          19153,
+          28747,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          1230,
+          314,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28734,
+          28793,
+          13,
+          1014,
+          1369,
+          9862,
+          1128,
+          18960,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          1773,
+          2117,
+          28733,
+          28750,
+          28787,
+          28723
+        ],
+        "full": {
+          "exact": true,
+          "tensor_count": 263,
+          "mismatched": [],
+          "source_cursor": 34,
+          "restored_cursor": 34,
+          "cursor_exact": true,
+          "probability_parity": {
+            "exact": true,
+            "within_tolerance": true,
+            "max_abs": 0.0
+          },
+          "checkpoint_sha256": "790c7f6514e75a4a060e5631e31c5927285e551f0b5c5ba72b29537cf2c48b2b"
+        },
+        "recurrent": {
+          "exact": true,
+          "tensor_count": 119,
+          "mismatched": [],
+          "query_did_not_mutate_bundle": true,
+          "bundle_sha256": "33b0e0009e2c81e00e79b393c5dca5f0edd17ffd7cc871fcddc1d8bf4a742cfb"
+        }
+      },
+      "domain": {
+        "write_tokens": [
+          19153,
+          28747,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          1230,
+          314,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28750,
+          28793,
+          13,
+          1014,
+          13669,
+          24517,
+          5846,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          6876,
+          28709,
+          28733,
+          28784,
+          28770,
+          28723,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          1230,
+          314,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28781,
+          28793,
+          13,
+          1014,
+          399,
+          4199,
+          21227,
+          18844,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          261,
+          5092,
+          28733,
+          28782,
+          28740,
+          28723,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          1230,
+          314,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28734,
+          28793,
+          13,
+          1014,
+          1369,
+          9862,
+          1128,
+          18960,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          1773,
+          2117,
+          28733,
+          28750,
+          28787,
+          28723
+        ],
+        "full": {
+          "exact": true,
+          "tensor_count": 264,
+          "mismatched": [],
+          "source_cursor": 97,
+          "restored_cursor": 97,
+          "cursor_exact": true,
+          "probability_parity": {
+            "exact": true,
+            "within_tolerance": true,
+            "max_abs": 0.0
+          },
+          "checkpoint_sha256": "670e8359b2662239913380eb014a0d8dd4fa7f774738c66e6a08241b9b2fa818"
+        },
+        "recurrent": {
+          "exact": true,
+          "tensor_count": 120,
+          "mismatched": [],
+          "query_did_not_mutate_bundle": true,
+          "bundle_sha256": "3257f6ddb75ee73c78c868920393142a83d49ba105e9340a8799e25829b94948"
+        }
+      },
+      "arms": {
+        "A_empty": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -12.894402503967285,
+                -6.52568244934082,
+                -2.092407703399658,
+                -5.279613018035889,
+                -4.4091081619262695
+              ],
+              "total_logp": -31.201213836669922,
+              "mean_logp": -6.240242767333984
+            },
+            "distractor": {
+              "token_logp": [
+                -7.120965003967285,
+                -13.672805786132812,
+                -2.1815457344055176,
+                -5.907042980194092,
+                -4.674208164215088
+              ],
+              "total_logp": -33.556567668914795,
+              "mean_logp": -6.711313533782959
+            }
+          },
+          "gold_nll": 6.240242767333984,
+          "margin": 0.4710707664489746,
+          "total_margin": 2.355353832244873,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 21,
+            "distractor": 21
+          }
+        },
+        "B_live_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -0.9594748616218567,
+                -0.05430077016353607,
+                -0.06452661752700806,
+                -0.09916071593761444,
+                -0.06137964501976967
+              ],
+              "total_logp": -1.238842610269785,
+              "mean_logp": -0.247768522053957
+            },
+            "distractor": {
+              "token_logp": [
+                -7.396975040435791,
+                -10.91341495513916,
+                -1.473742127418518,
+                -1.086798071861267,
+                -0.6638272404670715
+              ],
+              "total_logp": -21.534757435321808,
+              "mean_logp": -4.306951487064362
+            }
+          },
+          "gold_nll": 0.247768522053957,
+          "margin": 4.059182965010405,
+          "total_margin": 20.295914825052023,
+          "query_start_cursors": {
+            "gold": 34,
+            "distractor": 34
+          },
+          "query_end_cursors": {
+            "gold": 55,
+            "distractor": 55
+          }
+        },
+        "C_recurrent_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.127174735069275,
+                -0.060238588601350784,
+                -0.10872140526771545,
+                -0.12070231139659882,
+                -0.0767911896109581
+              ],
+              "total_logp": -1.493628229945898,
+              "mean_logp": -0.2987256459891796
+            },
+            "distractor": {
+              "token_logp": [
+                -7.1427998542785645,
+                -10.892637252807617,
+                -1.6074087619781494,
+                -1.0162336826324463,
+                -0.7953740954399109
+              ],
+              "total_logp": -21.45445364713669,
+              "mean_logp": -4.290890729427337
+            }
+          },
+          "gold_nll": 0.2987256459891796,
+          "margin": 3.9921650834381577,
+          "total_margin": 19.96082541719079,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 21,
+            "distractor": 21
+          }
+        },
+        "D_full_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -0.9594748616218567,
+                -0.05430077016353607,
+                -0.06452661752700806,
+                -0.09916071593761444,
+                -0.06137964501976967
+              ],
+              "total_logp": -1.238842610269785,
+              "mean_logp": -0.247768522053957
+            },
+            "distractor": {
+              "token_logp": [
+                -7.396975040435791,
+                -10.91341495513916,
+                -1.473742127418518,
+                -1.086798071861267,
+                -0.6638272404670715
+              ],
+              "total_logp": -21.534757435321808,
+              "mean_logp": -4.306951487064362
+            }
+          },
+          "gold_nll": 0.247768522053957,
+          "margin": 4.059182965010405,
+          "total_margin": 20.295914825052023,
+          "query_start_cursors": {
+            "gold": 34,
+            "distractor": 34
+          },
+          "query_end_cursors": {
+            "gold": 55,
+            "distractor": 55
+          }
+        },
+        "E_recurrent_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.5230567455291748,
+                -0.04484834149479866,
+                -0.057521943002939224,
+                -0.12355303764343262,
+                -0.049881935119628906
+              ],
+              "total_logp": -1.7988620027899742,
+              "mean_logp": -0.35977240055799486
+            },
+            "distractor": {
+              "token_logp": [
+                -7.335556983947754,
+                -9.613492012023926,
+                -0.7431647181510925,
+                -1.684856653213501,
+                -1.699695110321045
+              ],
+              "total_logp": -21.076765477657318,
+              "mean_logp": -4.215353095531464
+            }
+          },
+          "gold_nll": 0.35977240055799486,
+          "margin": 3.8555806949734692,
+          "total_margin": 19.277903474867344,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 21,
+            "distractor": 21
+          }
+        },
+        "E_live_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.2279771566390991,
+                -0.03888935595750809,
+                -0.03392559662461281,
+                -0.0706612691283226,
+                -0.03302937373518944
+              ],
+              "total_logp": -1.404482752084732,
+              "mean_logp": -0.2808965504169464
+            },
+            "distractor": {
+              "token_logp": [
+                -7.462352275848389,
+                -9.470318794250488,
+                -0.6333128213882446,
+                -1.579280972480774,
+                -1.4917633533477783
+              ],
+              "total_logp": -20.637028217315674,
+              "mean_logp": -4.127405643463135
+            }
+          },
+          "gold_nll": 0.2808965504169464,
+          "margin": 3.8465090930461883,
+          "total_margin": 19.23254546523094,
+          "query_start_cursors": {
+            "gold": 97,
+            "distractor": 97
+          },
+          "query_end_cursors": {
+            "gold": 118,
+            "distractor": 118
+          }
+        },
+        "E_full_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.2279771566390991,
+                -0.03888935595750809,
+                -0.03392559662461281,
+                -0.0706612691283226,
+                -0.03302937373518944
+              ],
+              "total_logp": -1.404482752084732,
+              "mean_logp": -0.2808965504169464
+            },
+            "distractor": {
+              "token_logp": [
+                -7.462352275848389,
+                -9.470318794250488,
+                -0.6333128213882446,
+                -1.579280972480774,
+                -1.4917633533477783
+              ],
+              "total_logp": -20.637028217315674,
+              "mean_logp": -4.127405643463135
+            }
+          },
+          "gold_nll": 0.2808965504169464,
+          "margin": 3.8465090930461883,
+          "total_margin": 19.23254546523094,
+          "query_start_cursors": {
+            "gold": 97,
+            "distractor": 97
+          },
+          "query_end_cursors": {
+            "gold": 118,
+            "distractor": 118
+          }
+        }
+      },
+      "historical_bos": {
+        "empty_wrapper": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -11.754925727844238,
+                -6.750183582305908,
+                -1.7452346086502075,
+                -5.305632591247559,
+                -4.133848667144775
+              ],
+              "total_logp": -29.689825177192688,
+              "mean_logp": -5.937965035438538
+            },
+            "distractor": {
+              "token_logp": [
+                -6.481488227844238,
+                -14.112014770507812,
+                -1.8691331148147583,
+                -6.019169330596924,
+                -4.291212558746338
+              ],
+              "total_logp": -32.77301800251007,
+              "mean_logp": -6.5546036005020145
+            }
+          },
+          "gold_nll": 5.937965035438538,
+          "margin": 0.6166385650634769,
+          "total_margin": 3.083192825317383,
+          "query_start_cursors": {
+            "gold": 4,
+            "distractor": 4
+          },
+          "query_end_cursors": {
+            "gold": 25,
+            "distractor": 25
+          },
+          "write_tokens": [
+            1,
+            19153,
+            28747,
+            13
+          ]
+        },
+        "exact_record": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -0.7700697183609009,
+                -0.06181308999657631,
+                -0.05452870577573776,
+                -0.06970866769552231,
+                -0.05088634416460991
+              ],
+              "total_logp": -1.0070065259933472,
+              "mean_logp": -0.20140130519866944
+            },
+            "distractor": {
+              "token_logp": [
+                -7.301319599151611,
+                -10.912737846374512,
+                -1.4431276321411133,
+                -1.0945909023284912,
+                -0.6179251670837402
+              ],
+              "total_logp": -21.369701147079468,
+              "mean_logp": -4.273940229415894
+            }
+          },
+          "gold_nll": 0.20140130519866944,
+          "margin": 4.072538924217224,
+          "total_margin": 20.36269462108612,
+          "query_start_cursors": {
+            "gold": 35,
+            "distractor": 35
+          },
+          "query_end_cursors": {
+            "gold": 56,
+            "distractor": 56
+          },
+          "write_tokens": [
+            1,
+            19153,
+            28747,
+            13,
+            28792,
+            7740,
+            28747,
+            1187,
+            1230,
+            314,
+            28793,
+            13,
+            28792,
+            7079,
+            28747,
+            28705,
+            28734,
+            28793,
+            13,
+            1014,
+            1369,
+            9862,
+            1128,
+            18960,
+            354,
+            272,
+            1868,
+            3881,
+            349,
+            1773,
+            2117,
+            28733,
+            28750,
+            28787,
+            28723
+          ]
+        }
+      }
+    }
+  ],
+  "diagnosis": "NameError: name 'json' is not defined",
+  "elapsed_seconds": 160.603858834
+}
