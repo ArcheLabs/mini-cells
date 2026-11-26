@@ -59,6 +59,8 @@ def main():
                     "pyproject.toml", "README.md", "LICENSE", cwd=repo, timeout=120)
                 run(sys.executable, "-m", "pip", "install", "-c", str(constraints),
                     str(repo) + "[mom]", timeout=240)
+                run(sys.executable, str(repo / EXPERIMENT / "test_bridge.py"), timeout=120,
+                    cwd=repo)
                 visible_gpu = t4_uuid()
                 env = {**os.environ, "CUDA_VISIBLE_DEVICES": visible_gpu}
                 run(sys.executable, "-u", str(repo / EXPERIMENT / "run_bridge.py"),

@@ -3,6 +3,7 @@ import argparse
 from dataclasses import asdict
 from hashlib import file_digest, sha256
 from importlib.metadata import version
+import json
 from pathlib import Path
 from statistics import mean
 import subprocess

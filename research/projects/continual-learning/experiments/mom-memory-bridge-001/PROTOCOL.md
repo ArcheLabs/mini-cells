@@ -62,6 +62,9 @@ All effects are descriptive development evidence.
 ## Kaggle
 
 Run [kaggle_bridge.py](kaggle_bridge.py) in Script mode with T4, Internet
-and the existing `GITHUB_TOKEN` secret. The job publishes case scores,
+and the existing `GITHUB_TOKEN` secret. Before loading the real model,
+the job runs the CPU entry-point regression through all nine cases,
+both disk codecs, JSONL reporting and checksum generation.
+The job publishes case scores,
 summaries, checksums and source identity to a dedicated result branch.
 Temporary state bundles are kept out of the published artifacts.
