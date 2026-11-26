@@ -1,7 +1,10 @@
 from contextlib import nullcontext, redirect_stdout
 from io import StringIO
 import json
+import os
 from pathlib import Path
+import subprocess
+import sys
 from tempfile import TemporaryDirectory
 from types import SimpleNamespace
 import unittest
@@ -18,6 +21,15 @@ from minicells_native.sdk import MiniCells
 
 
 class QualityTest(unittest.TestCase):
+    def test_runner_starts_as_a_clean_subprocess_from_another_directory(self):
+        env = {key: value for key, value in os.environ.items() if key != "PYTHONPATH"}
+        with TemporaryDirectory() as temp:
+            result = subprocess.run([sys.executable, str(Path(run.__file__).resolve()), "--help"],
+                                    cwd=temp, env=env, capture_output=True, text=True, timeout=60)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("--model-revision", result.stdout)
+        self.assertIn("--split", result.stdout)
+
     def test_dataset_is_disjoint_and_has_real_reference_chains(self):
         records, data = build()
         self.assertEqual(build(), (records, data))

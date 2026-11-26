@@ -12,8 +12,8 @@ import subprocess
 import sys
 import time
 
-ROOT = Path(__file__).resolve().parents[4]
-sys.path.insert(0, str(ROOT / "apps/mom-native-cells"))
+ROOT = Path(__file__).resolve().parents[5]
+sys.path[:0] = [str(ROOT / "src"), str(ROOT / "apps/mom-native-cells")]
 
 import torch
 from minicells import MiniCells
