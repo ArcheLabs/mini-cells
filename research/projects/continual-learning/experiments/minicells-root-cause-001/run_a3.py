@@ -102,7 +102,7 @@ def packing_summary(evidence):
                                              for b in call["backends"]}))
 
 
-def run_arm(backbone, schedules, original_logits=None):
+def run_arm(backbone, schedules, original_logits=None, *, focus=()):
     logit_key = (len(backbone.model.model.layers), "logits")
     full, experts, evidence, cache = trace(backbone, schedules["whole"])
     logits = {"whole": full[logit_key]}
@@ -121,6 +121,8 @@ def run_arm(backbone, schedules, original_logits=None):
             routing=compare_routing(evidence["routing"], split["routing"]),
             cache=compare_caches(cache, state), cache_cursor=state.get_seq_length(),
             whole_cache_cursor=cache.get_seq_length())
+        if focus:
+            arm["splits"][name]["focused_stages"] = [row for row in rows if (row["layer"], row["stage"]) in focus]
         del state
     if original_logits is not None:
         arm["same_schedule_vs_original"] = {name: differences(original_logits[name], value, SPLIT)

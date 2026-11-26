@@ -227,3 +227,28 @@ compares matching schedules across arms. It includes first divergences,
 routing agreement, cache summaries and the frozen Logits gate. This
 short fused-recurrent diagnostic does not perform A.4 generation or
 long-sequence acceptance.
+
+## Phase A.3.2 expert recurrence padding
+
+A.3.1 brought prefill plus decode and tokenwise execution within the
+frozen Logits tolerance. Two-chunk prefill still failed, first at layer 1
+attention output. [A.3.1 artifacts](https://github.com/ArcheLabs/mini-cells/tree/96941e148aea43f6791708cfc33fbca1d05d95c1/artifacts/experiments/minicells-root-cause-001/a31-204228f35ce0).
+
+Run [kaggle_phase_a32.py](kaggle_phase_a32.py) in Kaggle Script mode with
+T4, Internet, and the existing GitHub secret. A fixed-input probe captures
+the real second-prefill-chunk Delta calls at layer 1 for experts with
+padding and a nonzero incoming state. It replays the same Q/K/V, router
+assignment, coefficients and boundary state. The compact reference omits
+padded steps and uses the same pinned Triton operator. The candidate
+leaves the tensor layout intact and sets the padded log-decay and update
+gate to zero. Its valid outputs and final state must match compact replay
+within A.1's component tolerance. The report records native differences
+independently of that gate.
+
+The paired full-model experiment starts from A.3.1 in both arms and enables
+the candidate only for the routed experts. The shared path stays native.
+The report compares each split against that arm's whole pass, compares
+matching schedules across arms and retains layer 0 and layer 1 attention
+output differences. It measures final Logits, routing and cache differences
+against the original Phase A bounds. A.4 remains the separate generation
+and long-input acceptance stage.
