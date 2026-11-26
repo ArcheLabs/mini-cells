@@ -1,0 +1,4729 @@
+{
+  "format": "minicells.root-cause.001.phase-a.v1",
+  "status": "FAIL",
+  "engineering_status": "PASS",
+  "protocol": {
+    "parity": {
+      "atol": 0.0625,
+      "rtol": 0.005
+    },
+    "split": {
+      "atol": 0.25,
+      "rtol": 0.02
+    },
+    "max_new_tokens": 32,
+    "minimum_bos_continuations": 4,
+    "use_cache": true
+  },
+  "environment": {
+    "timestamp": "2026-11-26T08:23:36.316002+00:00",
+    "python": "3.13.16 (main, Oct  1 2026, 15:40:24) [GCC 13.3.0]",
+    "torch": "2.11.0+cu130",
+    "physical_devices": [
+      {
+        "name": "Tesla T4",
+        "total_mib": "15360",
+        "free_mib": "14912",
+        "driver": "580.178.04",
+        "compute_capability": "7.5"
+      },
+      {
+        "name": "Tesla T4",
+        "total_mib": "15360",
+        "free_mib": "14912",
+        "driver": "580.178.04",
+        "compute_capability": "7.5"
+      }
+    ],
+    "hardware_status": "T4_PRESENT",
+    "cuda_runtime": "13.0"
+  },
+  "model_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+  "identity": {
+    "model_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+    "model_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+    "architecture": "mom-gated-deltanet",
+    "mom_revision": "125038087b71b635c171cec857bd0f21d10955b6",
+    "tokenizer_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+    "tokenizer_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+    "tokenizer_hash": "90e3e115a745594abd2167554dcf472ea00d4852465c03b5482309d9036f4c49",
+    "tokenizer_files": {
+      "special_tokens_map.json": "4452b845ab9ca2afa863f59f1411a959e8a32bb4334e264b0e71d5d17dd4dcb9",
+      "tokenizer.json": "a2699839c243202a04a90537576fc719283f638e90fe80feb469888275289575",
+      "tokenizer_config.json": "cc3fdc5126e4d2e3a3934bc29779bf811c2eeefb60237017cddfd03acf9a7562"
+    },
+    "config_hash": "b99c19cdd75493abb6dfe0d5e991ebaac8d5af963b75c0ea2f73a6f496204341",
+    "weights_sha256": "08820287a91c2bc10f1fafe8b149dbf027ae51768530027c711dc240f7d53771",
+    "dtype": "float16",
+    "num_hidden_layers": 24,
+    "num_memories": 4,
+    "shared_memory": true,
+    "topk": 2,
+    "torch": "2.11.0+cu130",
+    "triton": "3.6.0",
+    "transformers": "4.51.3",
+    "flash-linear-attention": "0.2.2",
+    "parameters": 1552884000
+  },
+  "gates": {
+    "tokenizer": "PASS",
+    "native_reference": "PASS",
+    "upstream_split": "FAIL",
+    "greedy_reference": "PASS",
+    "base_completion": "FAIL"
+  },
+  "official_wrapper": {
+    "status": "FAIL",
+    "error_type": "TypeError",
+    "reason": "unsupported operand type(s) for +=: 'NoneType' and 'Tensor'"
+  },
+  "tokenizer": {
+    "bos": 1,
+    "eos": 2,
+    "model_bos": 1,
+    "model_eos": 2,
+    "independent_generation_bos": [
+      false,
+      true
+    ],
+    "current_sdk_write_bos": false,
+    "current_sdk_query_bos": false
+  },
+  "counts": {
+    "continuation/bos=False": 2,
+    "continuation/bos=True": 3,
+    "fact_completion/bos=False": 4,
+    "fact_completion/bos=True": 3,
+    "question_answer/bos=False": 1,
+    "question_answer/bos=True": 1
+  },
+  "rows": [
+    {
+      "id": "france",
+      "style": "continuation",
+      "text": "The capital of France is",
+      "target": "Paris",
+      "bos": false,
+      "prompt_token_ids": [
+        415,
+        5565,
+        302,
+        4843,
+        349
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              5,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 252,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            5
+          ],
+          "reference_positions": [
+            5
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            5
+          ],
+          "consumed_tokens": 5
+        },
+        "prefill_decode": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              5,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 258,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "reference_positions": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "consumed_tokens": 5,
+          "upstream_vs_whole": {
+            "pass_": false,
+            "shape": [
+              1,
+              5,
+              32000
+            ],
+            "max_abs": 21.93707275390625,
+            "mean_abs": 5.185129642486572,
+            "within_fraction": 0.043668750673532486,
+            "top1_agreement": 0.20000000298023224
+          }
+        },
+        "tokenwise": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              5,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 258,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "reference_positions": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "consumed_tokens": 5,
+          "upstream_vs_whole": {
+            "pass_": false,
+            "shape": [
+              1,
+              5,
+              32000
+            ],
+            "max_abs": 21.93707275390625,
+            "mean_abs": 5.185129642486572,
+            "within_fraction": 0.043668750673532486,
+            "top1_agreement": 0.20000000298023224
+          }
+        }
+      },
+      "native": {
+        "text": "Parisaaaaa and of the most, in, the most, the inse are, the  ofc., the, the fact the",
+        "token_ids": [
+          5465,
+          28708,
+          28708,
+          28708,
+          28708,
+          28708,
+          304,
+          302,
+          272,
+          1080,
+          28725,
+          297,
+          28725,
+          272,
+          1080,
+          28725,
+          272,
+          297,
+          331,
+          460,
+          28725,
+          272,
+          28705,
+          302,
+          28717,
+          28723,
+          28725,
+          272,
+          28725,
+          272,
+          1639,
+          272
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 5.028882457000009,
+        "known_completion": false
+      },
+      "reference_generation": {
+        "text": "Parisaaaaa and of the most, in, the most, the inse are, the  ofc., the, the fact the",
+        "token_ids": [
+          5465,
+          28708,
+          28708,
+          28708,
+          28708,
+          28708,
+          304,
+          302,
+          272,
+          1080,
+          28725,
+          297,
+          28725,
+          272,
+          1080,
+          28725,
+          272,
+          297,
+          331,
+          460,
+          28725,
+          272,
+          28705,
+          302,
+          28717,
+          28723,
+          28725,
+          272,
+          28725,
+          272,
+          1639,
+          272
+        ],
+        "stop_reason": "max_new_tokens",
+        "matches_native": true
+      }
+    },
+    {
+      "id": "france",
+      "style": "continuation",
+      "text": "The capital of France is",
+      "target": "Paris",
+      "bos": true,
+      "prompt_token_ids": [
+        1,
+        415,
+        5565,
+        302,
+        4843,
+        349
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              6,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 252,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            6
+          ],
+          "reference_positions": [
+            6
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            6
+          ],
+          "consumed_tokens": 6
+        },
+        "prefill_decode": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              6,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 254,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "reference_positions": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "consumed_tokens": 6,
+          "upstream_vs_whole": {
+            "pass_": false,
+            "shape": [
+              1,
+              6,
+              32000
+            ],
+            "max_abs": 15.63671875,
+            "mean_abs": 3.1922285556793213,
+            "within_fraction": 0.3753281235694885,
+            "top1_agreement": 0.6666666865348816
+          }
+        },
+        "tokenwise": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              6,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 264,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "reference_positions": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "consumed_tokens": 6,
+          "upstream_vs_whole": {
+            "pass_": false,
+            "shape": [
+              1,
+              6,
+              32000
+            ],
+            "max_abs": 18.37890625,
+            "mean_abs": 3.6731932163238525,
+            "within_fraction": 0.18915624916553497,
+            "top1_agreement": 0.5
+          }
+        }
+      },
+      "native": {
+        "text": "Paris the the the the the the name the word the capital as the capital..., the LHtog the LFtie asff,",
+        "token_ids": [
+          5465,
+          272,
+          272,
+          272,
+          272,
+          272,
+          272,
+          1141,
+          272,
+          1707,
+          272,
+          5565,
+          390,
+          272,
+          5565,
+          28723,
+          28723,
+          28723,
+          28725,
+          272,
+          393,
+          28769,
+          28707,
+          476,
+          272,
+          393,
+          28765,
+          28707,
+          412,
+          390,
+          496,
+          28725
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 5.008484753000005,
+        "known_completion": true
+      },
+      "reference_generation": {
+        "text": "Paris the the the the the the name the word the capital as the capital..., the LHtog the LFtie asff,",
+        "token_ids": [
+          5465,
+          272,
+          272,
+          272,
+          272,
+          272,
+          272,
+          1141,
+          272,
+          1707,
+          272,
+          5565,
+          390,
+          272,
+          5565,
+          28723,
+          28723,
+          28723,
+          28725,
+          272,
+          393,
+          28769,
+          28707,
+          476,
+          272,
+          393,
+          28765,
+          28707,
+          412,
+          390,
+          496,
+          28725
+        ],
+        "stop_reason": "max_new_tokens",
+        "matches_native": true
+      }
+    },
+    {
+      "id": "france",
+      "style": "fact_completion",
+      "text": "The capital of France is Paris.\nThe capital of France is",
+      "target": "Paris",
+      "bos": false,
+      "prompt_token_ids": [
+        415,
+        5565,
+        302,
+        4843,
+        349,
+        5465,
+        28723,
+        13,
+        1014,
+        5565,
+        302,
+        4843,
+        349
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              13,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 258,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            13
+          ],
+          "reference_positions": [
+            13
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            13
+          ],
+          "consumed_tokens": 13
+        },
+        "prefill_decode": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              13,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 260,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "reference_positions": [
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "consumed_tokens": 13,
+          "upstream_vs_whole": {
+            "pass_": false,
+            "shape": [
+              1,
+              13,
+              32000
+            ],
+            "max_abs": 15.7548828125,
+            "mean_abs": 1.7781316041946411,
+            "within_fraction": 0.3176274001598358,
+            "top1_agreement": 0.5384615659713745
+          }
+        },
+        "tokenwise": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              13,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 264,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "reference_positions": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "consumed_tokens": 13,
+          "upstream_vs_whole": {
+            "pass_": false,
+            "shape": [
+              1,
+              13,
+              32000
+            ],
+            "max_abs": 26.94140625,
+            "mean_abs": 5.650414943695068,
+            "within_fraction": 0.04293028637766838,
+            "top1_agreement": 0.07692307978868484
+          }
+        }
+      },
+      "native": {
+        "text": "Paris law capital the reason the house-an,,,,,, totaletoll, with, the, , , the, the",
+        "token_ids": [
+          5465,
+          2309,
+          5565,
+          272,
+          2611,
+          272,
+          2134,
+          28733,
+          276,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          298,
+          28707,
+          883,
+          28707,
+          793,
+          28725,
+          395,
+          28725,
+          272,
+          28725,
+          28705,
+          28725,
+          28705,
+          28725,
+          272,
+          28725,
+          272
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 4.944444781999948,
+        "known_completion": true
+      },
+      "reference_generation": {
+        "text": "Paris law capital the reason the house-an,,,,,, totaletoll, with, the, , , the, the",
+        "token_ids": [
+          5465,
+          2309,
+          5565,
+          272,
+          2611,
+          272,
+          2134,
+          28733,
+          276,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          298,
+          28707,
+          883,
+          28707,
+          793,
+          28725,
+          395,
+          28725,
+          272,
+          28725,
+          28705,
+          28725,
+          28705,
+          28725,
+          272,
+          28725,
+          272
+        ],
+        "stop_reason": "max_new_tokens",
+        "matches_native": true
+      }
+    },
+    {
+      "id": "france",
+      "style": "fact_completion",
+      "text": "The capital of France is Paris.\nThe capital of France is",
+      "target": "Paris",
+      "bos": true,
+      "prompt_token_ids": [
+        1,
+        415,
+        5565,
+        302,
+        4843,
+        349,
+        5465,
+        28723,
+        13,
+        1014,
+        5565,
+        302,
+        4843,
+        349
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              14,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 257,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            14
+          ],
+          "reference_positions": [
+            14
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            14
+          ],
+          "consumed_tokens": 14
+        },
+        "prefill_decode": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              14,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 261,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            10,
+            11,
+            12,
+            13,
+            14
+          ],
+          "reference_positions": [
+            10,
+            11,
+            12,
+            13,
+            14
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            10,
+            11,
+            12,
+            13,
+            14
+          ],
+          "consumed_tokens": 14,
+          "upstream_vs_whole": {
+            "pass_": false,
+            "shape": [
+              1,
+              14,
+              32000
+            ],
+            "max_abs": 15.94921875,
+            "mean_abs": 1.3338043689727783,
+            "within_fraction": 0.4817321300506592,
+            "top1_agreement": 0.5714285969734192
+          }
+        },
+        "tokenwise": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              14,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 264,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+          ],
+          "reference_positions": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+          ],
+          "consumed_tokens": 14,
+          "upstream_vs_whole": {
+            "pass_": false,
+            "shape": [
+              1,
+              14,
+              32000
+            ],
+            "max_abs": 23.8984375,
+            "mean_abs": 4.946420669555664,
+            "within_fraction": 0.0992165133357048,
+            "top1_agreement": 0.2857142984867096
+          }
+        }
+      },
+      "native": {
+        "text": "Parisnet the.ily the, to the, to with, the, you the the, the, the best that, the best to peace, the first",
+        "token_ids": [
+          5465,
+          1687,
+          272,
+          28723,
+          1106,
+          272,
+          28725,
+          298,
+          272,
+          28725,
+          298,
+          395,
+          28725,
+          272,
+          28725,
+          368,
+          272,
+          272,
+          28725,
+          272,
+          28725,
+          272,
+          1489,
+          369,
+          28725,
+          272,
+          1489,
+          298,
+          6405,
+          28725,
+          272,
+          907
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 4.9856222040000375,
+        "known_completion": false
+      },
+      "reference_generation": {
+        "text": "Parisnet the.ily the, to the, to with, the, you the the, the, the best that, the best to peace, the first",
+        "token_ids": [
+          5465,
+          1687,
+          272,
+          28723,
+          1106,
+          272,
+          28725,
+          298,
+          272,
+          28725,
+          298,
+          395,
+          28725,
+          272,
+          28725,
+          368,
+          272,
+          272,
+          28725,
+          272,
+          28725,
+          272,
+          1489,
+          369,
+          28725,
+          272,
+          1489,
+          298,
+          6405,
+          28725,
+          272,
+          907
+        ],
+        "stop_reason": "max_new_tokens",
+        "matches_native": true
+      }
+    },
+    {
+      "id": "france",
+      "style": "question_answer",
+      "text": "Question: What is the capital of France? Reply with only the answer.\nAnswer:",
+      "target": "Paris",
+      "bos": false,
+      "prompt_token_ids": [
+        22478,
+        28747,
+        1824,
+        349,
+        272,
+        5565,
+        302,
+        4843,
+        28804,
+        3357,
+        346,
+        395,
+        865,
+        272,
+        4372,
+        28723,
+        13,
+        2820,
+        16981,
+        28747
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              20,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 263,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            20
+          ],
+          "reference_positions": [
+            20
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            20
+          ],
+          "consumed_tokens": 20
+        },
+        "prefill_decode": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              20,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 263,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            16,
+            17,
+            18,
+            19,
+            20
+          ],
+          "reference_positions": [
+            16,
+            17,
+            18,
+            19,
+            20
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            16,
+            17,
+            18,
+            19,
+            20
+          ],
+          "consumed_tokens": 20,
+          "upstream_vs_whole": {
+            "pass_": false,
+            "shape": [
+              1,
+              20,
+              32000
+            ],
+            "max_abs": 24.521728515625,
+            "mean_abs": 2.273145914077759,
+            "within_fraction": 0.2592359185218811,
+            "top1_agreement": 0.550000011920929
+          }
+        },
+        "tokenwise": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              20,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 264,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20
+          ],
+          "reference_positions": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20
+          ],
+          "consumed_tokens": 20,
+          "upstream_vs_whole": {
+            "pass_": false,
+            "shape": [
+              1,
+              20,
+              32000
+            ],
+            "max_abs": 33.7890625,
+            "mean_abs": 4.477962970733643,
+            "within_fraction": 0.0780765637755394,
+            "top1_agreement": 0.0
+          }
+        }
+      },
+      "native": {
+        "text": "Paris . of the, the, the, the a, the, the the only in the only forn./\n, who is the world,",
+        "token_ids": [
+          5465,
+          28705,
+          28723,
+          302,
+          272,
+          28725,
+          272,
+          28725,
+          272,
+          28725,
+          272,
+          264,
+          28725,
+          272,
+          28725,
+          272,
+          272,
+          865,
+          297,
+          272,
+          865,
+          354,
+          28711,
+          28723,
+          28748,
+          13,
+          28725,
+          693,
+          349,
+          272,
+          1526,
+          28725
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 5.033999638000012,
+        "known_completion": true
+      },
+      "reference_generation": {
+        "text": "Paris . of the, the, the, the a, the, the the only in the only forn./\n, who is the world,",
+        "token_ids": [
+          5465,
+          28705,
+          28723,
+          302,
+          272,
+          28725,
+          272,
+          28725,
+          272,
+          28725,
+          272,
+          264,
+          28725,
+          272,
+          28725,
+          272,
+          272,
+          865,
+          297,
+          272,
+          865,
+          354,
+          28711,
+          28723,
+          28748,
+          13,
+          28725,
+          693,
+          349,
+          272,
+          1526,
+          28725
+        ],
+        "stop_reason": "max_new_tokens",
+        "matches_native": true
+      }
+    },
+    {
+      "id": "france",
+      "style": "question_answer",
+      "text": "Question: What is the capital of France? Reply with only the answer.\nAnswer:",
+      "target": "Paris",
+      "bos": true,
+      "prompt_token_ids": [
+        1,
+        22478,
+        28747,
+        1824,
+        349,
+        272,
+        5565,
+        302,
+        4843,
+        28804,
+        3357,
+        346,
+        395,
+        865,
+        272,
+        4372,
+        28723,
+        13,
+        2820,
+        16981,
+        28747
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              21,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 261,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            21
+          ],
+          "reference_positions": [
+            21
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            21
+          ],
+          "consumed_tokens": 21
+        },
+        "prefill_decode": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              21,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 263,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            17,
+            18,
+            19,
+            20,
+            21
+          ],
+          "reference_positions": [
+            17,
+            18,
+            19,
+            20,
+            21
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            17,
+            18,
+            19,
+            20,
+            21
+          ],
+          "consumed_tokens": 21,
+          "upstream_vs_whole": {
+            "pass_": false,
+            "shape": [
+              1,
+              21,
+              32000
+            ],
+            "max_abs": 20.1669921875,
+            "mean_abs": 1.0814149379730225,
+            "within_fraction": 0.8222827315330505,
+            "top1_agreement": 0.8095238208770752
+          }
+        },
+        "tokenwise": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              21,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 264,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21
+          ],
+          "reference_positions": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21
+          ],
+          "consumed_tokens": 21,
+          "upstream_vs_whole": {
+            "pass_": false,
+            "shape": [
+              1,
+              21,
+              32000
+            ],
+            "max_abs": 29.80078125,
+            "mean_abs": 6.1858134269714355,
+            "within_fraction": 0.0653110146522522,
+            "top1_agreement": 0.0476190485060215
+          }
+        }
+      },
+      "native": {
+        "text": "Paris HELN.,:\n\nThe French firkt-K, to theorov., the only in the only in- in-",
+        "token_ids": [
+          5465,
+          382,
+          2980,
+          28759,
+          28723,
+          28725,
+          28747,
+          13,
+          13,
+          1014,
+          4949,
+          285,
+          7316,
+          28707,
+          28733,
+          28796,
+          28725,
+          298,
+          272,
+          271,
+          626,
+          28723,
+          28725,
+          272,
+          865,
+          297,
+          272,
+          865,
+          297,
+          28733,
+          297,
+          28733
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 5.01807932600002,
+        "known_completion": true
+      },
+      "reference_generation": {
+        "text": "Paris HELN.,:\n\nThe French firkt-K, to theorov., the only in the only in- in-",
+        "token_ids": [
+          5465,
+          382,
+          2980,
+          28759,
+          28723,
+          28725,
+          28747,
+          13,
+          13,
+          1014,
+          4949,
+          285,
+          7316,
+          28707,
+          28733,
+          28796,
+          28725,
+          298,
+          272,
+          271,
+          626,
+          28723,
+          28725,
+          272,
+          865,
+          297,
+          272,
+          865,
+          297,
+          28733,
+          297,
+          28733
+        ],
+        "stop_reason": "max_new_tokens",
+        "matches_native": true
+      }
+    },
+    {
+      "id": "days",
+      "style": "continuation",
+      "text": "Monday, Tuesday, Wednesday, Thursday,",
+      "target": "Friday",
+      "bos": false,
+      "prompt_token_ids": [
+        9262,
+        28725,
+        11187,
+        28725,
+        11463,
+        28725,
+        10983,
+        28725
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              8,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 244,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            8
+          ],
+          "reference_positions": [
+            8
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            8
+          ],
+          "consumed_tokens": 8
+        }
+      },
+      "native": {
+        "text": "Friday,,,,t,,t,,t,,,,,,,,,,,,,,,,,,,,",
+        "token_ids": [
+          8085,
+          28725,
+          28725,
+          28725,
+          28725,
+          28707,
+          28725,
+          28725,
+          28707,
+          28725,
+          28725,
+          28707,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 5.040379710000025,
+        "known_completion": true
+      }
+    },
+    {
+      "id": "days",
+      "style": "continuation",
+      "text": "Monday, Tuesday, Wednesday, Thursday,",
+      "target": "Friday",
+      "bos": true,
+      "prompt_token_ids": [
+        1,
+        9262,
+        28725,
+        11187,
+        28725,
+        11463,
+        28725,
+        10983,
+        28725
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              9,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 247,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            9
+          ],
+          "reference_positions": [
+            9
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            9
+          ],
+          "consumed_tokens": 9
+        }
+      },
+      "native": {
+        "text": "Friday, S for thet or thet,\n January , and , and the first, and the other names, \"Chs the last hur",
+        "token_ids": [
+          8085,
+          28725,
+          318,
+          354,
+          272,
+          28707,
+          442,
+          272,
+          28707,
+          28725,
+          13,
+          4624,
+          28705,
+          28725,
+          304,
+          28705,
+          28725,
+          304,
+          272,
+          907,
+          28725,
+          304,
+          272,
+          799,
+          2955,
+          28725,
+          345,
+          1209,
+          28713,
+          272,
+          1432,
+          7033
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 4.9390806789999715,
+        "known_completion": true
+      }
+    },
+    {
+      "id": "days",
+      "style": "fact_completion",
+      "text": "Monday, Tuesday, Wednesday, Thursday, Friday.\nMonday, Tuesday, Wednesday, Thursday,",
+      "target": "Friday",
+      "bos": false,
+      "prompt_token_ids": [
+        9262,
+        28725,
+        11187,
+        28725,
+        11463,
+        28725,
+        10983,
+        28725,
+        8085,
+        28723,
+        13,
+        28755,
+        1089,
+        339,
+        28725,
+        11187,
+        28725,
+        11463,
+        28725,
+        10983,
+        28725
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              21,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 257,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            21
+          ],
+          "reference_positions": [
+            21
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            21
+          ],
+          "consumed_tokens": 21
+        }
+      },
+      "native": {
+        "text": "Friday Th, was, htoph M ate the wasitoph, the ...t, the wasimtch, ation,",
+        "token_ids": [
+          8085,
+          320,
+          28716,
+          28725,
+          403,
+          28725,
+          295,
+          28707,
+          3126,
+          351,
+          28705,
+          380,
+          272,
+          403,
+          28710,
+          28707,
+          3126,
+          28725,
+          272,
+          28705,
+          1101,
+          28707,
+          28725,
+          272,
+          403,
+          321,
+          28707,
+          338,
+          28725,
+          28705,
+          352,
+          28725
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 5.006302922999964,
+        "known_completion": true
+      }
+    },
+    {
+      "id": "days",
+      "style": "fact_completion",
+      "text": "Monday, Tuesday, Wednesday, Thursday, Friday.\nMonday, Tuesday, Wednesday, Thursday,",
+      "target": "Friday",
+      "bos": true,
+      "prompt_token_ids": [
+        1,
+        9262,
+        28725,
+        11187,
+        28725,
+        11463,
+        28725,
+        10983,
+        28725,
+        8085,
+        28723,
+        13,
+        28755,
+        1089,
+        339,
+        28725,
+        11187,
+        28725,
+        11463,
+        28725,
+        10983,
+        28725
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              22,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 254,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            22
+          ],
+          "reference_positions": [
+            22
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            22
+          ],
+          "consumed_tokens": 22
+        }
+      },
+      "native": {
+        "text": "Friday, the, h,t,,,,,,,,,,,,, by,,,,,,,,,,",
+        "token_ids": [
+          8085,
+          28725,
+          272,
+          28725,
+          28705,
+          28716,
+          28725,
+          28707,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          486,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 5.306681941999955,
+        "known_completion": true
+      }
+    },
+    {
+      "id": "days",
+      "style": "question_answer",
+      "text": "Question: What day comes after Thursday? Reply with only the answer.\nAnswer:",
+      "target": "Friday",
+      "bos": false,
+      "prompt_token_ids": [
+        22478,
+        28747,
+        1824,
+        1370,
+        3435,
+        1024,
+        10983,
+        28804,
+        3357,
+        346,
+        395,
+        865,
+        272,
+        4372,
+        28723,
+        13,
+        2820,
+        16981,
+        28747
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              19,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 264,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            19
+          ],
+          "reference_positions": [
+            19
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            19
+          ],
+          "consumed_tokens": 19
+        }
+      },
+      "native": {
+        "text": "Thursday, the., the following:: the best, is LTD, the following the town, to be, where it now that , making the",
+        "token_ids": [
+          10983,
+          28725,
+          272,
+          28723,
+          28725,
+          272,
+          2296,
+          28747,
+          28747,
+          272,
+          1489,
+          28725,
+          349,
+          393,
+          21339,
+          28725,
+          272,
+          2296,
+          272,
+          3736,
+          28725,
+          298,
+          347,
+          28725,
+          970,
+          378,
+          1055,
+          369,
+          28705,
+          28725,
+          2492,
+          272
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 5.290556030999994,
+        "known_completion": false
+      }
+    },
+    {
+      "id": "days",
+      "style": "question_answer",
+      "text": "Question: What day comes after Thursday? Reply with only the answer.\nAnswer:",
+      "target": "Friday",
+      "bos": true,
+      "prompt_token_ids": [
+        1,
+        22478,
+        28747,
+        1824,
+        1370,
+        3435,
+        1024,
+        10983,
+        28804,
+        3357,
+        346,
+        395,
+        865,
+        272,
+        4372,
+        28723,
+        13,
+        2820,
+        16981,
+        28747
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              20,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 261,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            20
+          ],
+          "reference_positions": [
+            20
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            20
+          ],
+          "consumed_tokens": 20
+        }
+      },
+      "native": {
+        "text": "Thursday is: of the days that is that, the the the, the question, the fact, it does not only for an 1 has been, at",
+        "token_ids": [
+          10983,
+          349,
+          28747,
+          302,
+          272,
+          2202,
+          369,
+          349,
+          369,
+          28725,
+          272,
+          272,
+          272,
+          28725,
+          272,
+          2996,
+          28725,
+          272,
+          1639,
+          28725,
+          378,
+          1235,
+          459,
+          865,
+          354,
+          396,
+          28705,
+          28740,
+          659,
+          750,
+          28725,
+          438
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 5.020998357999986,
+        "known_completion": false
+      }
+    },
+    {
+      "id": "numbers",
+      "style": "continuation",
+      "text": "One, two, three, four,",
+      "target": "five",
+      "bos": false,
+      "prompt_token_ids": [
+        2387,
+        28725,
+        989,
+        28725,
+        1712,
+        28725,
+        2308,
+        28725
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              8,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 249,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            8
+          ],
+          "reference_positions": [
+            8
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            8
+          ],
+          "consumed_tokens": 8
+        }
+      },
+      "native": {
+        "text": "five-t, all,\n,,,,, March of the \nCh\nThe 0, in the,\nThe 's to the",
+        "token_ids": [
+          3359,
+          28733,
+          28707,
+          28725,
+          544,
+          28725,
+          13,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          4117,
+          302,
+          272,
+          28705,
+          13,
+          1209,
+          13,
+          1014,
+          28705,
+          28734,
+          28725,
+          297,
+          272,
+          28725,
+          13,
+          1014,
+          464,
+          28713,
+          298,
+          272
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 4.897063593000041,
+        "known_completion": true
+      }
+    },
+    {
+      "id": "numbers",
+      "style": "continuation",
+      "text": "One, two, three, four,",
+      "target": "five",
+      "bos": true,
+      "prompt_token_ids": [
+        1,
+        2387,
+        28725,
+        989,
+        28725,
+        1712,
+        28725,
+        2308,
+        28725
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              9,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 246,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            9
+          ],
+          "reference_positions": [
+            9
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            9
+          ],
+          "consumed_tokens": 9
+        }
+      },
+      "native": {
+        "text": "five more,by,, included,,,,,,,,,,,,,,,,,,,, one, there is the",
+        "token_ids": [
+          3359,
+          680,
+          28725,
+          1403,
+          28725,
+          28725,
+          4658,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          624,
+          28725,
+          736,
+          349,
+          272
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 4.936941547999993,
+        "known_completion": true
+      }
+    },
+    {
+      "id": "numbers",
+      "style": "fact_completion",
+      "text": "One, two, three, four, five.\nOne, two, three, four,",
+      "target": "five",
+      "bos": false,
+      "prompt_token_ids": [
+        2387,
+        28725,
+        989,
+        28725,
+        1712,
+        28725,
+        2308,
+        28725,
+        3359,
+        28723,
+        13,
+        6167,
+        28725,
+        989,
+        28725,
+        1712,
+        28725,
+        2308,
+        28725
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              19,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 254,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            19
+          ],
+          "reference_positions": [
+            19
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            19
+          ],
+          "consumed_tokens": 19
+        }
+      },
+      "native": {
+        "text": "five,, side, point, point-t, out, the, Of,,,,,,,,,,, aeme,,,",
+        "token_ids": [
+          3359,
+          28725,
+          28725,
+          2081,
+          28725,
+          1305,
+          28725,
+          1305,
+          28733,
+          28707,
+          28725,
+          575,
+          28725,
+          272,
+          28725,
+          4529,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          264,
+          5037,
+          28725,
+          28725,
+          28725
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 4.9796165440000095,
+        "known_completion": true
+      }
+    },
+    {
+      "id": "numbers",
+      "style": "fact_completion",
+      "text": "One, two, three, four, five.\nOne, two, three, four,",
+      "target": "five",
+      "bos": true,
+      "prompt_token_ids": [
+        1,
+        2387,
+        28725,
+        989,
+        28725,
+        1712,
+        28725,
+        2308,
+        28725,
+        3359,
+        28723,
+        13,
+        6167,
+        28725,
+        989,
+        28725,
+        1712,
+        28725,
+        2308,
+        28725
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              20,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 253,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            20
+          ],
+          "reference_positions": [
+            20
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            20
+          ],
+          "consumed_tokens": 20
+        }
+      },
+      "native": {
+        "text": "five points to part, well, or two, award in- one of thetow one., one of it one other, one-t, one",
+        "token_ids": [
+          3359,
+          3569,
+          298,
+          744,
+          28725,
+          1162,
+          28725,
+          442,
+          989,
+          28725,
+          7619,
+          297,
+          28733,
+          624,
+          302,
+          272,
+          28707,
+          336,
+          624,
+          28723,
+          28725,
+          624,
+          302,
+          378,
+          624,
+          799,
+          28725,
+          624,
+          28733,
+          28707,
+          28725,
+          624
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 4.963928645999999,
+        "known_completion": true
+      }
+    },
+    {
+      "id": "numbers",
+      "style": "question_answer",
+      "text": "Question: What word comes after four in counting? Reply with only the answer.\nAnswer:",
+      "target": "five",
+      "bos": false,
+      "prompt_token_ids": [
+        22478,
+        28747,
+        1824,
+        1707,
+        3435,
+        1024,
+        2308,
+        297,
+        20014,
+        28804,
+        3357,
+        346,
+        395,
+        865,
+        272,
+        4372,
+        28723,
+        13,
+        2820,
+        16981,
+        28747
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              21,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 264,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            21
+          ],
+          "reference_positions": [
+            21
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            21
+          ],
+          "consumed_tokens": 21
+        }
+      },
+      "native": {
+        "text": ": World:-1, , ', . the.., and, and of the forms of the latter-i...t...",
+        "token_ids": [
+          28705,
+          28747,
+          3304,
+          28747,
+          28733,
+          28740,
+          28725,
+          28705,
+          28725,
+          28705,
+          28742,
+          28725,
+          28705,
+          28723,
+          272,
+          28723,
+          28723,
+          28725,
+          304,
+          28725,
+          304,
+          302,
+          272,
+          6967,
+          302,
+          272,
+          9827,
+          28733,
+          28710,
+          1101,
+          28707,
+          1101
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 4.973976622999999,
+        "known_completion": false
+      }
+    },
+    {
+      "id": "numbers",
+      "style": "question_answer",
+      "text": "Question: What word comes after four in counting? Reply with only the answer.\nAnswer:",
+      "target": "five",
+      "bos": true,
+      "prompt_token_ids": [
+        1,
+        22478,
+        28747,
+        1824,
+        1707,
+        3435,
+        1024,
+        2308,
+        297,
+        20014,
+        28804,
+        3357,
+        346,
+        395,
+        865,
+        272,
+        4372,
+        28723,
+        13,
+        2820,
+        16981,
+        28747
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              22,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 264,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            22
+          ],
+          "reference_positions": [
+            22
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            22
+          ],
+          "consumed_tokens": 22
+        }
+      },
+      "native": {
+        "text": "Fourtch the the the only one of the the language, the only the , the original in theor-, the only in the  the ",
+        "token_ids": [
+          9611,
+          28707,
+          338,
+          272,
+          272,
+          272,
+          865,
+          624,
+          302,
+          272,
+          272,
+          3842,
+          28725,
+          272,
+          865,
+          272,
+          28705,
+          28725,
+          272,
+          3493,
+          297,
+          272,
+          271,
+          28733,
+          28725,
+          272,
+          865,
+          297,
+          272,
+          28705,
+          272,
+          28705
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 5.059184512000002,
+        "known_completion": false
+      }
+    },
+    {
+      "id": "color",
+      "style": "continuation",
+      "text": "A ripe banana is usually",
+      "target": "yellow",
+      "bos": false,
+      "prompt_token_ids": [
+        330,
+        3191,
+        386,
+        8743,
+        2238,
+        349,
+        4312
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              7,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 262,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            7
+          ],
+          "reference_positions": [
+            7
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            7
+          ],
+          "consumed_tokens": 7
+        }
+      },
+      "native": {
+        "text": "a the most valuable to, a the other than it is, its three-et contour to, with the next its for the next  the next ",
+        "token_ids": [
+          264,
+          272,
+          1080,
+          12302,
+          298,
+          28725,
+          264,
+          272,
+          799,
+          821,
+          378,
+          349,
+          28725,
+          871,
+          1712,
+          28733,
+          299,
+          679,
+          423,
+          298,
+          28725,
+          395,
+          272,
+          1679,
+          871,
+          354,
+          272,
+          1679,
+          28705,
+          272,
+          1679,
+          28705
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 5.049993379,
+        "known_completion": false
+      }
+    },
+    {
+      "id": "color",
+      "style": "continuation",
+      "text": "A ripe banana is usually",
+      "target": "yellow",
+      "bos": true,
+      "prompt_token_ids": [
+        1,
+        330,
+        3191,
+        386,
+        8743,
+        2238,
+        349,
+        4312
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              8,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 259,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            8
+          ],
+          "reference_positions": [
+            8
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            8
+          ],
+          "consumed_tokens": 8
+        }
+      },
+      "native": {
+        "text": "a\n The Chan, but not in the, which is the, a, bev., that you, like  --ac' it,",
+        "token_ids": [
+          264,
+          13,
+          1,
+          415,
+          689,
+          276,
+          28725,
+          562,
+          459,
+          297,
+          272,
+          28725,
+          690,
+          349,
+          272,
+          28725,
+          264,
+          28725,
+          347,
+          28728,
+          28723,
+          28725,
+          369,
+          368,
+          28725,
+          737,
+          28705,
+          1939,
+          323,
+          28742,
+          378,
+          28725
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 4.945029572999999,
+        "known_completion": false
+      }
+    },
+    {
+      "id": "color",
+      "style": "fact_completion",
+      "text": "A ripe banana is usually yellow.\nA ripe banana is usually",
+      "target": "yellow",
+      "bos": false,
+      "prompt_token_ids": [
+        330,
+        3191,
+        386,
+        8743,
+        2238,
+        349,
+        4312,
+        9684,
+        28723,
+        13,
+        28741,
+        3191,
+        386,
+        8743,
+        2238,
+        349,
+        4312
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              17,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 263,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            17
+          ],
+          "reference_positions": [
+            17
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            17
+          ],
+          "consumed_tokens": 17
+        }
+      },
+      "native": {
+        "text": "yellowus with\n a\n\nA\nThe A-, and A-on A-to a mess, A, A, A, A, A",
+        "token_ids": [
+          9684,
+          381,
+          395,
+          13,
+          264,
+          13,
+          13,
+          28741,
+          13,
+          1014,
+          330,
+          28733,
+          28725,
+          304,
+          330,
+          28733,
+          266,
+          330,
+          28733,
+          532,
+          264,
+          4687,
+          28725,
+          330,
+          28725,
+          330,
+          28725,
+          330,
+          28725,
+          330,
+          28725,
+          330
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 5.058273596000049,
+        "known_completion": false
+      }
+    },
+    {
+      "id": "color",
+      "style": "fact_completion",
+      "text": "A ripe banana is usually yellow.\nA ripe banana is usually",
+      "target": "yellow",
+      "bos": true,
+      "prompt_token_ids": [
+        1,
+        330,
+        3191,
+        386,
+        8743,
+        2238,
+        349,
+        4312,
+        9684,
+        28723,
+        13,
+        28741,
+        3191,
+        386,
+        8743,
+        2238,
+        349,
+        4312
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              18,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 263,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            18
+          ],
+          "reference_positions": [
+            18
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            18
+          ],
+          "consumed_tokens": 18
+        }
+      },
+      "native": {
+        "text": "yellowoot on\n\n\nThe\n\nThe\nThe, the day  on the day  the most ofse the most of the same as I was",
+        "token_ids": [
+          9684,
+          1541,
+          356,
+          13,
+          13,
+          13,
+          1014,
+          13,
+          13,
+          1014,
+          13,
+          1014,
+          28725,
+          272,
+          1370,
+          28705,
+          356,
+          272,
+          1370,
+          28705,
+          272,
+          1080,
+          302,
+          331,
+          272,
+          1080,
+          302,
+          272,
+          1348,
+          390,
+          315,
+          403
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 4.960191662,
+        "known_completion": false
+      }
+    },
+    {
+      "id": "color",
+      "style": "question_answer",
+      "text": "Question: What color is a ripe banana usually? Reply with only the answer.\nAnswer:",
+      "target": "yellow",
+      "bos": false,
+      "prompt_token_ids": [
+        22478,
+        28747,
+        1824,
+        3181,
+        349,
+        264,
+        3191,
+        386,
+        8743,
+        2238,
+        4312,
+        28804,
+        3357,
+        346,
+        395,
+        865,
+        272,
+        4372,
+        28723,
+        13,
+        2820,
+        16981,
+        28747
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              23,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 264,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            23
+          ],
+          "reference_positions": [
+            23
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            23
+          ],
+          "consumed_tokens": 23
+        }
+      },
+      "native": {
+        "text": "The waytel, , it: on., heedous it, and is.,  f, is, it the booked, but",
+        "token_ids": [
+          415,
+          1069,
+          28707,
+          301,
+          28725,
+          28705,
+          28725,
+          378,
+          28747,
+          356,
+          28723,
+          28725,
+          400,
+          286,
+          607,
+          378,
+          28725,
+          304,
+          349,
+          28723,
+          28725,
+          28705,
+          285,
+          28725,
+          349,
+          28725,
+          378,
+          272,
+          1820,
+          286,
+          28725,
+          562
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 5.004504804999954,
+        "known_completion": false
+      }
+    },
+    {
+      "id": "color",
+      "style": "question_answer",
+      "text": "Question: What color is a ripe banana usually? Reply with only the answer.\nAnswer:",
+      "target": "yellow",
+      "bos": true,
+      "prompt_token_ids": [
+        1,
+        22478,
+        28747,
+        1824,
+        3181,
+        349,
+        264,
+        3191,
+        386,
+        8743,
+        2238,
+        4312,
+        28804,
+        3357,
+        346,
+        395,
+        865,
+        272,
+        4372,
+        28723,
+        13,
+        2820,
+        16981,
+        28747
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              24,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 263,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            24
+          ],
+          "reference_positions": [
+            24
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            24
+          ],
+          "consumed_tokens": 24
+        }
+      },
+      "native": {
+        "text": "The \"\nm\nThes the following the following the use to, the other than the following the name has aphy, it would as such thatt",
+        "token_ids": [
+          415,
+          345,
+          13,
+          28719,
+          13,
+          1014,
+          28713,
+          272,
+          2296,
+          272,
+          2296,
+          272,
+          938,
+          298,
+          28725,
+          272,
+          799,
+          821,
+          272,
+          2296,
+          272,
+          1141,
+          659,
+          264,
+          8071,
+          28725,
+          378,
+          682,
+          390,
+          1259,
+          369,
+          28707
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 5.131326749999971,
+        "known_completion": false
+      }
+    },
+    {
+      "id": "arithmetic",
+      "style": "continuation",
+      "text": "2 + 2 =",
+      "target": "4",
+      "bos": false,
+      "prompt_token_ids": [
+        28705,
+        28750,
+        648,
+        28705,
+        28750,
+        327
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              6,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 252,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            6
+          ],
+          "reference_positions": [
+            6
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            6
+          ],
+          "consumed_tokens": 6
+        }
+      },
+      "native": {
+        "text": "\nThe \nThe\nThe\nThe\nThe\nThe A\nA\nA\nAmb\nA\nA\nAmb, A",
+        "token_ids": [
+          28705,
+          13,
+          1014,
+          28705,
+          13,
+          1014,
+          13,
+          1014,
+          13,
+          1014,
+          13,
+          1014,
+          13,
+          1014,
+          28705,
+          28741,
+          13,
+          28741,
+          13,
+          28741,
+          13,
+          28741,
+          1757,
+          13,
+          28741,
+          13,
+          28741,
+          13,
+          28741,
+          1757,
+          28725,
+          330
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 4.998327486999983,
+        "known_completion": false
+      }
+    },
+    {
+      "id": "arithmetic",
+      "style": "continuation",
+      "text": "2 + 2 =",
+      "target": "4",
+      "bos": true,
+      "prompt_token_ids": [
+        1,
+        28705,
+        28750,
+        648,
+        28705,
+        28750,
+        327
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              7,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 247,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            7
+          ],
+          "reference_positions": [
+            7
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            7
+          ],
+          "consumed_tokens": 7
+        }
+      },
+      "native": {
+        "text": "? -,,,,,\nThe \nThe second-t-t, the same-t, which is a/1, the \"\n",
+        "token_ids": [
+          1550,
+          387,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          13,
+          1014,
+          28705,
+          13,
+          1014,
+          1676,
+          28733,
+          28707,
+          28733,
+          28707,
+          28725,
+          272,
+          1348,
+          28733,
+          28707,
+          28725,
+          690,
+          349,
+          264,
+          28748,
+          28740,
+          28725,
+          272,
+          345,
+          13
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 4.9460532529999455,
+        "known_completion": false
+      }
+    },
+    {
+      "id": "arithmetic",
+      "style": "fact_completion",
+      "text": "2 + 2 = 4.\n2 + 2 =",
+      "target": "4",
+      "bos": false,
+      "prompt_token_ids": [
+        28705,
+        28750,
+        648,
+        28705,
+        28750,
+        327,
+        28705,
+        28781,
+        28723,
+        13,
+        28750,
+        648,
+        28705,
+        28750,
+        327
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              15,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 261,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            15
+          ],
+          "reference_positions": [
+            15
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            15
+          ],
+          "consumed_tokens": 15
+        }
+      },
+      "native": {
+        "text": " 212, ,,,,,,,,,, IG , the answer , can bees, the number on",
+        "token_ids": [
+          28705,
+          28705,
+          28750,
+          28740,
+          28750,
+          28725,
+          28705,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          315,
+          28777,
+          28705,
+          28725,
+          272,
+          4372,
+          28705,
+          28725,
+          541,
+          347,
+          274,
+          28725,
+          272,
+          1474,
+          356
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 5.0103057460000855,
+        "known_completion": false
+      }
+    },
+    {
+      "id": "arithmetic",
+      "style": "fact_completion",
+      "text": "2 + 2 = 4.\n2 + 2 =",
+      "target": "4",
+      "bos": true,
+      "prompt_token_ids": [
+        1,
+        28705,
+        28750,
+        648,
+        28705,
+        28750,
+        327,
+        28705,
+        28781,
+        28723,
+        13,
+        28750,
+        648,
+        28705,
+        28750,
+        327
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              16,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 257,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            16
+          ],
+          "reference_positions": [
+            16
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            16
+          ],
+          "consumed_tokens": 16
+        }
+      },
+      "native": {
+        "text": "       the word of the two things to the two in big-t, etcetert, the agem,, \n",
+        "token_ids": [
+          28705,
+          28705,
+          28705,
+          28705,
+          28705,
+          28705,
+          28705,
+          272,
+          1707,
+          302,
+          272,
+          989,
+          1722,
+          298,
+          272,
+          989,
+          297,
+          2032,
+          28733,
+          28707,
+          28725,
+          4345,
+          1623,
+          28707,
+          28725,
+          272,
+          3595,
+          28719,
+          28725,
+          28725,
+          28705,
+          13
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 4.997959940999976,
+        "known_completion": false
+      }
+    },
+    {
+      "id": "arithmetic",
+      "style": "question_answer",
+      "text": "Question: What is two plus two? Reply with only the answer.\nAnswer:",
+      "target": "4",
+      "bos": false,
+      "prompt_token_ids": [
+        22478,
+        28747,
+        1824,
+        349,
+        989,
+        3285,
+        989,
+        28804,
+        3357,
+        346,
+        395,
+        865,
+        272,
+        4372,
+        28723,
+        13,
+        2820,
+        16981,
+        28747
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              19,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 264,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            19
+          ],
+          "reference_positions": [
+            19
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            19
+          ],
+          "consumed_tokens": 19
+        }
+      },
+      "native": {
+        "text": "Two, theeson the the the the. two with the language that. is the. was the, the following the following, they will one of the",
+        "token_ids": [
+          6005,
+          28725,
+          272,
+          274,
+          266,
+          272,
+          272,
+          272,
+          272,
+          28723,
+          989,
+          395,
+          272,
+          3842,
+          369,
+          28723,
+          349,
+          272,
+          28723,
+          403,
+          272,
+          28725,
+          272,
+          2296,
+          272,
+          2296,
+          28725,
+          590,
+          622,
+          624,
+          302,
+          272
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 4.986949179000021,
+        "known_completion": false
+      }
+    },
+    {
+      "id": "arithmetic",
+      "style": "question_answer",
+      "text": "Question: What is two plus two? Reply with only the answer.\nAnswer:",
+      "target": "4",
+      "bos": true,
+      "prompt_token_ids": [
+        1,
+        22478,
+        28747,
+        1824,
+        349,
+        989,
+        3285,
+        989,
+        28804,
+        3357,
+        346,
+        395,
+        865,
+        272,
+        4372,
+        28723,
+        13,
+        2820,
+        16981,
+        28747
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              20,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 263,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            20
+          ],
+          "reference_positions": [
+            20
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            20
+          ],
+          "consumed_tokens": 20
+        }
+      },
+      "native": {
+        "text": "Two, the the the the the, the same as is up and, it, the way, it, for the only in the other than the 1",
+        "token_ids": [
+          6005,
+          28725,
+          272,
+          272,
+          272,
+          272,
+          272,
+          28725,
+          272,
+          1348,
+          390,
+          349,
+          582,
+          304,
+          28725,
+          378,
+          28725,
+          272,
+          1069,
+          28725,
+          378,
+          28725,
+          354,
+          272,
+          865,
+          297,
+          272,
+          799,
+          821,
+          272,
+          28705,
+          28740
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 5.029917054999942,
+        "known_completion": false
+      }
+    },
+    {
+      "id": "opposite",
+      "style": "continuation",
+      "text": "The opposite of hot is",
+      "target": "cold",
+      "bos": false,
+      "prompt_token_ids": [
+        415,
+        9089,
+        302,
+        3296,
+        349
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              5,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 258,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            5
+          ],
+          "reference_positions": [
+            5
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            5
+          ],
+          "consumed_tokens": 5
+        }
+      },
+      "native": {
+        "text": "not-in, ofat coffee, they all, they are, Gailon,,, ands on, not the Caldec, not it (",
+        "token_ids": [
+          459,
+          28733,
+          262,
+          28725,
+          302,
+          270,
+          7045,
+          28725,
+          590,
+          544,
+          28725,
+          590,
+          460,
+          28725,
+          420,
+          614,
+          266,
+          28725,
+          28725,
+          28725,
+          304,
+          28713,
+          356,
+          28725,
+          459,
+          272,
+          2984,
+          6669,
+          28725,
+          459,
+          378,
+          325
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 4.959746149000011,
+        "known_completion": false
+      }
+    },
+    {
+      "id": "opposite",
+      "style": "continuation",
+      "text": "The opposite of hot is",
+      "target": "cold",
+      "bos": true,
+      "prompt_token_ids": [
+        1,
+        415,
+        9089,
+        302,
+        3296,
+        349
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              6,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 252,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            6
+          ],
+          "reference_positions": [
+            6
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            6
+          ],
+          "consumed_tokens": 6
+        }
+      },
+      "native": {
+        "text": "noting,es,,aria, you coffee, the the the ain, the is  have questions are  harfu, the world, or research",
+        "token_ids": [
+          459,
+          288,
+          28725,
+          274,
+          28725,
+          28725,
+          6463,
+          28725,
+          368,
+          7045,
+          28725,
+          272,
+          272,
+          272,
+          264,
+          262,
+          28725,
+          272,
+          349,
+          28705,
+          506,
+          4224,
+          460,
+          28705,
+          4412,
+          21278,
+          28725,
+          272,
+          1526,
+          28725,
+          442,
+          3332
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 4.948137104000011,
+        "known_completion": false
+      }
+    },
+    {
+      "id": "opposite",
+      "style": "fact_completion",
+      "text": "The opposite of hot is cold.\nThe opposite of hot is",
+      "target": "cold",
+      "bos": false,
+      "prompt_token_ids": [
+        415,
+        9089,
+        302,
+        3296,
+        349,
+        5256,
+        28723,
+        13,
+        1014,
+        9089,
+        302,
+        3296,
+        349
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              13,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 262,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            13
+          ],
+          "reference_positions": [
+            13
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            13
+          ],
+          "consumed_tokens": 13
+        }
+      },
+      "native": {
+        "text": "cold,,,,,,,, d,,,,us, soltou,oer,,rrrrrrrr",
+        "token_ids": [
+          5256,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          28725,
+          281,
+          28725,
+          28725,
+          28725,
+          28725,
+          381,
+          28725,
+          2128,
+          28707,
+          280,
+          28725,
+          28709,
+          263,
+          28725,
+          28725,
+          28712,
+          28712,
+          28712,
+          28712,
+          28712,
+          28712,
+          28712,
+          28712
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 4.9175516379999635,
+        "known_completion": true
+      }
+    },
+    {
+      "id": "opposite",
+      "style": "fact_completion",
+      "text": "The opposite of hot is cold.\nThe opposite of hot is",
+      "target": "cold",
+      "bos": true,
+      "prompt_token_ids": [
+        1,
+        415,
+        9089,
+        302,
+        3296,
+        349,
+        5256,
+        28723,
+        13,
+        1014,
+        9089,
+        302,
+        3296,
+        349
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              14,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 262,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            14
+          ],
+          "reference_positions": [
+            14
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            14
+          ],
+          "consumed_tokens": 14
+        }
+      },
+      "native": {
+        "text": "cold,,' the the the the the the the the the h,  the the, the, the way to, the \nThe book review the",
+        "token_ids": [
+          5256,
+          28725,
+          28725,
+          28742,
+          272,
+          272,
+          272,
+          272,
+          272,
+          272,
+          272,
+          272,
+          272,
+          295,
+          28725,
+          28705,
+          272,
+          272,
+          28725,
+          272,
+          28725,
+          272,
+          1069,
+          298,
+          28725,
+          272,
+          28705,
+          13,
+          1014,
+          1820,
+          4058,
+          272
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 4.9915443899999445,
+        "known_completion": true
+      }
+    },
+    {
+      "id": "opposite",
+      "style": "question_answer",
+      "text": "Question: What is the opposite of hot? Reply with only the answer.\nAnswer:",
+      "target": "cold",
+      "bos": false,
+      "prompt_token_ids": [
+        22478,
+        28747,
+        1824,
+        349,
+        272,
+        9089,
+        302,
+        3296,
+        28804,
+        3357,
+        346,
+        395,
+        865,
+        272,
+        4372,
+        28723,
+        13,
+        2820,
+        16981,
+        28747
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              20,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 263,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            20
+          ],
+          "reference_positions": [
+            20
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            20
+          ],
+          "consumed_tokens": 20
+        }
+      },
+      "native": {
+        "text": "The first world leaders in a lot  the word. is is-, the definition, is., \", all of theThe of theiv, but",
+        "token_ids": [
+          415,
+          907,
+          1526,
+          8038,
+          297,
+          264,
+          2055,
+          28705,
+          272,
+          1707,
+          28723,
+          349,
+          349,
+          28733,
+          28725,
+          272,
+          7526,
+          28725,
+          349,
+          28723,
+          28725,
+          345,
+          28725,
+          544,
+          302,
+          272,
+          1014,
+          302,
+          272,
+          449,
+          28725,
+          562
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 4.937569632999953,
+        "known_completion": false
+      }
+    },
+    {
+      "id": "opposite",
+      "style": "question_answer",
+      "text": "Question: What is the opposite of hot? Reply with only the answer.\nAnswer:",
+      "target": "cold",
+      "bos": true,
+      "prompt_token_ids": [
+        1,
+        22478,
+        28747,
+        1824,
+        349,
+        272,
+        9089,
+        302,
+        3296,
+        28804,
+        3357,
+        346,
+        395,
+        865,
+        272,
+        4372,
+        28723,
+        13,
+        2820,
+        16981,
+        28747
+      ],
+      "comparisons": {
+        "whole": {
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              21,
+              32000
+            ],
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 262,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.0
+          },
+          "positions": [
+            21
+          ],
+          "reference_positions": [
+            21
+          ],
+          "position_parity": true,
+          "logical_positions": [
+            21
+          ],
+          "consumed_tokens": 21
+        }
+      },
+      "native": {
+        "text": "Hot\nIk the most of the most important to in-1, the book, the book, the book, the book, the most people, the",
+        "token_ids": [
+          6895,
+          13,
+          28737,
+          28729,
+          272,
+          1080,
+          302,
+          272,
+          1080,
+          2278,
+          298,
+          297,
+          28733,
+          28740,
+          28725,
+          272,
+          1820,
+          28725,
+          272,
+          1820,
+          28725,
+          272,
+          1820,
+          28725,
+          272,
+          1820,
+          28725,
+          272,
+          1080,
+          905,
+          28725,
+          272
+        ],
+        "stop_reason": "max_new_tokens",
+        "seconds": 4.958851922999997,
+        "known_completion": false
+      }
+    }
+  ],
+  "diagnosis": "Phase A Base Runtime gates evaluated. Phase B remains a separate experiment.",
+  "seconds": 403.547874458
+}
