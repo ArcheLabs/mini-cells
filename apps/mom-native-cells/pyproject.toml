@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "minicells-native-sdk"
+version = "0.1.0"
+description = "MiniCells Developer Preview for native MoM neural state management"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+dependencies = [
+    "torch",
+    "transformers==4.51.3",
+    "flash-linear-attention==0.2.2",
+    "huggingface-hub==0.36.2",
+    "tokenizers==0.21.4",
+    "safetensors>=0.4",
+    "sentencepiece",
+    "filelock",
+    "einops",
+]
+
+[tool.setuptools.packages.find]
+include = ["minicells_native", "minicells_native.*"]

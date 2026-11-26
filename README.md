@@ -81,3 +81,10 @@ Start from the [research project index](research/README.md). Current research
 definitions, notebooks, and results are kept with their owning project and
 experiment; the shared registry is an index rather than a separate experiment
 home.
+
+## Native MoM SDK Developer Preview
+
+The independently versioned [Native MoM Python SDK](apps/mom-native-cells/README.md)
+uses the pinned MoM 1.3B checkpoint and a bounded FP16 recurrent runtime on
+one Tesla T4. See the SDK guide for the release candidate and its acceptance
+requirements.
