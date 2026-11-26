@@ -1,0 +1,676 @@
+split,group,metric,comparison,n,mean,median,sd,ci95
+smoke,all,mean_target_nll,A,9,5.194827863463649,5.327694058418274,1.013617611549093,
+smoke,all,target_perplexity,A,9,286.1301504969198,205.9624886792147,253.16882052464763,
+smoke,all,exact_match,A,9,0.0,False,0.0,
+smoke,all,token_f1,A,9,0.0,0.0,0.0,
+smoke,all,constraint_satisfied,A,9,0.0,False,0.0,
+smoke,all,mean_target_nll,B,9,5.436677118142446,5.99111024538676,1.0408355854081792,
+smoke,all,target_perplexity,B,9,344.73331651924167,399.85830441448826,236.08611035053644,
+smoke,all,exact_match,B,9,0.0,False,0.0,
+smoke,all,token_f1,B,9,0.0,0.0,0.0,
+smoke,all,constraint_satisfied,B,9,0.0,False,0.0,
+smoke,all,mean_target_nll,C,9,5.844288600263772,5.8974794546763105,1.0546804122458018,
+smoke,all,target_perplexity,C,9,594.793286784184,364.11853297775696,623.5778730710231,
+smoke,all,exact_match,C,9,0.0,False,0.0,
+smoke,all,token_f1,C,9,0.0,0.0,0.0,
+smoke,all,constraint_satisfied,C,9,0.0,False,0.0,
+smoke,all,mean_target_nll,D,9,6.09804046926675,6.07932694753011,1.2749709276725212,
+smoke,all,target_perplexity,D,9,949.9206517311219,436.7351501042994,1210.9033225881158,
+smoke,all,exact_match,D,9,0.0,False,0.0,
+smoke,all,token_f1,D,9,0.0,0.0,0.0,
+smoke,all,constraint_satisfied,D,9,0.0,False,0.0,
+smoke,all,mean_target_nll,B-A,9,0.24184925467879698,0.0,0.6210180125810617,"[-0.09574497187579113, 0.6873881772712427]"
+smoke,all,target_perplexity,B-A,9,58.60316602232191,0.0,207.14878103237055,"[-67.10182227939814, 195.92435997391465]"
+smoke,all,exact_match,B-A,9,0.0,0,0.0,"[0.0, 0.0]"
+smoke,all,token_f1,B-A,9,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,all,constraint_satisfied,B-A,9,0.0,0,0.0,"[0.0, 0.0]"
+smoke,all,mean_target_nll,C-A,9,0.6494607368001232,0.7495660185813904,0.6296339693090157,"[0.23372789168799388, 1.0528390230955902]"
+smoke,all,target_perplexity,C-A,9,308.66313628726425,80.7620881580799,469.9378399154013,"[31.77217223195005, 630.0932070548332]"
+smoke,all,exact_match,C-A,9,0.0,0,0.0,"[0.0, 0.0]"
+smoke,all,token_f1,C-A,9,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,all,constraint_satisfied,C-A,9,0.0,0,0.0,"[0.0, 0.0]"
+smoke,all,mean_target_nll,D-A,9,0.9032126058031013,0.6839416027069092,1.126952031917496,"[0.28887779734752805, 1.6933513360994834]"
+smoke,all,target_perplexity,D-A,9,663.7905012342021,153.37870528462236,1218.5935925419687,"[72.45073549625583, 1556.6301164280708]"
+smoke,all,exact_match,D-A,9,0.0,0,0.0,"[0.0, 0.0]"
+smoke,all,token_f1,D-A,9,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,all,constraint_satisfied,D-A,9,0.0,0,0.0,"[0.0, 0.0]"
+smoke,all,mean_target_nll,B-D,9,-0.6613633511243042,-0.5295138359069824,0.6589629515333448,"[-1.081536398993598, -0.22212578190697543]"
+smoke,all,target_perplexity,B-D,9,-605.1873352118803,-162.49316682296603,1071.4416024928423,"[-1382.7709860935008, -76.69769268783551]"
+smoke,all,exact_match,B-D,9,0.0,0,0.0,"[0.0, 0.0]"
+smoke,all,token_f1,B-D,9,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,all,constraint_satisfied,B-D,9,0.0,0,0.0,"[0.0, 0.0]"
+smoke,all,mean_target_nll,B-best_single,3,-0.06992561287350085,0.006511767705282168,0.21887058555786307,"[-0.3679028352101641, 0.15161422888437937]"
+smoke,all,target_perplexity,B-best_single,3,-60.93783170215303,2.6644621632535745,159.2352548186401,"[-279.82147575051306, 94.34351848080041]"
+smoke,all,exact_match,B-best_single,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,all,token_f1,B-best_single,3,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,all,constraint_satisfied,B-best_single,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,relevant,mean_target_nll,A,6,5.766873233848148,5.7893606424331665,0.7089249167110714,
+smoke,relevant,target_perplexity,A,6,398.7511008105908,330.1349609655773,240.55269975504686,
+smoke,relevant,exact_match,A,6,0.0,0.0,0.0,
+smoke,relevant,token_f1,A,6,0.0,0.0,0.0,
+smoke,relevant,constraint_satisfied,A,6,0.0,0.0,0.0,
+smoke,relevant,mean_target_nll,B,6,6.1296471158663435,6.184514184792837,0.3571233424836426,
+smoke,relevant,target_perplexity,B,6,486.65584984407366,491.9677357949862,151.50353142417936,
+smoke,relevant,exact_match,B,6,0.0,0.0,0.0,
+smoke,relevant,token_f1,B,6,0.0,0.0,0.0,
+smoke,relevant,constraint_satisfied,B,6,0.0,0.0,0.0,
+smoke,relevant,mean_target_nll,C,6,6.434651679462856,6.161526461442312,0.7631478724566487,
+smoke,relevant,target_perplexity,C,6,837.0661271896321,482.6780554942969,637.7629861831199,
+smoke,relevant,exact_match,C,6,0.0,0.0,0.0,
+smoke,relevant,token_f1,C,6,0.0,0.0,0.0,
+smoke,relevant,constraint_satisfied,C,6,0.0,0.0,0.0,
+smoke,relevant,mean_target_nll,D,6,6.706171658304002,6.694306691487631,1.0396627096566924,
+smoke,relevant,target_perplexity,D,6,1339.6795367600357,855.8968297240407,1317.625186658353,
+smoke,relevant,exact_match,D,6,0.0,0.0,0.0,
+smoke,relevant,token_f1,D,6,0.0,0.0,0.0,
+smoke,relevant,constraint_satisfied,D,6,0.0,0.0,0.0,
+smoke,relevant,mean_target_nll,B-A,6,0.36277388201819544,0.240871568520864,0.7311817567702851,"[-0.14811453554365336, 1.0036077565617034]"
+smoke,relevant,target_perplexity,B-A,6,87.90474903348286,73.41146171498434,248.57630201593156,"[-104.50682213982651, 283.2473413631028]"
+smoke,relevant,exact_match,B-A,6,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,relevant,token_f1,B-A,6,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,relevant,constraint_satisfied,B-A,6,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,relevant,mean_target_nll,C-A,6,0.6677784456147089,0.5618036786715188,0.6327597119432626,"[0.14858302805158852, 1.1747231019867794]"
+smoke,relevant,target_perplexity,C-A,6,438.3150263790413,189.20465789250719,528.7247161249288,"[34.22762184443778, 873.4575244752797]"
+smoke,relevant,exact_match,C-A,6,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,relevant,token_f1,C-A,6,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,relevant,constraint_satisfied,C-A,6,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,relevant,mean_target_nll,D-A,6,0.9392984244558548,0.6125307679176326,1.354036986754646,"[0.05216547515657218, 2.168703178564708]"
+smoke,relevant,target_perplexity,D-A,6,940.9284359494449,457.6277838446274,1411.3293512448608,"[82.1636124737231, 2249.611680529665]"
+smoke,relevant,exact_match,D-A,6,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,relevant,token_f1,D-A,6,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,relevant,constraint_satisfied,D-A,6,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,relevant,mean_target_nll,B-D,6,-0.5765245424376593,-0.4315023422241211,0.7496977950620228,"[-1.194981422689226, -0.031814985805087424]"
+smoke,relevant,target_perplexity,B-D,6,-853.023686915962,-315.32994960021364,1237.9512980057393,"[-1954.7225192694757, -81.09666821705888]"
+smoke,relevant,exact_match,B-D,6,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,relevant,token_f1,B-D,6,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,relevant,constraint_satisfied,B-D,6,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,relevant,mean_target_nll,B-best_single,3,-0.06992561287350085,0.006511767705282168,0.21887058555786307,"[-0.3679028352101641, 0.15161422888437937]"
+smoke,relevant,target_perplexity,B-best_single,3,-60.93783170215303,2.6644621632535745,159.2352548186401,"[-279.82147575051306, 94.34351848080041]"
+smoke,relevant,exact_match,B-best_single,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,relevant,token_f1,B-best_single,3,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,relevant,constraint_satisfied,B-best_single,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,single_cell,mean_target_nll,A,3,5.17505747742123,5.327694058418274,0.4602467920066228,
+smoke,single_cell,target_perplexity,A,3,194.67483230952658,205.9624886792147,77.42887984916672,
+smoke,single_cell,exact_match,A,3,0.0,False,0.0,
+smoke,single_cell,token_f1,A,3,0.0,0.0,0.0,
+smoke,single_cell,constraint_satisfied,A,3,0.0,False,0.0,
+smoke,single_cell,mean_target_nll,B,3,5.935923510127598,5.99111024538676,0.3640484518408751,
+smoke,single_cell,target_perplexity,B,3,403.1890584699425,399.85830441448826,137.65769873543093,
+smoke,single_cell,exact_match,B,3,0.0,False,0.0,
+smoke,single_cell,token_f1,B,3,0.0,0.0,0.0,
+smoke,single_cell,constraint_satisfied,B,3,0.0,False,0.0,
+smoke,single_cell,mean_target_nll,C,3,5.783824218644036,5.8974794546763105,0.2157064662305501,
+smoke,single_cell,target_perplexity,C,3,332.25259420521735,364.11853297775696,66.04352558990844,
+smoke,single_cell,exact_match,C,3,0.0,False,0.0,
+smoke,single_cell,token_f1,C,3,0.0,0.0,0.0,
+smoke,single_cell,constraint_satisfied,C,3,0.0,False,0.0,
+smoke,single_cell,mean_target_nll,D,3,6.477305107646519,6.07932694753011,1.364738553368111,
+smoke,single_cell,target_perplexity,D,3,1554.359796952259,436.7351501042994,1783.791549224364,
+smoke,single_cell,exact_match,D,3,0.0,False,0.0,
+smoke,single_cell,token_f1,D,3,0.0,0.0,0.0,
+smoke,single_cell,constraint_satisfied,D,3,0.0,False,0.0,
+smoke,single_cell,mean_target_nll,B-A,3,0.7608660327063669,0.3444046179453535,0.740226010834456,"[0.1373385190963745, 1.8008549610773725]"
+smoke,single_cell,target_perplexity,B-A,3,208.5142261604159,116.50185959481121,194.27652675475247,"[30.321063835157474, 478.719755051279]"
+smoke,single_cell,exact_match,B-A,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,single_cell,token_f1,B-A,3,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,single_cell,constraint_satisfied,B-A,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,single_cell,mean_target_nll,C-A,3,0.6087667412228056,0.25077382723490427,0.5759632095100516,"[0.1541377305984497, 1.421388665835063]"
+smoke,single_cell,target_perplexity,C-A,3,137.57776189569077,80.7620881580799,114.76294437202401,"[34.323969902057996, 297.64722762693447]"
+smoke,single_cell,exact_match,C-A,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,single_cell,token_f1,C-A,3,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,single_cell,constraint_satisfied,C-A,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,single_cell,mean_target_nll,D-A,3,1.3022476302252877,0.43262132008870413,1.7632826729376956,"[-0.28693556785583496, 3.7610571384429945]"
+smoke,single_cell,target_perplexity,D-A,3,1359.6849646427324,153.37870528462236,1852.644335544594,"[-51.37526515959797, 3977.051453803173]"
+smoke,single_cell,exact_match,D-A,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,single_cell,token_f1,D-A,3,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,single_cell,constraint_satisfied,D-A,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,single_cell,mean_target_nll,B-D,3,-0.5413815975189209,-0.08821670214335064,1.0248416399861797,"[-1.9602021773656215, 0.4242740869522095]"
+smoke,single_cell,target_perplexity,B-D,3,-1151.1707384823164,-36.87684568981115,1660.3992149477983,"[-3498.331698751894, 81.69632899475545]"
+smoke,single_cell,exact_match,B-D,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,single_cell,token_f1,B-D,3,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,single_cell,constraint_satisfied,B-D,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,single_cell,mean_target_nll,B-best_single,0,,,,
+smoke,single_cell,target_perplexity,B-best_single,0,,,,
+smoke,single_cell,exact_match,B-best_single,0,,,,
+smoke,single_cell,token_f1,B-best_single,0,,,,
+smoke,single_cell,constraint_satisfied,B-best_single,0,,,,
+smoke,cross_cell,mean_target_nll,A,3,6.358688990275065,6.51999028523763,0.3046804660704112,
+smoke,cross_cell,target_perplexity,A,3,602.8273693116552,678.5717931437005,162.60911583779617,
+smoke,cross_cell,exact_match,A,3,0.0,False,0.0,
+smoke,cross_cell,token_f1,A,3,0.0,0.0,0.0,
+smoke,cross_cell,constraint_satisfied,A,3,0.0,False,0.0,
+smoke,cross_cell,mean_target_nll,B,3,6.32337072160509,6.444503466288249,0.21791103084699057,
+smoke,cross_cell,target_perplexity,B,3,570.1226412182049,629.2341634069606,114.12093376008822,
+smoke,cross_cell,exact_match,B,3,0.0,False,0.0,
+smoke,cross_cell,token_f1,B,3,0.0,0.0,0.0,
+smoke,cross_cell,constraint_satisfied,B,3,0.0,False,0.0,
+smoke,cross_cell,mean_target_nll,C,3,7.085479140281677,7.408651351928711,0.5206796552437984,
+smoke,cross_cell,target_perplexity,C,3,1341.8796601740469,1650.1993073426695,547.2185117936547,
+smoke,cross_cell,exact_match,C,3,0.0,False,0.0,
+smoke,cross_cell,token_f1,C,3,0.0,0.0,0.0,
+smoke,cross_cell,constraint_satisfied,C,3,0.0,False,0.0,
+smoke,cross_cell,mean_target_nll,D,3,6.935038208961487,7.037721872329712,0.44105100003559417,
+smoke,cross_cell,target_perplexity,D,3,1124.9992765678123,1138.79033951611,445.1794533851044,
+smoke,cross_cell,exact_match,D,3,0.0,False,0.0,
+smoke,cross_cell,token_f1,D,3,0.0,0.0,0.0,
+smoke,cross_cell,constraint_satisfied,D,3,0.0,False,0.0,
+smoke,cross_cell,mean_target_nll,B-A,3,-0.03531826866997593,-0.17955756187438965,0.45206664870614033,"[-0.5025896231333409, 0.5761923789978027]"
+smoke,cross_cell,target_perplexity,B-A,3,-32.70472809345017,-123.76267427282664,238.20935131576348,"[-268.0616400346951, 293.7101300271712]"
+smoke,cross_cell,exact_match,B-A,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,cross_cell,token_f1,B-A,3,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,cross_cell,constraint_satisfied,B-A,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,cross_cell,mean_target_nll,C-A,3,0.7267901500066122,0.8728335301081334,0.6797582841697827,"[-0.1690987745920811, 1.4766356945037842]"
+smoke,cross_cell,target_perplexity,C-A,3,739.0522908623919,1049.4395155677125,604.1881436969609,"[-105.56847321172904, 1273.285830231192]"
+smoke,cross_cell,exact_match,C-A,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,cross_cell,token_f1,C-A,3,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,cross_cell,constraint_satisfied,C-A,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,cross_cell,mean_target_nll,D-A,3,0.5763492186864217,0.7924402157465611,0.5424041725314929,"[-0.1690987745920811, 1.1057062149047852]"
+smoke,cross_cell,target_perplexity,D-A,3,522.1719072561573,761.8768624046324,447.9910497973204,"[-105.56847321172904, 910.2073325755686]"
+smoke,cross_cell,exact_match,D-A,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,cross_cell,token_f1,D-A,3,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,cross_cell,constraint_satisfied,D-A,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,cross_cell,mean_target_nll,B-D,3,-0.6116674873563976,-0.5295138359069824,0.2670639017857566,"[-0.9719977776209507, -0.33349084854125977]"
+smoke,cross_cell,target_perplexity,B-D,3,-554.8766353496076,-468.16673237746124,361.02347673455273,"[-1033.9700068483953, -162.49316682296603]"
+smoke,cross_cell,exact_match,B-D,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,cross_cell,token_f1,B-D,3,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,cross_cell,constraint_satisfied,B-D,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,cross_cell,mean_target_nll,B-best_single,3,-0.06992561287350085,0.006511767705282168,0.21887058555786307,"[-0.3679028352101641, 0.15161422888437937]"
+smoke,cross_cell,target_perplexity,B-best_single,3,-60.93783170215303,2.6644621632535745,159.2352548186401,"[-279.82147575051306, 94.34351848080041]"
+smoke,cross_cell,exact_match,B-best_single,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,cross_cell,token_f1,B-best_single,3,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,cross_cell,constraint_satisfied,B-best_single,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,irrelevant,mean_target_nll,A,3,4.050737122694652,3.9646271467208862,0.3371905656892457,
+smoke,irrelevant,target_perplexity,A,3,60.888249869577656,52.70061612844874,21.24339053244797,
+smoke,irrelevant,exact_match,A,3,0.0,False,0.0,
+smoke,irrelevant,token_f1,A,3,0.0,0.0,0.0,
+smoke,irrelevant,constraint_satisfied,A,3,0.0,False,0.0,
+smoke,irrelevant,mean_target_nll,B,3,4.050737122694652,3.9646271467208862,0.3371905656892457,
+smoke,irrelevant,target_perplexity,B,3,60.888249869577656,52.70061612844874,21.24339053244797,
+smoke,irrelevant,exact_match,B,3,0.0,False,0.0,
+smoke,irrelevant,token_f1,B,3,0.0,0.0,0.0,
+smoke,irrelevant,constraint_satisfied,B,3,0.0,False,0.0,
+smoke,irrelevant,mean_target_nll,C,3,4.663562441865603,4.714193165302277,0.2847658226791906,
+smoke,irrelevant,target_perplexity,C,3,110.24760597328769,111.51879763018962,29.800387114599513,
+smoke,irrelevant,exact_match,C,3,0.0,False,0.0,
+smoke,irrelevant,token_f1,C,3,0.0,0.0,0.0,
+smoke,irrelevant,constraint_satisfied,C,3,0.0,False,0.0,
+smoke,irrelevant,mean_target_nll,D,3,4.8817780911922455,4.648568749427795,0.704211787071064,
+smoke,irrelevant,target_perplexity,D,3,170.4028816732944,104.43540532560755,122.94866480773106,
+smoke,irrelevant,exact_match,D,3,0.0,False,0.0,
+smoke,irrelevant,token_f1,D,3,0.0,0.0,0.0,
+smoke,irrelevant,constraint_satisfied,D,3,0.0,False,0.0,
+smoke,irrelevant,mean_target_nll,B-A,3,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,irrelevant,target_perplexity,B-A,3,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,irrelevant,exact_match,B-A,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,irrelevant,token_f1,B-A,3,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,irrelevant,constraint_satisfied,B-A,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,irrelevant,mean_target_nll,C-A,3,0.6128253191709518,0.7495660185813904,0.6217184805594429,"[-0.20772671699523926, 1.2966366559267044]"
+smoke,irrelevant,target_perplexity,C-A,3,49.359356103710034,58.81818150174088,50.669454744108954,"[-16.884188570528238, 106.14407537991742]"
+smoke,irrelevant,exact_match,C-A,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,irrelevant,token_f1,C-A,3,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,irrelevant,constraint_satisfied,C-A,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,irrelevant,mean_target_nll,D-A,3,0.8310409684975942,0.6839416027069092,0.36799076874655395,"[0.47227463126182556, 1.3369066715240479]"
+smoke,irrelevant,target_perplexity,D-A,3,109.51463180371672,51.734789197158804,101.86926343683668,"[24.114844073257686, 252.69426214073368]"
+smoke,irrelevant,exact_match,D-A,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,irrelevant,token_f1,D-A,3,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,irrelevant,constraint_satisfied,D-A,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,irrelevant,mean_target_nll,B-D,3,-0.8310409684975942,-0.6839416027069092,0.36799076874655395,"[-1.3369066715240479, -0.47227463126182556]"
+smoke,irrelevant,target_perplexity,B-D,3,-109.51463180371672,-51.734789197158804,101.86926343683668,"[-252.69426214073368, -24.114844073257686]"
+smoke,irrelevant,exact_match,B-D,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,irrelevant,token_f1,B-D,3,0.0,0.0,0.0,"[0.0, 0.0]"
+smoke,irrelevant,constraint_satisfied,B-D,3,0.0,0,0.0,"[0.0, 0.0]"
+smoke,irrelevant,mean_target_nll,B-best_single,0,,,,
+smoke,irrelevant,target_perplexity,B-best_single,0,,,,
+smoke,irrelevant,exact_match,B-best_single,0,,,,
+smoke,irrelevant,token_f1,B-best_single,0,,,,
+smoke,irrelevant,constraint_satisfied,B-best_single,0,,,,
+development,all,mean_target_nll,A,56,5.171164366372284,4.882002840439478,0.9838597093608855,
+development,all,target_perplexity,A,56,323.3953482151224,131.93472650000734,474.5724629212224,
+development,all,exact_match,A,56,0.0,0.0,0.0,
+development,all,token_f1,A,56,0.0,0.0,0.0,
+development,all,constraint_satisfied,A,56,0.0,0.0,0.0,
+development,all,mean_target_nll,B,56,6.103651261666701,6.038903295993805,0.9754050982832175,
+development,all,target_perplexity,B,56,766.5571042416167,419.8392434407536,1031.9566934463328,
+development,all,exact_match,B,56,0.0,0.0,0.0,
+development,all,token_f1,B,56,0.0,0.0,0.0,
+development,all,constraint_satisfied,B,56,0.0,0.0,0.0,
+development,all,mean_target_nll,C,56,6.035140357379403,5.9986617267131805,1.014028644074637,
+development,all,target_perplexity,C,56,742.490512509558,402.8944447350835,1031.0515588864032,
+development,all,exact_match,C,56,0.0,0.0,0.0,
+development,all,token_f1,C,56,0.0,0.0,0.0,
+development,all,constraint_satisfied,C,56,0.0,0.0,0.0,
+development,all,mean_target_nll,D,56,6.191589246193567,6.058385491371155,0.9770931147141332,
+development,all,target_perplexity,D,56,805.9813976246757,427.703526591843,1009.8902871339797,
+development,all,exact_match,D,56,0.0,0.0,0.0,
+development,all,token_f1,D,56,0.0,0.0,0.0,
+development,all,constraint_satisfied,D,56,0.0,0.0,0.0,
+development,all,mean_target_nll,B-A,56,0.9324868952944165,0.783738156159719,1.1791992928565511,"[0.6426540297411737, 1.2367022970602626]"
+development,all,target_perplexity,B-A,56,443.1617560264943,141.4384459092456,1076.0014987407444,"[183.85964254431687, 733.9748988369622]"
+development,all,exact_match,B-A,56,0.0,0.0,0.0,"[0.0, 0.0]"
+development,all,token_f1,B-A,56,0.0,0.0,0.0,"[0.0, 0.0]"
+development,all,constraint_satisfied,B-A,56,0.0,0.0,0.0,"[0.0, 0.0]"
+development,all,mean_target_nll,C-A,56,0.8639759910071181,0.8289338946342468,1.112732998339266,"[0.5844333154105004, 1.167078835889697]"
+development,all,target_perplexity,C-A,56,419.0951642944356,203.3261851271834,888.8666434088718,"[209.35872770615612, 666.456934291111]"
+development,all,exact_match,C-A,56,0.0,0.0,0.0,"[0.0, 0.0]"
+development,all,token_f1,C-A,56,0.0,0.0,0.0,"[0.0, 0.0]"
+development,all,constraint_satisfied,C-A,56,0.0,0.0,0.0,"[0.0, 0.0]"
+development,all,mean_target_nll,D-A,56,1.0204248798212834,1.15365452816089,1.239460816266167,"[0.7090143016761258, 1.3514602493849537]"
+development,all,target_perplexity,D-A,56,482.58604940955325,231.52351586396486,1077.9968885082467,"[235.20557403380397, 789.7760851214983]"
+development,all,exact_match,D-A,56,0.0,0.0,0.0,"[0.0, 0.0]"
+development,all,token_f1,D-A,56,0.0,0.0,0.0,"[0.0, 0.0]"
+development,all,constraint_satisfied,D-A,56,0.0,0.0,0.0,"[0.0, 0.0]"
+development,all,mean_target_nll,B-D,56,-0.08793798452686695,-0.0784343282381692,0.9941935160691349,"[-0.3574674376951797, 0.17654627863140335]"
+development,all,target_perplexity,B-D,56,-39.42429338305899,-41.971053168077674,1134.5733630608638,"[-331.4702483378197, 273.34033153673346]"
+development,all,exact_match,B-D,56,0.0,0.0,0.0,"[0.0, 0.0]"
+development,all,token_f1,B-D,56,0.0,0.0,0.0,"[0.0, 0.0]"
+development,all,constraint_satisfied,B-D,56,0.0,0.0,0.0,"[0.0, 0.0]"
+development,all,mean_target_nll,B-best_single,8,0.13051815330982208,-0.055306514104207505,0.5073733531991964,"[-0.17410352826118447, 0.5377754022677741]"
+development,all,target_perplexity,B-best_single,8,364.8656158917467,-20.34797038438026,895.7250526091665,"[-107.85938303438307, 1041.0382395915658]"
+development,all,exact_match,B-best_single,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,all,token_f1,B-best_single,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,all,constraint_satisfied,B-best_single,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,relevant,mean_target_nll,A,48,5.243042119675212,4.90677801767985,1.0351850535869005,
+development,relevant,target_perplexity,A,48,356.94918220298194,135.2030905479931,504.52900313882594,
+development,relevant,exact_match,A,48,0.0,0.0,0.0,
+development,relevant,token_f1,A,48,0.0,0.0,0.0,
+development,relevant,constraint_satisfied,A,48,0.0,0.0,0.0,
+development,relevant,mean_target_nll,B,48,6.330943497518699,6.165600876013437,0.8525344721206634,
+development,relevant,target_perplexity,B,48,873.9712309005586,476.6908361334399,1077.6521539333078,
+development,relevant,exact_match,B,48,0.0,0.0,0.0,
+development,relevant,token_f1,B,48,0.0,0.0,0.0,
+development,relevant,constraint_satisfied,B,48,0.0,0.0,0.0,
+development,relevant,mean_target_nll,C,48,6.177000084684955,6.047753115495046,0.9577902953705943,
+development,relevant,target_perplexity,C,48,820.007046280327,423.24660725152125,1088.5573733513381,
+development,relevant,exact_match,C,48,0.0,0.0,0.0,
+development,relevant,token_f1,C,48,0.0,0.0,0.0,
+development,relevant,constraint_satisfied,C,48,0.0,0.0,0.0,
+development,relevant,mean_target_nll,D,48,6.350055020716455,6.246863126754761,0.8792745003533163,
+development,relevant,target_perplexity,D,48,883.6154386386688,516.8229004282413,1054.9485896617562,
+development,relevant,exact_match,D,48,0.0,0.0,0.0,
+development,relevant,token_f1,D,48,0.0,0.0,0.0,
+development,relevant,constraint_satisfied,D,48,0.0,0.0,0.0,
+development,relevant,mean_target_nll,B-A,48,1.087901377843486,1.0931128064791364,1.2054821322954798,"[0.7427903819415306, 1.4424846524165735]"
+development,relevant,target_perplexity,B-A,48,517.0220486975767,192.84045195794644,1145.6679404057315,"[205.76756585718405, 859.332205141296]"
+development,relevant,exact_match,B-A,48,0.0,0.0,0.0,"[0.0, 0.0]"
+development,relevant,token_f1,B-A,48,0.0,0.0,0.0,"[0.0, 0.0]"
+development,relevant,constraint_satisfied,B-A,48,0.0,0.0,0.0,"[0.0, 0.0]"
+development,relevant,mean_target_nll,C-A,48,0.9339579650097424,0.9169948101043701,1.1360546069395119,"[0.6167087803284327, 1.2479816108114192]"
+development,relevant,target_perplexity,C-A,48,463.0578640773452,208.10708432971674,946.9112206729457,"[211.77832192797402, 734.2756371149738]"
+development,relevant,exact_match,C-A,48,0.0,0.0,0.0,"[0.0, 0.0]"
+development,relevant,token_f1,C-A,48,0.0,0.0,0.0,"[0.0, 0.0]"
+development,relevant,constraint_satisfied,C-A,48,0.0,0.0,0.0,"[0.0, 0.0]"
+development,relevant,mean_target_nll,D-A,48,1.1070129010412428,1.2577560941378276,1.26269727453777,"[0.7443358790543345, 1.4658646935390103]"
+development,relevant,target_perplexity,D-A,48,526.6662564356868,311.24976909998406,1144.8312599828698,"[239.38936930700297, 886.6351057867481]"
+development,relevant,exact_match,D-A,48,0.0,0.0,0.0,"[0.0, 0.0]"
+development,relevant,token_f1,D-A,48,0.0,0.0,0.0,"[0.0, 0.0]"
+development,relevant,constraint_satisfied,D-A,48,0.0,0.0,0.0,"[0.0, 0.0]"
+development,relevant,mean_target_nll,B-D,48,-0.019111523197756868,-0.0784343282381692,0.9872070723309196,"[-0.2963134381506178, 0.2688760550485717]"
+development,relevant,target_perplexity,B-D,48,-9.644207738110183,-41.971053168077674,1209.9895676588137,"[-327.91982365719304, 342.96759858932836]"
+development,relevant,exact_match,B-D,48,0.0,0.0,0.0,"[0.0, 0.0]"
+development,relevant,token_f1,B-D,48,0.0,0.0,0.0,"[0.0, 0.0]"
+development,relevant,constraint_satisfied,B-D,48,0.0,0.0,0.0,"[0.0, 0.0]"
+development,relevant,mean_target_nll,B-best_single,8,0.13051815330982208,-0.055306514104207505,0.5073733531991964,"[-0.17410352826118447, 0.5377754022677741]"
+development,relevant,target_perplexity,B-best_single,8,364.8656158917467,-20.34797038438026,895.7250526091665,"[-107.85938303438307, 1041.0382395915658]"
+development,relevant,exact_match,B-best_single,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,relevant,token_f1,B-best_single,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,relevant,constraint_satisfied,B-best_single,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,single_cell,mean_target_nll,A,40,4.92666283249855,4.7924518187840786,0.7481682102796975,
+development,single_cell,target_perplexity,A,40,189.61523702098836,120.60947083595735,186.05205925417528,
+development,single_cell,exact_match,A,40,0.0,0.0,0.0,
+development,single_cell,token_f1,A,40,0.0,0.0,0.0,
+development,single_cell,constraint_satisfied,A,40,0.0,0.0,0.0,
+development,single_cell,mean_target_nll,B,40,6.276754998167356,6.095323344071707,0.8552888411080672,
+development,single_cell,target_perplexity,B,40,830.9966646903134,443.7921683425977,1041.4131728681007,
+development,single_cell,exact_match,B,40,0.0,0.0,0.0,
+development,single_cell,token_f1,B,40,0.0,0.0,0.0,
+development,single_cell,constraint_satisfied,B,40,0.0,0.0,0.0,
+development,single_cell,mean_target_nll,C,40,6.055432827274005,6.018130580584208,0.8856028372292782,
+development,single_cell,target_perplexity,C,40,653.9027901175649,410.82854726205903,715.822366539345,
+development,single_cell,exact_match,C,40,0.0,0.0,0.0,
+development,single_cell,token_f1,C,40,0.0,0.0,0.0,
+development,single_cell,constraint_satisfied,C,40,0.0,0.0,0.0,
+development,single_cell,mean_target_nll,D,40,6.352568026383718,6.308219571908316,0.9160888570255837,
+development,single_cell,target_perplexity,D,40,916.6621792458039,549.1811266074153,1128.317641641956,
+development,single_cell,exact_match,D,40,0.0,0.0,0.0,
+development,single_cell,token_f1,D,40,0.0,0.0,0.0,
+development,single_cell,constraint_satisfied,D,40,0.0,0.0,0.0,
+development,single_cell,mean_target_nll,B-A,40,1.3500921656688054,1.204110423723857,1.0914237129102284,"[1.017415060599645, 1.6895057156682014]"
+development,single_cell,target_perplexity,B-A,40,641.381427669325,267.2414423803335,1056.5980422378022,"[346.2654165531264, 986.2387343447463]"
+development,single_cell,exact_match,B-A,40,0.0,0.0,0.0,"[0.0, 0.0]"
+development,single_cell,token_f1,B-A,40,0.0,0.0,0.0,"[0.0, 0.0]"
+development,single_cell,constraint_satisfied,B-A,40,0.0,0.0,0.0,"[0.0, 0.0]"
+development,single_cell,mean_target_nll,C-A,40,1.1287699947754544,1.2176104287306468,1.0688338382819929,"[0.7984230572978654, 1.4695312226812045]"
+development,single_cell,target_perplexity,C-A,40,464.28755309657663,234.82451801234242,731.2313928296295,"[256.2784619974455, 701.1501936918511]"
+development,single_cell,exact_match,C-A,40,0.0,0.0,0.0,"[0.0, 0.0]"
+development,single_cell,token_f1,C-A,40,0.0,0.0,0.0,"[0.0, 0.0]"
+development,single_cell,constraint_satisfied,C-A,40,0.0,0.0,0.0,"[0.0, 0.0]"
+development,single_cell,mean_target_nll,D-A,40,1.4259051938851675,1.5101700921853385,1.1128246413835126,"[1.083508682747682, 1.756357268492381]"
+development,single_cell,target_perplexity,D-A,40,727.0469422248156,437.26542815983623,1135.7766790653989,"[417.2093081300883, 1106.2436241100227]"
+development,single_cell,exact_match,D-A,40,0.0,0.0,0.0,"[0.0, 0.0]"
+development,single_cell,token_f1,D-A,40,0.0,0.0,0.0,"[0.0, 0.0]"
+development,single_cell,constraint_satisfied,D-A,40,0.0,0.0,0.0,"[0.0, 0.0]"
+development,single_cell,mean_target_nll,B-D,40,-0.075813028216362,-0.16084982951482152,0.9839831984805028,"[-0.3840968052546183, 0.23072699010372152]"
+development,single_cell,target_perplexity,B-D,40,-85.66551455549056,-80.63083800285668,1160.8361281610582,"[-427.7851194265404, 290.6313417918258]"
+development,single_cell,exact_match,B-D,40,0.0,0.0,0.0,"[0.0, 0.0]"
+development,single_cell,token_f1,B-D,40,0.0,0.0,0.0,"[0.0, 0.0]"
+development,single_cell,constraint_satisfied,B-D,40,0.0,0.0,0.0,"[0.0, 0.0]"
+development,single_cell,mean_target_nll,B-best_single,0,,,,
+development,single_cell,target_perplexity,B-best_single,0,,,,
+development,single_cell,exact_match,B-best_single,0,,,,
+development,single_cell,token_f1,B-best_single,0,,,,
+development,single_cell,constraint_satisfied,B-best_single,0,,,,
+development,cross_cell,mean_target_nll,A,8,6.824938555558522,7.111388007799784,0.7924611132543172,
+development,cross_cell,target_perplexity,A,8,1193.6189081129498,1229.5041854390715,717.0779385679327,
+development,cross_cell,exact_match,A,8,0.0,0.0,0.0,
+development,cross_cell,token_f1,A,8,0.0,0.0,0.0,
+development,cross_cell,constraint_satisfied,A,8,0.0,0.0,0.0,
+development,cross_cell,mean_target_nll,B,8,6.601885994275411,6.425046761830648,0.7843489940364126,
+development,cross_cell,target_perplexity,B,8,1088.8440619517844,617.332172116329,1220.6119800812223,
+development,cross_cell,exact_match,B,8,0.0,0.0,0.0,
+development,cross_cell,token_f1,B,8,0.0,0.0,0.0,
+development,cross_cell,constraint_satisfied,B,8,0.0,0.0,0.0,
+development,cross_cell,mean_target_nll,C,8,6.784836371739705,6.390583674112956,1.067405092109457,
+development,cross_cell,target_perplexity,C,8,1650.528327094138,609.1635217467211,1928.7342768805427,
+development,cross_cell,exact_match,C,8,0.0,0.0,0.0,
+development,cross_cell,token_f1,C,8,0.0,0.0,0.0,
+development,cross_cell,constraint_satisfied,C,8,0.0,0.0,0.0,
+development,cross_cell,mean_target_nll,D,8,6.337489992380142,5.946097115675608,0.6651755077216319,
+development,cross_cell,target_perplexity,D,8,718.3817356029926,382.34371013869793,528.4250626446352,
+development,cross_cell,exact_match,D,8,0.0,0.0,0.0,
+development,cross_cell,token_f1,D,8,0.0,0.0,0.0,
+development,cross_cell,constraint_satisfied,D,8,0.0,0.0,0.0,
+development,cross_cell,mean_target_nll,B-A,8,-0.22305256128311157,-0.08669118086497019,0.8371225391627831,"[-0.7585465709368387, 0.36616617441177346]"
+development,cross_cell,target_perplexity,B-A,8,-104.77484616116546,-133.16114771709672,1352.5440508871102,"[-892.6330294471226, 937.8381120505633]"
+development,cross_cell,exact_match,B-A,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,cross_cell,token_f1,B-A,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,cross_cell,constraint_satisfied,B-A,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,cross_cell,mean_target_nll,C-A,8,-0.04010218381881725,0.34796784321467067,0.9450607081900867,"[-0.6888891607522966, 0.60787791510423]"
+development,cross_cell,target_perplexity,C-A,8,456.90941898118814,123.48155400328916,1645.084510190175,"[-596.4675299213171, 1755.0346053245967]"
+development,cross_cell,exact_match,C-A,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,cross_cell,token_f1,C-A,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,cross_cell,constraint_satisfied,C-A,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,cross_cell,mean_target_nll,D-A,8,-0.48744856317838037,-0.46831415096918727,0.5690028096075603,"[-0.8722585141658781, -0.082834045092265]"
+development,cross_cell,target_perplexity,D-A,8,-475.2371725099572,-355.3796773637973,457.5104177393295,"[-797.062684675474, -172.88854161744192]"
+development,cross_cell,exact_match,D-A,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,cross_cell,token_f1,D-A,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,cross_cell,constraint_satisfied,D-A,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,cross_cell,mean_target_nll,B-D,8,0.2643960018952688,0.047095537185668945,0.9538869573278921,"[-0.33051307002703334, 0.9604391902685163]"
+development,cross_cell,target_perplexity,B-D,8,370.4623263487917,17.407488170668046,1368.7106224956844,"[-374.92938303815595, 1436.0646203850604]"
+development,cross_cell,exact_match,B-D,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,cross_cell,token_f1,B-D,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,cross_cell,constraint_satisfied,B-D,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,cross_cell,mean_target_nll,B-best_single,8,0.13051815330982208,-0.055306514104207505,0.5073733531991964,"[-0.17410352826118447, 0.5377754022677741]"
+development,cross_cell,target_perplexity,B-best_single,8,364.8656158917467,-20.34797038438026,895.7250526091665,"[-107.85938303438307, 1041.0382395915658]"
+development,cross_cell,exact_match,B-best_single,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,cross_cell,token_f1,B-best_single,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,cross_cell,constraint_satisfied,B-best_single,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,irrelevant,mean_target_nll,A,8,4.739897846554716,4.709396086633205,0.3594741204491683,
+development,irrelevant,target_perplexity,A,8,122.07234428796497,110.99572653797378,44.15832118974893,
+development,irrelevant,exact_match,A,8,0.0,0.0,0.0,
+development,irrelevant,token_f1,A,8,0.0,0.0,0.0,
+development,irrelevant,constraint_satisfied,A,8,0.0,0.0,0.0,
+development,irrelevant,mean_target_nll,B,8,4.739897846554716,4.709396086633205,0.3594741204491683,
+development,irrelevant,target_perplexity,B,8,122.07234428796497,110.99572653797378,44.15832118974893,
+development,irrelevant,exact_match,B,8,0.0,0.0,0.0,
+development,irrelevant,token_f1,B,8,0.0,0.0,0.0,
+development,irrelevant,constraint_satisfied,B,8,0.0,0.0,0.0,
+development,irrelevant,mean_target_nll,C,8,5.183981993546088,4.897166520357132,0.9210806066136388,
+development,irrelevant,target_perplexity,C,8,277.3913098849435,133.94404992710184,281.70577342349077,
+development,irrelevant,exact_match,C,8,0.0,0.0,0.0,
+development,irrelevant,token_f1,C,8,0.0,0.0,0.0,
+development,irrelevant,constraint_satisfied,C,8,0.0,0.0,0.0,
+development,irrelevant,mean_target_nll,D,8,5.240794599056244,5.195592477917671,0.994764258870965,
+development,irrelevant,target_perplexity,D,8,340.1771515407168,183.97999931346462,456.6330274323927,
+development,irrelevant,exact_match,D,8,0.0,0.0,0.0,
+development,irrelevant,token_f1,D,8,0.0,0.0,0.0,
+development,irrelevant,constraint_satisfied,D,8,0.0,0.0,0.0,
+development,irrelevant,mean_target_nll,B-A,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,irrelevant,target_perplexity,B-A,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,irrelevant,exact_match,B-A,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,irrelevant,token_f1,B-A,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,irrelevant,constraint_satisfied,B-A,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,irrelevant,mean_target_nll,C-A,8,0.4440841469913721,0.3854796141386032,0.8472358813683177,"[-0.11426043137907982, 1.056946663185954]"
+development,irrelevant,target_perplexity,C-A,8,155.3189655969785,40.82338227663696,263.75748805336156,"[5.509975607768819, 368.17190349031483]"
+development,irrelevant,exact_match,C-A,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,irrelevant,token_f1,C-A,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,irrelevant,constraint_satisfied,C-A,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,irrelevant,mean_target_nll,D-A,8,0.5008967525015274,0.4189509004354477,0.9340883122459975,"[-0.10873522919913137, 1.176285507157445]"
+development,irrelevant,target_perplexity,D-A,8,218.1048072527518,62.555960793332645,434.85703750638766,"[2.5271066131147304, 570.3555502694796]"
+development,irrelevant,exact_match,D-A,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,irrelevant,token_f1,D-A,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,irrelevant,constraint_satisfied,D-A,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,irrelevant,mean_target_nll,B-D,8,-0.5008967525015274,-0.4189509004354477,0.9340883122459975,"[-1.172810286283493, 0.1093260614822309]"
+development,irrelevant,target_perplexity,B-D,8,-218.1048072527518,-62.555960793332645,434.85703750638766,"[-570.0955897828062, -2.460029090925831]"
+development,irrelevant,exact_match,B-D,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,irrelevant,token_f1,B-D,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,irrelevant,constraint_satisfied,B-D,8,0.0,0.0,0.0,"[0.0, 0.0]"
+development,irrelevant,mean_target_nll,B-best_single,0,,,,
+development,irrelevant,target_perplexity,B-best_single,0,,,,
+development,irrelevant,exact_match,B-best_single,0,,,,
+development,irrelevant,token_f1,B-best_single,0,,,,
+development,irrelevant,constraint_satisfied,B-best_single,0,,,,
+held_out,all,mean_target_nll,A,128,5.7334096864797175,5.525858263174692,0.8967649231182288,
+held_out,all,target_perplexity,A,128,529.7727515666203,251.1310137522944,839.5371676834587,
+held_out,all,exact_match,A,128,0.0,0.0,0.0,
+held_out,all,token_f1,A,128,0.0,0.0,0.0,
+held_out,all,constraint_satisfied,A,128,0.0,0.0,0.0,
+held_out,all,mean_target_nll,B,128,6.474704687483609,6.519439190626144,1.015404405620166,
+held_out,all,target_perplexity,B,128,1143.1209267249467,678.2240193278074,1758.752913033898,
+held_out,all,exact_match,B,128,0.0,0.0,0.0,
+held_out,all,token_f1,B,128,0.0,0.0,0.0,
+held_out,all,constraint_satisfied,B,128,0.0,0.0,0.0,
+held_out,all,mean_target_nll,C,128,6.168583667449032,6.202117721239725,0.8231133385084135,
+held_out,all,target_perplexity,C,128,661.7740845031622,493.805466472469,564.6959846293593,
+held_out,all,exact_match,C,128,0.0,0.0,0.0,
+held_out,all,token_f1,C,128,0.0,0.0,0.0,
+held_out,all,constraint_satisfied,C,128,0.0,0.0,0.0,
+held_out,all,mean_target_nll,D,128,6.146416977824022,6.225303312142691,0.9021444316580797,
+held_out,all,target_perplexity,D,128,681.5017872632126,505.40096705871093,631.9313483685004,
+held_out,all,exact_match,D,128,0.0,0.0,0.0,
+held_out,all,token_f1,D,128,0.0,0.0,0.0,
+held_out,all,constraint_satisfied,D,128,0.0,0.0,0.0,
+held_out,all,mean_target_nll,B-A,128,0.7412950010038912,0.5142524838447571,1.0609861448505682,"[0.552361251010249, 0.9396839501957098]"
+held_out,all,target_perplexity,B-A,128,613.3481751583264,215.17955133544018,1508.7152965743685,"[375.82223227473935, 920.0607547248505]"
+held_out,all,exact_match,B-A,128,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,all,token_f1,B-A,128,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,all,constraint_satisfied,B-A,128,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,all,mean_target_nll,C-A,128,0.43517398096931476,0.43156152963638306,1.0815343556590242,"[0.24754384648986155, 0.6248840881356349]"
+held_out,all,target_perplexity,C-A,128,132.0013329365419,120.36452016813939,905.1950859528134,"[-33.921324155269176, 285.1592237532799]"
+held_out,all,exact_match,C-A,128,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,all,token_f1,C-A,128,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,all,constraint_satisfied,C-A,128,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,all,mean_target_nll,D-A,128,0.4130072913443049,0.47381957372029637,1.1136858346714293,"[0.21221857191994786, 0.6045994424882035]"
+held_out,all,target_perplexity,D-A,128,151.72903569659232,151.2416889639364,938.9464048412591,"[-20.027617318303292, 307.6620593355517]"
+held_out,all,exact_match,D-A,128,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,all,token_f1,D-A,128,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,all,constraint_satisfied,D-A,128,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,all,mean_target_nll,B-D,128,0.3282877096595863,0.2811694542566938,0.8904176041967529,"[0.18140780351435143, 0.49790420266799623]"
+held_out,all,target_perplexity,B-D,128,461.6191394617341,79.42671044421986,1641.7718807743536,"[198.57436115456017, 805.7375936821305]"
+held_out,all,exact_match,B-D,128,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,all,token_f1,B-D,128,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,all,constraint_satisfied,B-D,128,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,all,mean_target_nll,B-best_single,24,0.23474342541562185,0.2781138320763903,0.5776282172218193,"[-0.012709452874130722, 0.46123728238874]"
+held_out,all,target_perplexity,B-best_single,24,139.02951336282618,139.47972701503062,324.00345215879577,"[-1.074822969124508, 263.53570246505296]"
+held_out,all,exact_match,B-best_single,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,all,token_f1,B-best_single,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,all,constraint_satisfied,B-best_single,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,relevant,mean_target_nll,A,104,5.763081815953438,5.6349643766880035,0.8441808132134356,
+held_out,relevant,target_perplexity,A,104,505.7350655763938,280.07398752510625,772.0607939601092,
+held_out,relevant,exact_match,A,104,0.0,0.0,0.0,
+held_out,relevant,token_f1,A,104,0.0,0.0,0.0,
+held_out,relevant,constraint_satisfied,A,104,0.0,0.0,0.0,
+held_out,relevant,mean_target_nll,B,104,6.675444894112074,6.6767991582552595,0.8840997358154709,
+held_out,relevant,target_perplexity,B,104,1260.6251273097187,793.7744530154584,1861.4716778503434,
+held_out,relevant,exact_match,B,104,0.0,0.0,0.0,
+held_out,relevant,token_f1,B,104,0.0,0.0,0.0,
+held_out,relevant,constraint_satisfied,B,104,0.0,0.0,0.0,
+held_out,relevant,mean_target_nll,C,104,6.336995724875194,6.32005113363266,0.713859482745221,
+held_out,relevant,target_perplexity,C,104,728.7929177561693,555.657949973725,561.3992600223258,
+held_out,relevant,exact_match,C,104,0.0,0.0,0.0,
+held_out,relevant,token_f1,C,104,0.0,0.0,0.0,
+held_out,relevant,constraint_satisfied,C,104,0.0,0.0,0.0,
+held_out,relevant,mean_target_nll,D,104,6.430475143667978,6.393713315327962,0.6990837792111797,
+held_out,relevant,target_perplexity,D,104,799.4906604020715,598.0733549707807,642.2900189209589,
+held_out,relevant,exact_match,D,104,0.0,0.0,0.0,
+held_out,relevant,token_f1,D,104,0.0,0.0,0.0,
+held_out,relevant,constraint_satisfied,D,104,0.0,0.0,0.0,
+held_out,relevant,mean_target_nll,B-A,104,0.9123630781586354,0.8631757001082097,1.108778781647746,"[0.7022924597064654, 1.1178372389613054]"
+held_out,relevant,target_perplexity,B-A,104,754.8900617333248,353.2458533727969,1641.5405103474245,"[467.7487345522633, 1096.7438692489284]"
+held_out,relevant,exact_match,B-A,104,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,relevant,token_f1,B-A,104,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,relevant,constraint_satisfied,B-A,104,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,relevant,mean_target_nll,C-A,104,0.5739139089217553,0.6557874282201133,1.00008887614149,"[0.38011745439890104, 0.7638561840240772]"
+held_out,relevant,target_perplexity,C-A,104,223.05785217977558,214.8827509695384,821.9024921573007,"[65.43043070273526, 380.41321699392444]"
+held_out,relevant,exact_match,C-A,104,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,relevant,token_f1,C-A,104,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,relevant,constraint_satisfied,C-A,104,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,relevant,mean_target_nll,D-A,104,0.6673933277145411,0.7470897436141968,1.0366841410392988,"[0.46409758734397405, 0.8725615672958204]"
+held_out,relevant,target_perplexity,D-A,104,293.7555948256777,269.9828928985186,873.6090242792593,"[122.4417976290929, 466.05309891982597]"
+held_out,relevant,exact_match,D-A,104,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,relevant,token_f1,D-A,104,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,relevant,constraint_satisfied,D-A,104,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,relevant,mean_target_nll,B-D,104,0.2449697504440943,0.23385270436604833,0.9122015883762457,"[0.07041222907793829, 0.41758148009196294]"
+held_out,relevant,target_perplexity,B-D,104,461.1344669076471,108.44665980912308,1761.5719036963205,"[164.14693507299233, 830.9986459475991]"
+held_out,relevant,exact_match,B-D,104,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,relevant,token_f1,B-D,104,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,relevant,constraint_satisfied,B-D,104,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,relevant,mean_target_nll,B-best_single,24,0.23474342541562185,0.2781138320763903,0.5776282172218193,"[-0.012709452874130722, 0.46123728238874]"
+held_out,relevant,target_perplexity,B-best_single,24,139.02951336282618,139.47972701503062,324.00345215879577,"[-1.074822969124508, 263.53570246505296]"
+held_out,relevant,exact_match,B-best_single,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,relevant,token_f1,B-best_single,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,relevant,constraint_satisfied,B-best_single,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,single_cell,mean_target_nll,A,80,5.561253359913826,5.453923225402832,0.7780302204969666,
+held_out,single_cell,target_perplexity,A,80,421.01320727829597,233.67343785925146,812.159980035134,
+held_out,single_cell,exact_match,A,80,0.0,0.0,0.0,
+held_out,single_cell,token_f1,A,80,0.0,0.0,0.0,
+held_out,single_cell,constraint_satisfied,A,80,0.0,0.0,0.0,
+held_out,single_cell,mean_target_nll,B,80,6.78705491994818,6.773449917634328,0.9303722803074745,
+held_out,single_cell,target_perplexity,B,80,1446.8273118150307,874.4351950090713,2076.595935924025,
+held_out,single_cell,exact_match,B,80,0.0,0.0,0.0,
+held_out,single_cell,token_f1,B,80,0.0,0.0,0.0,
+held_out,single_cell,constraint_satisfied,B,80,0.0,0.0,0.0,
+held_out,single_cell,mean_target_nll,C,80,6.341823083907366,6.342418948809305,0.7265863346533202,
+held_out,single_cell,target_perplexity,C,80,739.132792606674,568.1876638314485,585.2340167860755,
+held_out,single_cell,exact_match,C,80,0.0,0.0,0.0,
+held_out,single_cell,token_f1,C,80,0.0,0.0,0.0,
+held_out,single_cell,constraint_satisfied,C,80,0.0,0.0,0.0,
+held_out,single_cell,mean_target_nll,D,80,6.428445589542389,6.371179282665253,0.7131713805180976,
+held_out,single_cell,target_perplexity,D,80,809.6264104742417,584.8896881513531,669.7426301087669,
+held_out,single_cell,exact_match,D,80,0.0,0.0,0.0,
+held_out,single_cell,token_f1,D,80,0.0,0.0,0.0,
+held_out,single_cell,constraint_satisfied,D,80,0.0,0.0,0.0,
+held_out,single_cell,mean_target_nll,B-A,80,1.2258015600343546,1.3770145773887634,0.9828187183502062,"[1.013238850980997, 1.4417604972918827]"
+held_out,single_cell,target_perplexity,B-A,80,1025.814104536735,607.5844743808102,1755.7285685820589,"[689.288802239892, 1455.3464618553376]"
+held_out,single_cell,exact_match,B-A,80,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,single_cell,token_f1,B-A,80,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,single_cell,constraint_satisfied,B-A,80,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,single_cell,mean_target_nll,C-A,80,0.7805697239935399,0.8969197273254395,0.931987721703617,"[0.5734036425749461, 0.9988685682415962]"
+held_out,single_cell,target_perplexity,C-A,80,318.119585328378,309.04801330800683,836.6488826298491,"[113.65923706942365, 502.9506212136089]"
+held_out,single_cell,exact_match,C-A,80,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,single_cell,token_f1,C-A,80,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,single_cell,constraint_satisfied,C-A,80,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,single_cell,mean_target_nll,D-A,80,0.8671922296285629,0.8319298823674517,0.9844836622959647,"[0.6494067539771399, 1.0826815068721771]"
+held_out,single_cell,target_perplexity,D-A,80,388.61320319594563,302.9086056737928,897.4360632168922,"[179.36995451170714, 581.4416667282333]"
+held_out,single_cell,exact_match,D-A,80,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,single_cell,token_f1,D-A,80,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,single_cell,constraint_satisfied,D-A,80,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,single_cell,mean_target_nll,B-D,80,0.35860933040579157,0.31788738568623875,0.936043515823279,"[0.1555645239849885, 0.5774671614170075]"
+held_out,single_cell,target_perplexity,B-D,80,637.2009013407892,240.94258173872302,1953.397133933079,"[259.1878659975875, 1121.3232426702696]"
+held_out,single_cell,exact_match,B-D,80,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,single_cell,token_f1,B-D,80,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,single_cell,constraint_satisfied,B-D,80,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,single_cell,mean_target_nll,B-best_single,0,,,,
+held_out,single_cell,target_perplexity,B-best_single,0,,,,
+held_out,single_cell,exact_match,B-best_single,0,,,,
+held_out,single_cell,token_f1,B-best_single,0,,,,
+held_out,single_cell,constraint_satisfied,B-best_single,0,,,,
+held_out,cross_cell,mean_target_nll,A,24,6.435843336085479,6.219717552264532,0.6942272693482123,
+held_out,cross_cell,target_perplexity,A,24,788.1412599033865,503.4031237371157,529.7597770656045,
+held_out,cross_cell,exact_match,A,24,0.0,0.0,0.0,
+held_out,cross_cell,token_f1,A,24,0.0,0.0,0.0,
+held_out,cross_cell,constraint_satisfied,A,24,0.0,0.0,0.0,
+held_out,cross_cell,mean_target_nll,B,24,6.303411474658383,6.316646158695221,0.567303588157443,
+held_out,cross_cell,target_perplexity,B,24,639.9511789586778,554.6348777344945,374.6423628450413,
+held_out,cross_cell,exact_match,B,24,0.0,0.0,0.0,
+held_out,cross_cell,token_f1,B,24,0.0,0.0,0.0,
+held_out,cross_cell,constraint_satisfied,B,24,0.0,0.0,0.0,
+held_out,cross_cell,mean_target_nll,C,24,6.320904528101285,6.228395740191141,0.6694407774468667,
+held_out,cross_cell,target_perplexity,C,24,694.3266682544873,506.95323902192854,471.7263464403817,
+held_out,cross_cell,exact_match,C,24,0.0,0.0,0.0,
+held_out,cross_cell,token_f1,C,24,0.0,0.0,0.0,
+held_out,cross_cell,constraint_satisfied,C,24,0.0,0.0,0.0,
+held_out,cross_cell,mean_target_nll,D,24,6.437240324086613,6.464668432871501,0.6498776861409493,
+held_out,cross_cell,target_perplexity,D,24,765.704826828171,642.2836049914539,539.4350135327156,
+held_out,cross_cell,exact_match,D,24,0.0,0.0,0.0,
+held_out,cross_cell,token_f1,D,24,0.0,0.0,0.0,
+held_out,cross_cell,constraint_satisfied,D,24,0.0,0.0,0.0,
+held_out,cross_cell,mean_target_nll,B-A,24,-0.13243186142709518,0.046783655881881714,0.8297635161631999,"[-0.4969012182619837, 0.19750569678015187]"
+held_out,cross_cell,target_perplexity,B-A,24,-148.19008094470865,25.615566594085237,584.2461082775136,"[-409.4056055541462, 79.90459464346415]"
+held_out,cross_cell,exact_match,B-A,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,cross_cell,token_f1,B-A,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,cross_cell,constraint_satisfied,B-A,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,cross_cell,mean_target_nll,C-A,24,-0.11493880798419324,-0.042893220980962266,0.9065831994373862,"[-0.4781407722168501, 0.25641649547550405]"
+held_out,cross_cell,target_perplexity,C-A,24,-93.81459164889912,-26.419467887004714,680.7845694156072,"[-363.5579786003273, 177.86588955343325]"
+held_out,cross_cell,exact_match,C-A,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,cross_cell,token_f1,C-A,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,cross_cell,constraint_satisfied,C-A,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,cross_cell,mean_target_nll,D-A,24,0.001396988001134673,0.1531084577242532,0.921837279350112,"[-0.38247413850492923, 0.3621882887350189]"
+held_out,cross_cell,target_perplexity,D-A,24,-22.436433075215465,78.4561616537085,701.825886556922,"[-308.73534742421936, 260.80283480223994]"
+held_out,cross_cell,exact_match,D-A,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,cross_cell,token_f1,D-A,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,cross_cell,constraint_satisfied,D-A,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,cross_cell,mean_target_nll,B-D,24,-0.13382884942822984,-0.2552229563395185,0.7061806373224511,"[-0.40566022694110854, 0.17016173816389502]"
+held_out,cross_cell,target_perplexity,B-D,24,-125.7536478694932,-134.0658923965129,529.1036240283971,"[-345.03392799899774, 84.62725027943736]"
+held_out,cross_cell,exact_match,B-D,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,cross_cell,token_f1,B-D,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,cross_cell,constraint_satisfied,B-D,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,cross_cell,mean_target_nll,B-best_single,24,0.23474342541562185,0.2781138320763903,0.5776282172218193,"[-0.012709452874130722, 0.46123728238874]"
+held_out,cross_cell,target_perplexity,B-best_single,24,139.02951336282618,139.47972701503062,324.00345215879577,"[-1.074822969124508, 263.53570246505296]"
+held_out,cross_cell,exact_match,B-best_single,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,cross_cell,token_f1,B-best_single,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,cross_cell,constraint_satisfied,B-best_single,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,irrelevant,mean_target_nll,A,24,5.6048304587602615,5.229963630437851,1.0865261977687506,
+held_out,irrelevant,target_perplexity,A,24,633.9360575242683,186.87278018743564,1078.2839256417756,
+held_out,irrelevant,exact_match,A,24,0.0,0.0,0.0,
+held_out,irrelevant,token_f1,A,24,0.0,0.0,0.0,
+held_out,irrelevant,constraint_satisfied,A,24,0.0,0.0,0.0,
+held_out,irrelevant,mean_target_nll,B,24,5.6048304587602615,5.229963630437851,1.0865261977687506,
+held_out,irrelevant,target_perplexity,B,24,633.9360575242683,186.87278018743564,1078.2839256417756,
+held_out,irrelevant,exact_match,B,24,0.0,0.0,0.0,
+held_out,irrelevant,token_f1,B,24,0.0,0.0,0.0,
+held_out,irrelevant,constraint_satisfied,B,24,0.0,0.0,0.0,
+held_out,irrelevant,mean_target_nll,C,24,5.438798085269,5.199068084359169,0.865839540969858,
+held_out,irrelevant,target_perplexity,C,24,371.3591404067977,181.10719425414413,480.7958230913058,
+held_out,irrelevant,exact_match,C,24,0.0,0.0,0.0,
+held_out,irrelevant,token_f1,C,24,0.0,0.0,0.0,
+held_out,irrelevant,constraint_satisfied,C,24,0.0,0.0,0.0,
+held_out,irrelevant,mean_target_nll,D,24,4.915498259166877,4.72669991850853,0.5983469723943861,
+held_out,irrelevant,target_perplexity,D,24,170.21667032815733,112.93996433596647,142.8359183872553,
+held_out,irrelevant,exact_match,D,24,0.0,0.0,0.0,
+held_out,irrelevant,token_f1,D,24,0.0,0.0,0.0,
+held_out,irrelevant,constraint_satisfied,D,24,0.0,0.0,0.0,
+held_out,irrelevant,mean_target_nll,B-A,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,irrelevant,target_perplexity,B-A,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,irrelevant,exact_match,B-A,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,irrelevant,token_f1,B-A,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,irrelevant,constraint_satisfied,B-A,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,irrelevant,mean_target_nll,C-A,24,-0.16603237349126068,-0.05945304036140442,1.2081077347555575,"[-0.668454472389486, 0.3197184130549431]"
+held_out,irrelevant,target_perplexity,C-A,24,-262.5769171174707,-12.835951519959465,1118.5376405287552,"[-728.9096034718813, 146.94238179907148]"
+held_out,irrelevant,exact_match,C-A,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,irrelevant,token_f1,C-A,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,irrelevant,constraint_satisfied,C-A,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,irrelevant,mean_target_nll,D-A,24,-0.6893321995933851,-0.5374960601329803,0.6798871780301383,"[-0.9610522712270416, -0.42760877725150853]"
+held_out,irrelevant,target_perplexity,D-A,24,-463.719387196111,-62.896848098155985,963.6492817242813,"[-885.7988479812166, -115.54177385767564]"
+held_out,irrelevant,exact_match,D-A,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,irrelevant,token_f1,D-A,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,irrelevant,constraint_satisfied,D-A,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,irrelevant,mean_target_nll,B-D,24,0.6893321995933851,0.5374960601329803,0.6798871780301383,"[0.42773231491446495, 0.9611423773070175]"
+held_out,irrelevant,target_perplexity,B-D,24,463.719387196111,62.896848098155985,963.6492817242813,"[115.54598217678392, 887.5941756832448]"
+held_out,irrelevant,exact_match,B-D,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,irrelevant,token_f1,B-D,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,irrelevant,constraint_satisfied,B-D,24,0.0,0.0,0.0,"[0.0, 0.0]"
+held_out,irrelevant,mean_target_nll,B-best_single,0,,,,
+held_out,irrelevant,target_perplexity,B-best_single,0,,,,
+held_out,irrelevant,exact_match,B-best_single,0,,,,
+held_out,irrelevant,token_f1,B-best_single,0,,,,
+held_out,irrelevant,constraint_satisfied,B-best_single,0,,,,

@@ -1,0 +1,56 @@
+{
+  "configuration": {
+    "revision": "e4630fb85ebf2a54457a0efcd5763cd28f0136ee",
+    "dataset_hash": "888ea633232968d1128b393b6ef7146fedebf8a481dbf26396dc13caa71851a4",
+    "code_hashes": {
+      "dataset.py": "9f7ebebeac1bf179836497956aae7abd29f818ebb70a281945782970d8f037e8",
+      "evaluation.py": "f0f1beb252d8534b6b877e15c9a673128eb4f72f1317d9bb74f0f23e0fe94608",
+      "kaggle_quality.py": "504f5fd73cabc2fb85e5ace453eb4aaf988028f4d4e352b53dfed3f74204e5bd",
+      "reporting.py": "9f5ea521ef4d2c4075b7ff8f2069aeb7015ac417f1082229df529cfffc09fd1d",
+      "run.py": "5bba7cb94c054dc53f91edd09b899e4decadc73465d6f393085bb4560e90ca5b",
+      "test_quality.py": "3760cae11386cf5126cbdebdfdab3c078a391c34a5ed53360bb863e862ecdda5"
+    },
+    "top_k": 2,
+    "threshold": null,
+    "seed": 57219,
+    "arms": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "evaluation": "both",
+    "max_new_tokens": 8,
+    "timeout": 180,
+    "min_auto_em_gain": 0.05,
+    "dirty": true
+  },
+  "model": {
+    "model_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+    "model_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+    "architecture": "mom-gated-deltanet",
+    "mom_revision": "125038087b71b635c171cec857bd0f21d10955b6",
+    "tokenizer_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+    "tokenizer_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+    "tokenizer_hash": "90e3e115a745594abd2167554dcf472ea00d4852465c03b5482309d9036f4c49",
+    "tokenizer_files": {
+      "special_tokens_map.json": "4452b845ab9ca2afa863f59f1411a959e8a32bb4334e264b0e71d5d17dd4dcb9",
+      "tokenizer.json": "a2699839c243202a04a90537576fc719283f638e90fe80feb469888275289575",
+      "tokenizer_config.json": "cc3fdc5126e4d2e3a3934bc29779bf811c2eeefb60237017cddfd03acf9a7562"
+    },
+    "config_hash": "b99c19cdd75493abb6dfe0d5e991ebaac8d5af963b75c0ea2f73a6f496204341",
+    "weights_sha256": "08820287a91c2bc10f1fafe8b149dbf027ae51768530027c711dc240f7d53771",
+    "dtype": "float16",
+    "num_hidden_layers": 24,
+    "num_memories": 4,
+    "shared_memory": true,
+    "topk": 2,
+    "torch": "2.11.0+cu130",
+    "triton": "3.6.0",
+    "transformers": "4.51.3",
+    "flash-linear-attention": "0.2.2",
+    "parameters": 1552884000
+  },
+  "cells_sha256": "d78b3af6611fda5aec658f57aa04a433ca6a085a920ee927bbb47d5ed69d7c07",
+  "dataset_sha256": "888ea633232968d1128b393b6ef7146fedebf8a481dbf26396dc13caa71851a4"
+}

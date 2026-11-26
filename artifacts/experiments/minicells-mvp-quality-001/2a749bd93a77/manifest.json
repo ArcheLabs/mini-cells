@@ -1,0 +1,152 @@
+{
+  "experiment": "minicells-mvp-quality-001",
+  "format": "minicells.mvp-quality.001.v1",
+  "configuration": {
+    "revision": "e4630fb85ebf2a54457a0efcd5763cd28f0136ee",
+    "dataset_hash": "888ea633232968d1128b393b6ef7146fedebf8a481dbf26396dc13caa71851a4",
+    "code_hashes": {
+      "dataset.py": "9f7ebebeac1bf179836497956aae7abd29f818ebb70a281945782970d8f037e8",
+      "evaluation.py": "f0f1beb252d8534b6b877e15c9a673128eb4f72f1317d9bb74f0f23e0fe94608",
+      "kaggle_quality.py": "504f5fd73cabc2fb85e5ace453eb4aaf988028f4d4e352b53dfed3f74204e5bd",
+      "reporting.py": "9f5ea521ef4d2c4075b7ff8f2069aeb7015ac417f1082229df529cfffc09fd1d",
+      "run.py": "5bba7cb94c054dc53f91edd09b899e4decadc73465d6f393085bb4560e90ca5b",
+      "test_quality.py": "3760cae11386cf5126cbdebdfdab3c078a391c34a5ed53360bb863e862ecdda5"
+    },
+    "top_k": 2,
+    "threshold": null,
+    "seed": 57219,
+    "arms": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "evaluation": "both",
+    "max_new_tokens": 8,
+    "timeout": 180,
+    "min_auto_em_gain": 0.05,
+    "dirty": true
+  },
+  "repository": "https://github.com/ArcheLabs/mini-cells",
+  "branch": "codex/minicells-mvp-quality-001",
+  "command": [
+    "/tmp/minicells-quality-b4st87wh/source/research/projects/continual-learning/experiments/minicells-mvp-quality-001/run.py",
+    "--output",
+    "/kaggle/working/minicells-mvp-quality-001-2a749bd93a77"
+  ],
+  "started_at": "2026-11-26T05:14:59.545408+00:00",
+  "environment": {
+    "timestamp": "2026-11-26T05:14:59.497144+00:00",
+    "python": "3.13.16 (main, Oct  1 2026, 15:40:24) [GCC 13.3.0]",
+    "torch": "2.11.0+cu130",
+    "physical_devices": [
+      {
+        "name": "Tesla T4",
+        "total_mib": "15360",
+        "free_mib": "14912",
+        "driver": "580.178.04",
+        "compute_capability": "7.5"
+      },
+      {
+        "name": "Tesla T4",
+        "total_mib": "15360",
+        "free_mib": "14912",
+        "driver": "580.178.04",
+        "compute_capability": "7.5"
+      }
+    ],
+    "hardware_status": "T4_PRESENT",
+    "cuda": "13.0",
+    "device": "_CudaDeviceProperties(name='Tesla T4', major=7, minor=5, total_memory=14911MB, multi_processor_count=40, uuid=22568148-66e1-be4b-8981-a46a19c55df0, pci_bus_id=0, pci_device_id=4, pci_domain_id=0, L2_cache_size=4MB)"
+  },
+  "python": "3.13.16",
+  "model_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+  "tokenizer_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+  "sdk_version": "0.2.0a1",
+  "do_sample": false,
+  "num_beams": 1,
+  "answer_eos": "excluded",
+  "generation_eos": "natural_stop",
+  "retries_per_arm": 1,
+  "model": {
+    "model_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+    "model_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+    "architecture": "mom-gated-deltanet",
+    "mom_revision": "125038087b71b635c171cec857bd0f21d10955b6",
+    "tokenizer_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+    "tokenizer_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+    "tokenizer_hash": "90e3e115a745594abd2167554dcf472ea00d4852465c03b5482309d9036f4c49",
+    "tokenizer_files": {
+      "special_tokens_map.json": "4452b845ab9ca2afa863f59f1411a959e8a32bb4334e264b0e71d5d17dd4dcb9",
+      "tokenizer.json": "a2699839c243202a04a90537576fc719283f638e90fe80feb469888275289575",
+      "tokenizer_config.json": "cc3fdc5126e4d2e3a3934bc29779bf811c2eeefb60237017cddfd03acf9a7562"
+    },
+    "config_hash": "b99c19cdd75493abb6dfe0d5e991ebaac8d5af963b75c0ea2f73a6f496204341",
+    "weights_sha256": "08820287a91c2bc10f1fafe8b149dbf027ae51768530027c711dc240f7d53771",
+    "dtype": "float16",
+    "num_hidden_layers": 24,
+    "num_memories": 4,
+    "shared_memory": true,
+    "topk": 2,
+    "torch": "2.11.0+cu130",
+    "triton": "3.6.0",
+    "transformers": "4.51.3",
+    "flash-linear-attention": "0.2.2",
+    "parameters": 1552884000
+  },
+  "finished_at": "2026-11-26T06:32:08.000747+00:00",
+  "outcomes": {
+    "A": {
+      "total": 193,
+      "success": 193,
+      "failure": 0,
+      "fallback": 0
+    },
+    "B": {
+      "total": 193,
+      "success": 193,
+      "failure": 0,
+      "fallback": 0
+    },
+    "C": {
+      "total": 193,
+      "success": 193,
+      "failure": 0,
+      "fallback": 0
+    },
+    "D": {
+      "total": 193,
+      "success": 193,
+      "failure": 0,
+      "fallback": 0
+    },
+    "single_1": {
+      "total": 35,
+      "success": 35,
+      "failure": 0,
+      "fallback": 0
+    },
+    "single_2": {
+      "total": 35,
+      "success": 35,
+      "failure": 0,
+      "fallback": 0
+    }
+  },
+  "result_sha256": {
+    "cell_manifest.json": "d78b3af6611fda5aec658f57aa04a433ca6a085a920ee927bbb47d5ed69d7c07",
+    "dataset.json": "888ea633232968d1128b393b6ef7146fedebf8a481dbf26396dc13caa71851a4",
+    "dataset_manifest.json": "6f4b85b9a6a87a07a4957f06d4136a1ce2e14559d6648b4f7dfaa0b30f5c43d8",
+    "decision.json": "7b37f7dd937a63a0523c29638c917b5296182296a2d61fc9603e9e1bd14a8f32",
+    "failures.json": "268d23291accbab614a14ec26f9ac4e688d4083a23e9015b22bf83967413ffb0",
+    "frozen_protocol.json": "58af1945ff84492c23e2e1cb25ffafb826a29d18de345bef6e8841473341aec2",
+    "generation_metrics.jsonl": "b03beeb044ac7beac53447dc3cce13f2e58fcedefe5958bbb745918c160a5f52",
+    "ready_for_held_out.json": "041dff8cee4c14767a03435eb9f84a05152b2dc00e322d74a702b6f6944a4bdf",
+    "report.md": "29f362ebd369deb4bfcca1c20bc58b0042fcb3d95a91b7acd8c0f198d267f594",
+    "sample_results.jsonl": "94881d0c0fac669bcdd385196283398d20f768285985b0be76ddbcd8cf610c74",
+    "selection_traces.jsonl": "dfbd8ce38d89430e8908142705c2176c035caa5400d26b202862625d08d353da",
+    "summary.csv": "cc7816d913e928338e0261a0e40c3bad09a26dea7f1a768932a846c412b828c4",
+    "summary.json": "7cb2244679911ab7388de0877ac8d592fe31232ac65523cc40f6f4662712867e",
+    "teacher_forced_metrics.jsonl": "038fa2b1a397010f9bd36d72b313bafe6f1f1a0425eea17df9a651935f2139de"
+  }
+}
