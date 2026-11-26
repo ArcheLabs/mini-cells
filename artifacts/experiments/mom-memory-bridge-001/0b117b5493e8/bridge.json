@@ -1,0 +1,5610 @@
+{
+  "format": "minicells.mom-memory-bridge.001.v1",
+  "status": "DEVELOPMENT_ONLY",
+  "engineering_status": "PASS",
+  "environment": {
+    "timestamp": "2026-11-26T16:09:08.555837+00:00",
+    "python": "3.13.16 (main, Oct  1 2026, 15:40:24) [GCC 13.3.0]",
+    "torch": "2.11.0+cu130",
+    "physical_devices": [
+      {
+        "name": "Tesla T4",
+        "total_mib": "15360",
+        "free_mib": "14912",
+        "driver": "580.178.04",
+        "compute_capability": "7.5"
+      },
+      {
+        "name": "Tesla T4",
+        "total_mib": "15360",
+        "free_mib": "14912",
+        "driver": "580.178.04",
+        "compute_capability": "7.5"
+      }
+    ],
+    "hardware_status": "T4_PRESENT",
+    "cuda_runtime": "13.0",
+    "fla": "0.2.2",
+    "triton": "3.6.0"
+  },
+  "model_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+  "historical_source": "2a0d0d70d2445ad04257ac544ea44147c1cffec6",
+  "runtime_evidence": {
+    "a32": "6db20d54ee066816e2319e71be390fb32a026dbc",
+    "a4": "a0a873ca4ceee4513af09237afd9551be8fa99d8"
+  },
+  "write_chunk": 64,
+  "bos": false,
+  "arms": [
+    "A_empty",
+    "B_live_exact",
+    "C_recurrent_exact",
+    "D_full_exact",
+    "E_recurrent_domain",
+    "E_live_domain",
+    "E_full_domain"
+  ],
+  "score_tolerance": {
+    "atol": 0.0625,
+    "rtol": 0.005
+  },
+  "identity": {
+    "model_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+    "model_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+    "architecture": "mom-gated-deltanet",
+    "mom_revision": "125038087b71b635c171cec857bd0f21d10955b6",
+    "tokenizer_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+    "tokenizer_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+    "tokenizer_hash": "90e3e115a745594abd2167554dcf472ea00d4852465c03b5482309d9036f4c49",
+    "tokenizer_files": {
+      "special_tokens_map.json": "4452b845ab9ca2afa863f59f1411a959e8a32bb4334e264b0e71d5d17dd4dcb9",
+      "tokenizer.json": "a2699839c243202a04a90537576fc719283f638e90fe80feb469888275289575",
+      "tokenizer_config.json": "cc3fdc5126e4d2e3a3934bc29779bf811c2eeefb60237017cddfd03acf9a7562"
+    },
+    "config_hash": "b99c19cdd75493abb6dfe0d5e991ebaac8d5af963b75c0ea2f73a6f496204341",
+    "weights_sha256": "08820287a91c2bc10f1fafe8b149dbf027ae51768530027c711dc240f7d53771",
+    "dtype": "float16",
+    "num_hidden_layers": 24,
+    "num_memories": 4,
+    "shared_memory": true,
+    "topk": 2,
+    "torch": "2.11.0+cu130",
+    "triton": "3.6.0",
+    "transformers": "4.51.3",
+    "flash-linear-attention": "0.2.2",
+    "parameters": 1552884000
+  },
+  "rows": [
+    {
+      "case": {
+        "index": 0,
+        "domain": "minijam",
+        "label": "test gateway alias",
+        "gold": "veka-27",
+        "distractor": "nalo-27"
+      },
+      "question": "\nQuestion: What is the current test gateway alias?\nAnswer:",
+      "query_ids": [
+        28705,
+        13,
+        24994,
+        28747,
+        1824,
+        349,
+        272,
+        1868,
+        1369,
+        9862,
+        1128,
+        18960,
+        28804,
+        13,
+        2820,
+        16981,
+        28747
+      ],
+      "targets": {
+        "gold": [
+          1773,
+          2117,
+          28733,
+          28750,
+          28787
+        ],
+        "distractor": [
+          307,
+          8344,
+          28733,
+          28750,
+          28787
+        ]
+      },
+      "equal_target_lengths": true,
+      "exact": {
+        "write_tokens": [
+          19153,
+          28747,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          1230,
+          314,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28734,
+          28793,
+          13,
+          1014,
+          1369,
+          9862,
+          1128,
+          18960,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          1773,
+          2117,
+          28733,
+          28750,
+          28787,
+          28723
+        ],
+        "full": {
+          "exact": true,
+          "tensor_count": 263,
+          "mismatched": [],
+          "source_cursor": 34,
+          "restored_cursor": 34,
+          "cursor_exact": true,
+          "probability_parity": {
+            "exact": true,
+            "within_tolerance": true,
+            "max_abs": 0.0
+          },
+          "checkpoint_sha256": "666167af9e0861bb0350a7f275c02e038193b113109111d1627986d340cb6c70"
+        },
+        "recurrent": {
+          "exact": true,
+          "tensor_count": 119,
+          "mismatched": [],
+          "query_did_not_mutate_bundle": true,
+          "bundle_sha256": "717087861d2ce7e8f67b2a838d1073ab07a7af0997e8a9c40dba386cf0992fd9"
+        }
+      },
+      "domain": {
+        "write_tokens": [
+          19153,
+          28747,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          1230,
+          314,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28750,
+          28793,
+          13,
+          1014,
+          13669,
+          24517,
+          5846,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          6876,
+          28709,
+          28733,
+          28784,
+          28770,
+          28723,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          1230,
+          314,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28781,
+          28793,
+          13,
+          1014,
+          399,
+          4199,
+          21227,
+          18844,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          261,
+          5092,
+          28733,
+          28782,
+          28740,
+          28723,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          1230,
+          314,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28734,
+          28793,
+          13,
+          1014,
+          1369,
+          9862,
+          1128,
+          18960,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          1773,
+          2117,
+          28733,
+          28750,
+          28787,
+          28723
+        ],
+        "full": {
+          "exact": true,
+          "tensor_count": 264,
+          "mismatched": [],
+          "source_cursor": 97,
+          "restored_cursor": 97,
+          "cursor_exact": true,
+          "probability_parity": {
+            "exact": true,
+            "within_tolerance": true,
+            "max_abs": 0.0
+          },
+          "checkpoint_sha256": "21fd6f24f198503ce5114e89e7723224dc22f7a6fcb6113b2a599d09b4e677ba"
+        },
+        "recurrent": {
+          "exact": true,
+          "tensor_count": 120,
+          "mismatched": [],
+          "query_did_not_mutate_bundle": true,
+          "bundle_sha256": "d64b8c886668f00a8f451a4aa1afbe5560f8756a530a5f7442af381c06207280"
+        }
+      },
+      "arms": {
+        "A_empty": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -12.894402503967285,
+                -6.52568244934082,
+                -2.092407703399658,
+                -5.279613018035889,
+                -4.4091081619262695
+              ],
+              "total_logp": -31.201213836669922,
+              "mean_logp": -6.240242767333984
+            },
+            "distractor": {
+              "token_logp": [
+                -7.120965003967285,
+                -13.672805786132812,
+                -2.1815457344055176,
+                -5.907042980194092,
+                -4.674208164215088
+              ],
+              "total_logp": -33.556567668914795,
+              "mean_logp": -6.711313533782959
+            }
+          },
+          "gold_nll": 6.240242767333984,
+          "margin": 0.4710707664489746,
+          "total_margin": 2.355353832244873,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 21,
+            "distractor": 21
+          }
+        },
+        "B_live_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -0.9594748616218567,
+                -0.05430077016353607,
+                -0.06452661752700806,
+                -0.09916071593761444,
+                -0.06137964501976967
+              ],
+              "total_logp": -1.238842610269785,
+              "mean_logp": -0.247768522053957
+            },
+            "distractor": {
+              "token_logp": [
+                -7.396975040435791,
+                -10.91341495513916,
+                -1.473742127418518,
+                -1.086798071861267,
+                -0.6638272404670715
+              ],
+              "total_logp": -21.534757435321808,
+              "mean_logp": -4.306951487064362
+            }
+          },
+          "gold_nll": 0.247768522053957,
+          "margin": 4.059182965010405,
+          "total_margin": 20.295914825052023,
+          "query_start_cursors": {
+            "gold": 34,
+            "distractor": 34
+          },
+          "query_end_cursors": {
+            "gold": 55,
+            "distractor": 55
+          }
+        },
+        "C_recurrent_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.127174735069275,
+                -0.060238588601350784,
+                -0.10872140526771545,
+                -0.12070231139659882,
+                -0.0767911896109581
+              ],
+              "total_logp": -1.493628229945898,
+              "mean_logp": -0.2987256459891796
+            },
+            "distractor": {
+              "token_logp": [
+                -7.1427998542785645,
+                -10.892637252807617,
+                -1.6074087619781494,
+                -1.0162336826324463,
+                -0.7953740954399109
+              ],
+              "total_logp": -21.45445364713669,
+              "mean_logp": -4.290890729427337
+            }
+          },
+          "gold_nll": 0.2987256459891796,
+          "margin": 3.9921650834381577,
+          "total_margin": 19.96082541719079,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 21,
+            "distractor": 21
+          }
+        },
+        "D_full_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -0.9594748616218567,
+                -0.05430077016353607,
+                -0.06452661752700806,
+                -0.09916071593761444,
+                -0.06137964501976967
+              ],
+              "total_logp": -1.238842610269785,
+              "mean_logp": -0.247768522053957
+            },
+            "distractor": {
+              "token_logp": [
+                -7.396975040435791,
+                -10.91341495513916,
+                -1.473742127418518,
+                -1.086798071861267,
+                -0.6638272404670715
+              ],
+              "total_logp": -21.534757435321808,
+              "mean_logp": -4.306951487064362
+            }
+          },
+          "gold_nll": 0.247768522053957,
+          "margin": 4.059182965010405,
+          "total_margin": 20.295914825052023,
+          "query_start_cursors": {
+            "gold": 34,
+            "distractor": 34
+          },
+          "query_end_cursors": {
+            "gold": 55,
+            "distractor": 55
+          }
+        },
+        "E_recurrent_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.5230567455291748,
+                -0.04484834149479866,
+                -0.057521943002939224,
+                -0.12355303764343262,
+                -0.049881935119628906
+              ],
+              "total_logp": -1.7988620027899742,
+              "mean_logp": -0.35977240055799486
+            },
+            "distractor": {
+              "token_logp": [
+                -7.335556983947754,
+                -9.613492012023926,
+                -0.7431647181510925,
+                -1.684856653213501,
+                -1.699695110321045
+              ],
+              "total_logp": -21.076765477657318,
+              "mean_logp": -4.215353095531464
+            }
+          },
+          "gold_nll": 0.35977240055799486,
+          "margin": 3.8555806949734692,
+          "total_margin": 19.277903474867344,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 21,
+            "distractor": 21
+          }
+        },
+        "E_live_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.2279771566390991,
+                -0.03888935595750809,
+                -0.03392559662461281,
+                -0.0706612691283226,
+                -0.03302937373518944
+              ],
+              "total_logp": -1.404482752084732,
+              "mean_logp": -0.2808965504169464
+            },
+            "distractor": {
+              "token_logp": [
+                -7.462352275848389,
+                -9.470318794250488,
+                -0.6333128213882446,
+                -1.579280972480774,
+                -1.4917633533477783
+              ],
+              "total_logp": -20.637028217315674,
+              "mean_logp": -4.127405643463135
+            }
+          },
+          "gold_nll": 0.2808965504169464,
+          "margin": 3.8465090930461883,
+          "total_margin": 19.23254546523094,
+          "query_start_cursors": {
+            "gold": 97,
+            "distractor": 97
+          },
+          "query_end_cursors": {
+            "gold": 118,
+            "distractor": 118
+          }
+        },
+        "E_full_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.2279771566390991,
+                -0.03888935595750809,
+                -0.03392559662461281,
+                -0.0706612691283226,
+                -0.03302937373518944
+              ],
+              "total_logp": -1.404482752084732,
+              "mean_logp": -0.2808965504169464
+            },
+            "distractor": {
+              "token_logp": [
+                -7.462352275848389,
+                -9.470318794250488,
+                -0.6333128213882446,
+                -1.579280972480774,
+                -1.4917633533477783
+              ],
+              "total_logp": -20.637028217315674,
+              "mean_logp": -4.127405643463135
+            }
+          },
+          "gold_nll": 0.2808965504169464,
+          "margin": 3.8465090930461883,
+          "total_margin": 19.23254546523094,
+          "query_start_cursors": {
+            "gold": 97,
+            "distractor": 97
+          },
+          "query_end_cursors": {
+            "gold": 118,
+            "distractor": 118
+          }
+        }
+      },
+      "historical_bos": {
+        "empty_wrapper": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -11.754925727844238,
+                -6.750183582305908,
+                -1.7452346086502075,
+                -5.305632591247559,
+                -4.133848667144775
+              ],
+              "total_logp": -29.689825177192688,
+              "mean_logp": -5.937965035438538
+            },
+            "distractor": {
+              "token_logp": [
+                -6.481488227844238,
+                -14.112014770507812,
+                -1.8691331148147583,
+                -6.019169330596924,
+                -4.291212558746338
+              ],
+              "total_logp": -32.77301800251007,
+              "mean_logp": -6.5546036005020145
+            }
+          },
+          "gold_nll": 5.937965035438538,
+          "margin": 0.6166385650634769,
+          "total_margin": 3.083192825317383,
+          "query_start_cursors": {
+            "gold": 4,
+            "distractor": 4
+          },
+          "query_end_cursors": {
+            "gold": 25,
+            "distractor": 25
+          },
+          "write_tokens": [
+            1,
+            19153,
+            28747,
+            13
+          ]
+        },
+        "exact_record": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -0.7700697183609009,
+                -0.06181308999657631,
+                -0.05452870577573776,
+                -0.06970866769552231,
+                -0.05088634416460991
+              ],
+              "total_logp": -1.0070065259933472,
+              "mean_logp": -0.20140130519866944
+            },
+            "distractor": {
+              "token_logp": [
+                -7.301319599151611,
+                -10.912737846374512,
+                -1.4431276321411133,
+                -1.0945909023284912,
+                -0.6179251670837402
+              ],
+              "total_logp": -21.369701147079468,
+              "mean_logp": -4.273940229415894
+            }
+          },
+          "gold_nll": 0.20140130519866944,
+          "margin": 4.072538924217224,
+          "total_margin": 20.36269462108612,
+          "query_start_cursors": {
+            "gold": 35,
+            "distractor": 35
+          },
+          "query_end_cursors": {
+            "gold": 56,
+            "distractor": 56
+          },
+          "write_tokens": [
+            1,
+            19153,
+            28747,
+            13,
+            28792,
+            7740,
+            28747,
+            1187,
+            1230,
+            314,
+            28793,
+            13,
+            28792,
+            7079,
+            28747,
+            28705,
+            28734,
+            28793,
+            13,
+            1014,
+            1369,
+            9862,
+            1128,
+            18960,
+            354,
+            272,
+            1868,
+            3881,
+            349,
+            1773,
+            2117,
+            28733,
+            28750,
+            28787,
+            28723
+          ]
+        }
+      }
+    },
+    {
+      "case": {
+        "index": 1,
+        "domain": "minijam",
+        "label": "peer relay tag",
+        "gold": "voro-63",
+        "distractor": "sena-63"
+      },
+      "question": "\nQuestion: What is the current peer relay tag?\nAnswer:",
+      "query_ids": [
+        28705,
+        13,
+        24994,
+        28747,
+        1824,
+        349,
+        272,
+        1868,
+        13669,
+        24517,
+        5846,
+        28804,
+        13,
+        2820,
+        16981,
+        28747
+      ],
+      "targets": {
+        "gold": [
+          6876,
+          28709,
+          28733,
+          28784,
+          28770
+        ],
+        "distractor": [
+          268,
+          3594,
+          28733,
+          28784,
+          28770
+        ]
+      },
+      "equal_target_lengths": true,
+      "exact": {
+        "write_tokens": [
+          19153,
+          28747,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          1230,
+          314,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28750,
+          28793,
+          13,
+          1014,
+          13669,
+          24517,
+          5846,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          6876,
+          28709,
+          28733,
+          28784,
+          28770,
+          28723
+        ],
+        "full": {
+          "exact": true,
+          "tensor_count": 263,
+          "mismatched": [],
+          "source_cursor": 33,
+          "restored_cursor": 33,
+          "cursor_exact": true,
+          "probability_parity": {
+            "exact": true,
+            "within_tolerance": true,
+            "max_abs": 0.0
+          },
+          "checkpoint_sha256": "c0f65fd210080027ea26e9ce02d1305ec21c4dbf54bf894aa015d8f0e9781178"
+        },
+        "recurrent": {
+          "exact": true,
+          "tensor_count": 119,
+          "mismatched": [],
+          "query_did_not_mutate_bundle": true,
+          "bundle_sha256": "18398ea41e77745940596c72bb3f8e88c2d030b84f149ac87c4ccf9f640867a6"
+        }
+      },
+      "domain": {
+        "write_tokens": [
+          19153,
+          28747,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          1230,
+          314,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28734,
+          28793,
+          13,
+          1014,
+          1369,
+          9862,
+          1128,
+          18960,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          1773,
+          2117,
+          28733,
+          28750,
+          28787,
+          28723,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          1230,
+          314,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28781,
+          28793,
+          13,
+          1014,
+          399,
+          4199,
+          21227,
+          18844,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          261,
+          5092,
+          28733,
+          28782,
+          28740,
+          28723,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          1230,
+          314,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28750,
+          28793,
+          13,
+          1014,
+          13669,
+          24517,
+          5846,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          6876,
+          28709,
+          28733,
+          28784,
+          28770,
+          28723
+        ],
+        "full": {
+          "exact": true,
+          "tensor_count": 264,
+          "mismatched": [],
+          "source_cursor": 97,
+          "restored_cursor": 97,
+          "cursor_exact": true,
+          "probability_parity": {
+            "exact": true,
+            "within_tolerance": true,
+            "max_abs": 0.0
+          },
+          "checkpoint_sha256": "a7417fdc53bf7bcff5c96d3fafd873ccf257ff641d98e64b713137572ac7846e"
+        },
+        "recurrent": {
+          "exact": true,
+          "tensor_count": 120,
+          "mismatched": [],
+          "query_did_not_mutate_bundle": true,
+          "bundle_sha256": "db04690b7d86b46f63feccbc348edf01979594a428d3f7c2089a0134d3c2bcfc"
+        }
+      },
+      "arms": {
+        "A_empty": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -15.391246795654297,
+                -4.022407054901123,
+                -2.2896032333374023,
+                -5.0959153175354,
+                -3.556138277053833
+              ],
+              "total_logp": -30.355310678482056,
+              "mean_logp": -6.071062135696411
+            },
+            "distractor": {
+              "token_logp": [
+                -8.695934295654297,
+                -11.293424606323242,
+                -1.6047531366348267,
+                -6.252522945404053,
+                -3.1162612438201904
+              ],
+              "total_logp": -30.96289622783661,
+              "mean_logp": -6.192579245567321
+            }
+          },
+          "gold_nll": 6.071062135696411,
+          "margin": 0.12151710987091047,
+          "total_margin": 0.6075855493545532,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 20,
+            "distractor": 20
+          }
+        },
+        "B_live_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -3.7224843502044678,
+                -0.06802305579185486,
+                -0.055050428956747055,
+                -0.11915866285562515,
+                -0.08530952781438828
+              ],
+              "total_logp": -4.050026025623083,
+              "mean_logp": -0.8100052051246166
+            },
+            "distractor": {
+              "token_logp": [
+                -7.238109588623047,
+                -10.457944869995117,
+                -1.267194390296936,
+                -1.7875275611877441,
+                -0.6800247430801392
+              ],
+              "total_logp": -21.430801153182983,
+              "mean_logp": -4.286160230636597
+            }
+          },
+          "gold_nll": 0.8100052051246166,
+          "margin": 3.47615502551198,
+          "total_margin": 17.3807751275599,
+          "query_start_cursors": {
+            "gold": 33,
+            "distractor": 33
+          },
+          "query_end_cursors": {
+            "gold": 53,
+            "distractor": 53
+          }
+        },
+        "C_recurrent_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -4.099696159362793,
+                -0.08644957095384598,
+                -0.09807279706001282,
+                -0.16992077231407166,
+                -0.11075204610824585
+              ],
+              "total_logp": -4.564891345798969,
+              "mean_logp": -0.9129782691597939
+            },
+            "distractor": {
+              "token_logp": [
+                -6.990321159362793,
+                -10.431938171386719,
+                -1.388107419013977,
+                -1.7077444791793823,
+                -1.1184791326522827
+              ],
+              "total_logp": -21.636590361595154,
+              "mean_logp": -4.327318072319031
+            }
+          },
+          "gold_nll": 0.9129782691597939,
+          "margin": 3.414339803159237,
+          "total_margin": 17.071699015796185,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 20,
+            "distractor": 20
+          }
+        },
+        "D_full_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -3.7224843502044678,
+                -0.06802305579185486,
+                -0.055050428956747055,
+                -0.11915866285562515,
+                -0.08530952781438828
+              ],
+              "total_logp": -4.050026025623083,
+              "mean_logp": -0.8100052051246166
+            },
+            "distractor": {
+              "token_logp": [
+                -7.238109588623047,
+                -10.457944869995117,
+                -1.267194390296936,
+                -1.7875275611877441,
+                -0.6800247430801392
+              ],
+              "total_logp": -21.430801153182983,
+              "mean_logp": -4.286160230636597
+            }
+          },
+          "gold_nll": 0.8100052051246166,
+          "margin": 3.47615502551198,
+          "total_margin": 17.3807751275599,
+          "query_start_cursors": {
+            "gold": 33,
+            "distractor": 33
+          },
+          "query_end_cursors": {
+            "gold": 53,
+            "distractor": 53
+          }
+        },
+        "E_recurrent_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -6.230660438537598,
+                -0.033701904118061066,
+                -0.042609069496393204,
+                -0.18801617622375488,
+                -0.07823614031076431
+              ],
+              "total_logp": -6.573223728686571,
+              "mean_logp": -1.3146447457373143
+            },
+            "distractor": {
+              "token_logp": [
+                -6.433785438537598,
+                -8.5953950881958,
+                -0.23188835382461548,
+                -2.3229684829711914,
+                -2.054361343383789
+              ],
+              "total_logp": -19.638398706912994,
+              "mean_logp": -3.927679741382599
+            }
+          },
+          "gold_nll": 1.3146447457373143,
+          "margin": 2.6130349956452843,
+          "total_margin": 13.065174978226423,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 20,
+            "distractor": 20
+          }
+        },
+        "E_live_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -5.7701897621154785,
+                -0.02287360467016697,
+                -0.023957641795277596,
+                -0.10171879827976227,
+                -0.04042648524045944
+              ],
+              "total_logp": -5.959166292101145,
+              "mean_logp": -1.191833258420229
+            },
+            "distractor": {
+              "token_logp": [
+                -6.5045647621154785,
+                -8.484627723693848,
+                -0.1887660026550293,
+                -2.2872042655944824,
+                -1.7376585006713867
+              ],
+              "total_logp": -19.202821254730225,
+              "mean_logp": -3.840564250946045
+            }
+          },
+          "gold_nll": 1.191833258420229,
+          "margin": 2.648730992525816,
+          "total_margin": 13.24365496262908,
+          "query_start_cursors": {
+            "gold": 97,
+            "distractor": 97
+          },
+          "query_end_cursors": {
+            "gold": 117,
+            "distractor": 117
+          }
+        },
+        "E_full_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -5.7701897621154785,
+                -0.02287360467016697,
+                -0.023957641795277596,
+                -0.10171879827976227,
+                -0.04042648524045944
+              ],
+              "total_logp": -5.959166292101145,
+              "mean_logp": -1.191833258420229
+            },
+            "distractor": {
+              "token_logp": [
+                -6.5045647621154785,
+                -8.484627723693848,
+                -0.1887660026550293,
+                -2.2872042655944824,
+                -1.7376585006713867
+              ],
+              "total_logp": -19.202821254730225,
+              "mean_logp": -3.840564250946045
+            }
+          },
+          "gold_nll": 1.191833258420229,
+          "margin": 2.648730992525816,
+          "total_margin": 13.24365496262908,
+          "query_start_cursors": {
+            "gold": 97,
+            "distractor": 97
+          },
+          "query_end_cursors": {
+            "gold": 117,
+            "distractor": 117
+          }
+        }
+      },
+      "historical_bos": {
+        "empty_wrapper": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -14.816951751708984,
+                -4.130134105682373,
+                -2.021449089050293,
+                -5.226315498352051,
+                -3.147122621536255
+              ],
+              "total_logp": -29.341973066329956,
+              "mean_logp": -5.868394613265991
+            },
+            "distractor": {
+              "token_logp": [
+                -7.738826274871826,
+                -11.403629302978516,
+                -1.3759814500808716,
+                -5.9413604736328125,
+                -3.0667877197265625
+              ],
+              "total_logp": -29.52658522129059,
+              "mean_logp": -5.905317044258117
+            }
+          },
+          "gold_nll": 5.868394613265991,
+          "margin": 0.03692243099212611,
+          "total_margin": 0.18461215496063232,
+          "query_start_cursors": {
+            "gold": 4,
+            "distractor": 4
+          },
+          "query_end_cursors": {
+            "gold": 24,
+            "distractor": 24
+          },
+          "write_tokens": [
+            1,
+            19153,
+            28747,
+            13
+          ]
+        },
+        "exact_record": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -4.148754119873047,
+                -0.06556130945682526,
+                -0.04908185452222824,
+                -0.06606380641460419,
+                -0.05462295934557915
+              ],
+              "total_logp": -4.384084049612284,
+              "mean_logp": -0.8768168099224567
+            },
+            "distractor": {
+              "token_logp": [
+                -7.508129119873047,
+                -10.016128540039062,
+                -1.1415570974349976,
+                -1.6256451606750488,
+                -0.59881991147995
+              ],
+              "total_logp": -20.890279829502106,
+              "mean_logp": -4.1780559659004215
+            }
+          },
+          "gold_nll": 0.8768168099224567,
+          "margin": 3.3012391559779646,
+          "total_margin": 16.506195779889822,
+          "query_start_cursors": {
+            "gold": 34,
+            "distractor": 34
+          },
+          "query_end_cursors": {
+            "gold": 54,
+            "distractor": 54
+          },
+          "write_tokens": [
+            1,
+            19153,
+            28747,
+            13,
+            28792,
+            7740,
+            28747,
+            1187,
+            1230,
+            314,
+            28793,
+            13,
+            28792,
+            7079,
+            28747,
+            28705,
+            28750,
+            28793,
+            13,
+            1014,
+            13669,
+            24517,
+            5846,
+            354,
+            272,
+            1868,
+            3881,
+            349,
+            6876,
+            28709,
+            28733,
+            28784,
+            28770,
+            28723
+          ]
+        }
+      }
+    },
+    {
+      "case": {
+        "index": 2,
+        "domain": "minijam",
+        "label": "RPC probe marker",
+        "gold": "tiva-51",
+        "distractor": "mora-51"
+      },
+      "question": "\nQuestion: What is the current RPC probe marker?\nAnswer:",
+      "query_ids": [
+        28705,
+        13,
+        24994,
+        28747,
+        1824,
+        349,
+        272,
+        1868,
+        399,
+        4199,
+        21227,
+        18844,
+        28804,
+        13,
+        2820,
+        16981,
+        28747
+      ],
+      "targets": {
+        "gold": [
+          261,
+          5092,
+          28733,
+          28782,
+          28740
+        ],
+        "distractor": [
+          2544,
+          28708,
+          28733,
+          28782,
+          28740
+        ]
+      },
+      "equal_target_lengths": true,
+      "exact": {
+        "write_tokens": [
+          19153,
+          28747,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          1230,
+          314,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28781,
+          28793,
+          13,
+          1014,
+          399,
+          4199,
+          21227,
+          18844,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          261,
+          5092,
+          28733,
+          28782,
+          28740,
+          28723
+        ],
+        "full": {
+          "exact": true,
+          "tensor_count": 264,
+          "mismatched": [],
+          "source_cursor": 34,
+          "restored_cursor": 34,
+          "cursor_exact": true,
+          "probability_parity": {
+            "exact": true,
+            "within_tolerance": true,
+            "max_abs": 0.0
+          },
+          "checkpoint_sha256": "416b950284e3e5b20f9ca888541a77a8511f57eb1b92eaea366b346db64e6b6b"
+        },
+        "recurrent": {
+          "exact": true,
+          "tensor_count": 120,
+          "mismatched": [],
+          "query_did_not_mutate_bundle": true,
+          "bundle_sha256": "6990431d9c35b657bff1e0a42ec27d6421a38b5b4d97ab7e99814a6327160f49"
+        }
+      },
+      "domain": {
+        "write_tokens": [
+          19153,
+          28747,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          1230,
+          314,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28734,
+          28793,
+          13,
+          1014,
+          1369,
+          9862,
+          1128,
+          18960,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          1773,
+          2117,
+          28733,
+          28750,
+          28787,
+          28723,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          1230,
+          314,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28750,
+          28793,
+          13,
+          1014,
+          13669,
+          24517,
+          5846,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          6876,
+          28709,
+          28733,
+          28784,
+          28770,
+          28723,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          1230,
+          314,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28781,
+          28793,
+          13,
+          1014,
+          399,
+          4199,
+          21227,
+          18844,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          261,
+          5092,
+          28733,
+          28782,
+          28740,
+          28723
+        ],
+        "full": {
+          "exact": true,
+          "tensor_count": 264,
+          "mismatched": [],
+          "source_cursor": 97,
+          "restored_cursor": 97,
+          "cursor_exact": true,
+          "probability_parity": {
+            "exact": true,
+            "within_tolerance": true,
+            "max_abs": 0.0
+          },
+          "checkpoint_sha256": "a1b78a786d74e62c1372d45847f528226b21b971ddc1fc37562d1ae3ae27ab56"
+        },
+        "recurrent": {
+          "exact": true,
+          "tensor_count": 120,
+          "mismatched": [],
+          "query_did_not_mutate_bundle": true,
+          "bundle_sha256": "67046e95e038efcfd37fddf594ea163e7176157e5e96d49a4dfdba1116e1efd5"
+        }
+      },
+      "arms": {
+        "A_empty": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -8.379877090454102,
+                -11.210912704467773,
+                -0.6912754774093628,
+                -5.983719825744629,
+                -3.0878796577453613
+              ],
+              "total_logp": -29.353664755821228,
+              "mean_logp": -5.870732951164245
+            },
+            "distractor": {
+              "token_logp": [
+                -12.653314590454102,
+                -4.459525108337402,
+                -2.264366388320923,
+                -6.209080696105957,
+                -3.0015416145324707
+              ],
+              "total_logp": -28.587828397750854,
+              "mean_logp": -5.717565679550171
+            }
+          },
+          "gold_nll": 5.870732951164245,
+          "margin": -0.15316727161407417,
+          "total_margin": -0.7658363580703735,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 21,
+            "distractor": 21
+          }
+        },
+        "B_live_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.0363048315048218,
+                -0.022585542872548103,
+                -0.034358203411102295,
+                -0.0840296521782875,
+                -0.044979751110076904
+              ],
+              "total_logp": -1.2222579810768366,
+              "mean_logp": -0.24445159621536733
+            },
+            "distractor": {
+              "token_logp": [
+                -11.989429473876953,
+                -3.864382028579712,
+                -1.0070878267288208,
+                -1.1206525564193726,
+                -0.5444836020469666
+              ],
+              "total_logp": -18.526035487651825,
+              "mean_logp": -3.705207097530365
+            }
+          },
+          "gold_nll": 0.24445159621536733,
+          "margin": 3.4607555013149973,
+          "total_margin": 17.30377750657499,
+          "query_start_cursors": {
+            "gold": 34,
+            "distractor": 34
+          },
+          "query_end_cursors": {
+            "gold": 55,
+            "distractor": 55
+          }
+        },
+        "C_recurrent_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.383435606956482,
+                -0.025656266137957573,
+                -0.04666320979595184,
+                -0.0961364135146141,
+                -0.05301311984658241
+              ],
+              "total_logp": -1.6049046162515879,
+              "mean_logp": -0.3209809232503176
+            },
+            "distractor": {
+              "token_logp": [
+                -11.789685249328613,
+                -3.8575589656829834,
+                -1.0750226974487305,
+                -1.0608593225479126,
+                -0.7322578430175781
+              ],
+              "total_logp": -18.515384078025818,
+              "mean_logp": -3.7030768156051637
+            }
+          },
+          "gold_nll": 0.3209809232503176,
+          "margin": 3.382095892354846,
+          "total_margin": 16.91047946177423,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 21,
+            "distractor": 21
+          }
+        },
+        "D_full_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.0363048315048218,
+                -0.022585542872548103,
+                -0.034358203411102295,
+                -0.0840296521782875,
+                -0.044979751110076904
+              ],
+              "total_logp": -1.2222579810768366,
+              "mean_logp": -0.24445159621536733
+            },
+            "distractor": {
+              "token_logp": [
+                -11.989429473876953,
+                -3.864382028579712,
+                -1.0070878267288208,
+                -1.1206525564193726,
+                -0.5444836020469666
+              ],
+              "total_logp": -18.526035487651825,
+              "mean_logp": -3.705207097530365
+            }
+          },
+          "gold_nll": 0.24445159621536733,
+          "margin": 3.4607555013149973,
+          "total_margin": 17.30377750657499,
+          "query_start_cursors": {
+            "gold": 34,
+            "distractor": 34
+          },
+          "query_end_cursors": {
+            "gold": 55,
+            "distractor": 55
+          }
+        },
+        "E_recurrent_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -2.973658561706543,
+                -0.022744616493582726,
+                -0.01997533068060875,
+                -0.10733293741941452,
+                -0.05488568916916847
+              ],
+              "total_logp": -3.1785971354693174,
+              "mean_logp": -0.6357194270938635
+            },
+            "distractor": {
+              "token_logp": [
+                -10.879908561706543,
+                -3.467919111251831,
+                -0.35293081402778625,
+                -1.7308391332626343,
+                -1.7286380529403687
+              ],
+              "total_logp": -18.160235673189163,
+              "mean_logp": -3.6320471346378325
+            }
+          },
+          "gold_nll": 0.6357194270938635,
+          "margin": 2.996327707543969,
+          "total_margin": 14.981638537719846,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 21,
+            "distractor": 21
+          }
+        },
+        "E_live_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -2.759593963623047,
+                -0.019256900995969772,
+                -0.011632589623332024,
+                -0.07460901141166687,
+                -0.03316823020577431
+              ],
+              "total_logp": -2.89826069585979,
+              "mean_logp": -0.579652139171958
+            },
+            "distractor": {
+              "token_logp": [
+                -10.915843963623047,
+                -3.393134117126465,
+                -0.29258841276168823,
+                -1.594813585281372,
+                -1.532294511795044
+              ],
+              "total_logp": -17.728674590587616,
+              "mean_logp": -3.5457349181175233
+            }
+          },
+          "gold_nll": 0.579652139171958,
+          "margin": 2.966082778945565,
+          "total_margin": 14.830413894727826,
+          "query_start_cursors": {
+            "gold": 97,
+            "distractor": 97
+          },
+          "query_end_cursors": {
+            "gold": 118,
+            "distractor": 118
+          }
+        },
+        "E_full_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -2.759593963623047,
+                -0.019256900995969772,
+                -0.011632589623332024,
+                -0.07460901141166687,
+                -0.03316823020577431
+              ],
+              "total_logp": -2.89826069585979,
+              "mean_logp": -0.579652139171958
+            },
+            "distractor": {
+              "token_logp": [
+                -10.915843963623047,
+                -3.393134117126465,
+                -0.29258841276168823,
+                -1.594813585281372,
+                -1.532294511795044
+              ],
+              "total_logp": -17.728674590587616,
+              "mean_logp": -3.5457349181175233
+            }
+          },
+          "gold_nll": 0.579652139171958,
+          "margin": 2.966082778945565,
+          "total_margin": 14.830413894727826,
+          "query_start_cursors": {
+            "gold": 97,
+            "distractor": 97
+          },
+          "query_end_cursors": {
+            "gold": 118,
+            "distractor": 118
+          }
+        }
+      },
+      "historical_bos": {
+        "empty_wrapper": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -7.682098388671875,
+                -10.999404907226562,
+                -0.6098103523254395,
+                -5.879751205444336,
+                -2.754342555999756
+              ],
+              "total_logp": -27.92540740966797,
+              "mean_logp": -5.585081481933594
+            },
+            "distractor": {
+              "token_logp": [
+                -12.713348388671875,
+                -4.072688579559326,
+                -1.8889529705047607,
+                -6.397100925445557,
+                -2.868696451187134
+              ],
+              "total_logp": -27.940787315368652,
+              "mean_logp": -5.58815746307373
+            }
+          },
+          "gold_nll": 5.585081481933594,
+          "margin": 0.003075981140136186,
+          "total_margin": 0.015379905700683594,
+          "query_start_cursors": {
+            "gold": 4,
+            "distractor": 4
+          },
+          "query_end_cursors": {
+            "gold": 25,
+            "distractor": 25
+          },
+          "write_tokens": [
+            1,
+            19153,
+            28747,
+            13
+          ]
+        },
+        "exact_record": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.2060185670852661,
+                -0.027680564671754837,
+                -0.03633072227239609,
+                -0.06278084963560104,
+                -0.034614913165569305
+              ],
+              "total_logp": -1.3674256168305874,
+              "mean_logp": -0.27348512336611747
+            },
+            "distractor": {
+              "token_logp": [
+                -11.846643447875977,
+                -3.8749566078186035,
+                -0.9103417992591858,
+                -1.031272530555725,
+                -0.5156275033950806
+              ],
+              "total_logp": -18.17884188890457,
+              "mean_logp": -3.635768377780914
+            }
+          },
+          "gold_nll": 0.27348512336611747,
+          "margin": 3.362283254414797,
+          "total_margin": 16.811416272073984,
+          "query_start_cursors": {
+            "gold": 35,
+            "distractor": 35
+          },
+          "query_end_cursors": {
+            "gold": 56,
+            "distractor": 56
+          },
+          "write_tokens": [
+            1,
+            19153,
+            28747,
+            13,
+            28792,
+            7740,
+            28747,
+            1187,
+            1230,
+            314,
+            28793,
+            13,
+            28792,
+            7079,
+            28747,
+            28705,
+            28781,
+            28793,
+            13,
+            1014,
+            399,
+            4199,
+            21227,
+            18844,
+            354,
+            272,
+            1868,
+            3881,
+            349,
+            261,
+            5092,
+            28733,
+            28782,
+            28740,
+            28723
+          ]
+        }
+      }
+    },
+    {
+      "case": {
+        "index": 3,
+        "domain": "jamscript",
+        "label": "compiler marker",
+        "gold": "sena-41",
+        "distractor": "veka-41"
+      },
+      "question": "\nQuestion: What is the current compiler marker?\nAnswer:",
+      "query_ids": [
+        28705,
+        13,
+        24994,
+        28747,
+        1824,
+        349,
+        272,
+        1868,
+        23198,
+        18844,
+        28804,
+        13,
+        2820,
+        16981,
+        28747
+      ],
+      "targets": {
+        "gold": [
+          268,
+          3594,
+          28733,
+          28781,
+          28740
+        ],
+        "distractor": [
+          1773,
+          2117,
+          28733,
+          28781,
+          28740
+        ]
+      },
+      "equal_target_lengths": true,
+      "exact": {
+        "write_tokens": [
+          19153,
+          28747,
+          13,
+          28792,
+          7740,
+          28747,
+          15219,
+          4459,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28784,
+          28793,
+          13,
+          1014,
+          23198,
+          18844,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          268,
+          3594,
+          28733,
+          28781,
+          28740,
+          28723
+        ],
+        "full": {
+          "exact": true,
+          "tensor_count": 263,
+          "mismatched": [],
+          "source_cursor": 31,
+          "restored_cursor": 31,
+          "cursor_exact": true,
+          "probability_parity": {
+            "exact": true,
+            "within_tolerance": true,
+            "max_abs": 0.0
+          },
+          "checkpoint_sha256": "570a42e4c51fd0478c2451be5664cb2c1bc7b0e42c1c9e15268acaff17685fbf"
+        },
+        "recurrent": {
+          "exact": true,
+          "tensor_count": 119,
+          "mismatched": [],
+          "query_did_not_mutate_bundle": true,
+          "bundle_sha256": "d6dcde44088c694be6e5d555719357ec9cbd3bacb5b533574668dbf8f4849519"
+        }
+      },
+      "domain": {
+        "write_tokens": [
+          19153,
+          28747,
+          13,
+          28792,
+          7740,
+          28747,
+          15219,
+          4459,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28783,
+          28793,
+          13,
+          1014,
+          2832,
+          3341,
+          3870,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          307,
+          8344,
+          28733,
+          28783,
+          28750,
+          28723,
+          13,
+          28792,
+          7740,
+          28747,
+          15219,
+          4459,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28740,
+          28734,
+          28793,
+          13,
+          1014,
+          2372,
+          16183,
+          5846,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          2544,
+          28708,
+          28733,
+          28770,
+          28781,
+          28723,
+          13,
+          28792,
+          7740,
+          28747,
+          15219,
+          4459,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28784,
+          28793,
+          13,
+          1014,
+          23198,
+          18844,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          268,
+          3594,
+          28733,
+          28781,
+          28740,
+          28723
+        ],
+        "full": {
+          "exact": true,
+          "tensor_count": 264,
+          "mismatched": [],
+          "source_cursor": 92,
+          "restored_cursor": 92,
+          "cursor_exact": true,
+          "probability_parity": {
+            "exact": true,
+            "within_tolerance": true,
+            "max_abs": 0.0
+          },
+          "checkpoint_sha256": "0fc7ea49087d47789aa95e2cd89bfd44d52ee0f2566a2e7bd4964bcfd684a4f1"
+        },
+        "recurrent": {
+          "exact": true,
+          "tensor_count": 120,
+          "mismatched": [],
+          "query_did_not_mutate_bundle": true,
+          "bundle_sha256": "1a475d0ef26c3ef00018a7c27bbb4a44407f5a6ec9b44a35a1824d1bbf3325d5"
+        }
+      },
+      "arms": {
+        "A_empty": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -8.193603515625,
+                -12.631805419921875,
+                -2.8500912189483643,
+                -5.338502883911133,
+                -3.947937488555908
+              ],
+              "total_logp": -32.96194052696228,
+              "mean_logp": -6.592388105392456
+            },
+            "distractor": {
+              "token_logp": [
+                -12.685791015625,
+                -7.757943153381348,
+                -2.8037712574005127,
+                -4.594890594482422,
+                -4.243267059326172
+              ],
+              "total_logp": -32.085663080215454,
+              "mean_logp": -6.417132616043091
+            }
+          },
+          "gold_nll": 6.592388105392456,
+          "margin": -0.1752554893493654,
+          "total_margin": -0.8762774467468262,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 19,
+            "distractor": 19
+          }
+        },
+        "B_live_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.7458488941192627,
+                -0.03626956418156624,
+                -0.05655301734805107,
+                -0.09753303974866867,
+                -0.10409418493509293
+              ],
+              "total_logp": -2.0402987003326416,
+              "mean_logp": -0.40805974006652834
+            },
+            "distractor": {
+              "token_logp": [
+                -9.886473655700684,
+                -6.531470775604248,
+                -0.7384040355682373,
+                -0.73322594165802,
+                -0.4242756962776184
+              ],
+              "total_logp": -18.313850104808807,
+              "mean_logp": -3.6627700209617613
+            }
+          },
+          "gold_nll": 0.40805974006652834,
+          "margin": 3.254710280895233,
+          "total_margin": 16.273551404476166,
+          "query_start_cursors": {
+            "gold": 31,
+            "distractor": 31
+          },
+          "query_end_cursors": {
+            "gold": 50,
+            "distractor": 50
+          }
+        },
+        "C_recurrent_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.6157174110412598,
+                -0.05144144967198372,
+                -0.0755610466003418,
+                -0.11394646763801575,
+                -0.13455647230148315
+              ],
+              "total_logp": -1.9912228472530842,
+              "mean_logp": -0.3982445694506168
+            },
+            "distractor": {
+              "token_logp": [
+                -9.850091934204102,
+                -6.530279159545898,
+                -0.786833643913269,
+                -0.7196163535118103,
+                -0.46613025665283203
+              ],
+              "total_logp": -18.35295134782791,
+              "mean_logp": -3.670590269565582
+            }
+          },
+          "gold_nll": 0.3982445694506168,
+          "margin": 3.272345700114965,
+          "total_margin": 16.361728500574827,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 19,
+            "distractor": 19
+          }
+        },
+        "D_full_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.7458488941192627,
+                -0.03626956418156624,
+                -0.05655301734805107,
+                -0.09753303974866867,
+                -0.10409418493509293
+              ],
+              "total_logp": -2.0402987003326416,
+              "mean_logp": -0.40805974006652834
+            },
+            "distractor": {
+              "token_logp": [
+                -9.886473655700684,
+                -6.531470775604248,
+                -0.7384040355682373,
+                -0.73322594165802,
+                -0.4242756962776184
+              ],
+              "total_logp": -18.313850104808807,
+              "mean_logp": -3.6627700209617613
+            }
+          },
+          "gold_nll": 0.40805974006652834,
+          "margin": 3.254710280895233,
+          "total_margin": 16.273551404476166,
+          "query_start_cursors": {
+            "gold": 31,
+            "distractor": 31
+          },
+          "query_end_cursors": {
+            "gold": 50,
+            "distractor": 50
+          }
+        },
+        "E_recurrent_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -2.5737342834472656,
+                -0.10825690627098083,
+                -0.10730734467506409,
+                -0.09655949473381042,
+                -0.05779493972659111
+              ],
+              "total_logp": -2.943652968853712,
+              "mean_logp": -0.5887305937707424
+            },
+            "distractor": {
+              "token_logp": [
+                -10.011234283447266,
+                -6.634456634521484,
+                -0.532071590423584,
+                -1.4006654024124146,
+                -1.1805082559585571
+              ],
+              "total_logp": -19.758936166763306,
+              "mean_logp": -3.951787233352661
+            }
+          },
+          "gold_nll": 0.5887305937707424,
+          "margin": 3.363056639581919,
+          "total_margin": 16.815283197909594,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 19,
+            "distractor": 19
+          }
+        },
+        "E_live_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -2.4557206630706787,
+                -0.08006959408521652,
+                -0.10786732286214828,
+                -0.0869932696223259,
+                -0.05165385082364082
+              ],
+              "total_logp": -2.7823047004640102,
+              "mean_logp": -0.556460940092802
+            },
+            "distractor": {
+              "token_logp": [
+                -9.861970901489258,
+                -6.6717753410339355,
+                -0.47525686025619507,
+                -1.375104546546936,
+                -1.216185450553894
+              ],
+              "total_logp": -19.60029309988022,
+              "mean_logp": -3.920058619976044
+            }
+          },
+          "gold_nll": 0.556460940092802,
+          "margin": 3.3635976798832417,
+          "total_margin": 16.81798839941621,
+          "query_start_cursors": {
+            "gold": 92,
+            "distractor": 92
+          },
+          "query_end_cursors": {
+            "gold": 111,
+            "distractor": 111
+          }
+        },
+        "E_full_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -2.4557206630706787,
+                -0.08006959408521652,
+                -0.10786732286214828,
+                -0.0869932696223259,
+                -0.05165385082364082
+              ],
+              "total_logp": -2.7823047004640102,
+              "mean_logp": -0.556460940092802
+            },
+            "distractor": {
+              "token_logp": [
+                -9.861970901489258,
+                -6.6717753410339355,
+                -0.47525686025619507,
+                -1.375104546546936,
+                -1.216185450553894
+              ],
+              "total_logp": -19.60029309988022,
+              "mean_logp": -3.920058619976044
+            }
+          },
+          "gold_nll": 0.556460940092802,
+          "margin": 3.3635976798832417,
+          "total_margin": 16.81798839941621,
+          "query_start_cursors": {
+            "gold": 92,
+            "distractor": 92
+          },
+          "query_end_cursors": {
+            "gold": 111,
+            "distractor": 111
+          }
+        }
+      },
+      "historical_bos": {
+        "empty_wrapper": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -7.925917625427246,
+                -12.699712753295898,
+                -2.2380192279815674,
+                -5.310459136962891,
+                -3.6646652221679688
+              ],
+              "total_logp": -31.83877396583557,
+              "mean_logp": -6.367754793167114
+            },
+            "distractor": {
+              "token_logp": [
+                -12.246230125427246,
+                -7.988189697265625,
+                -2.274947166442871,
+                -4.646428108215332,
+                -4.0162553787231445
+              ],
+              "total_logp": -31.17205047607422,
+              "mean_logp": -6.234410095214844
+            }
+          },
+          "gold_nll": 6.367754793167114,
+          "margin": -0.13334469795227033,
+          "total_margin": -0.6667234897613525,
+          "query_start_cursors": {
+            "gold": 4,
+            "distractor": 4
+          },
+          "query_end_cursors": {
+            "gold": 23,
+            "distractor": 23
+          },
+          "write_tokens": [
+            1,
+            19153,
+            28747,
+            13
+          ]
+        },
+        "exact_record": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.6807893514633179,
+                -0.04015236720442772,
+                -0.055362001061439514,
+                -0.07639577984809875,
+                -0.08304319530725479
+              ],
+              "total_logp": -1.9357426948845387,
+              "mean_logp": -0.3871485389769077
+            },
+            "distractor": {
+              "token_logp": [
+                -9.54016399383545,
+                -6.308069229125977,
+                -0.7188267111778259,
+                -0.7092850208282471,
+                -0.44024142622947693
+              ],
+              "total_logp": -17.716586381196976,
+              "mean_logp": -3.543317276239395
+            }
+          },
+          "gold_nll": 0.3871485389769077,
+          "margin": 3.156168737262487,
+          "total_margin": 15.780843686312437,
+          "query_start_cursors": {
+            "gold": 32,
+            "distractor": 32
+          },
+          "query_end_cursors": {
+            "gold": 51,
+            "distractor": 51
+          },
+          "write_tokens": [
+            1,
+            19153,
+            28747,
+            13,
+            28792,
+            7740,
+            28747,
+            15219,
+            4459,
+            28793,
+            13,
+            28792,
+            7079,
+            28747,
+            28705,
+            28784,
+            28793,
+            13,
+            1014,
+            23198,
+            18844,
+            354,
+            272,
+            1868,
+            3881,
+            349,
+            268,
+            3594,
+            28733,
+            28781,
+            28740,
+            28723
+          ]
+        }
+      }
+    },
+    {
+      "case": {
+        "index": 4,
+        "domain": "jamscript",
+        "label": "source map label",
+        "gold": "nalo-82",
+        "distractor": "voro-82"
+      },
+      "question": "\nQuestion: What is the current source map label?\nAnswer:",
+      "query_ids": [
+        28705,
+        13,
+        24994,
+        28747,
+        1824,
+        349,
+        272,
+        1868,
+        2832,
+        3341,
+        3870,
+        28804,
+        13,
+        2820,
+        16981,
+        28747
+      ],
+      "targets": {
+        "gold": [
+          307,
+          8344,
+          28733,
+          28783,
+          28750
+        ],
+        "distractor": [
+          6876,
+          28709,
+          28733,
+          28783,
+          28750
+        ]
+      },
+      "equal_target_lengths": true,
+      "exact": {
+        "write_tokens": [
+          19153,
+          28747,
+          13,
+          28792,
+          7740,
+          28747,
+          15219,
+          4459,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28783,
+          28793,
+          13,
+          1014,
+          2832,
+          3341,
+          3870,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          307,
+          8344,
+          28733,
+          28783,
+          28750,
+          28723
+        ],
+        "full": {
+          "exact": true,
+          "tensor_count": 264,
+          "mismatched": [],
+          "source_cursor": 32,
+          "restored_cursor": 32,
+          "cursor_exact": true,
+          "probability_parity": {
+            "exact": true,
+            "within_tolerance": true,
+            "max_abs": 0.0
+          },
+          "checkpoint_sha256": "431712fe288325d82351e2fbe37e0c19535f0c8b0f584f654194e5b9d8e0ba15"
+        },
+        "recurrent": {
+          "exact": true,
+          "tensor_count": 120,
+          "mismatched": [],
+          "query_did_not_mutate_bundle": true,
+          "bundle_sha256": "aec4ff8f28756280d6bc26eaeb898103984a405ffe4eecc08e5d7765eb23e7a4"
+        }
+      },
+      "domain": {
+        "write_tokens": [
+          19153,
+          28747,
+          13,
+          28792,
+          7740,
+          28747,
+          15219,
+          4459,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28784,
+          28793,
+          13,
+          1014,
+          23198,
+          18844,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          268,
+          3594,
+          28733,
+          28781,
+          28740,
+          28723,
+          13,
+          28792,
+          7740,
+          28747,
+          15219,
+          4459,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28740,
+          28734,
+          28793,
+          13,
+          1014,
+          2372,
+          16183,
+          5846,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          2544,
+          28708,
+          28733,
+          28770,
+          28781,
+          28723,
+          13,
+          28792,
+          7740,
+          28747,
+          15219,
+          4459,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28783,
+          28793,
+          13,
+          1014,
+          2832,
+          3341,
+          3870,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          307,
+          8344,
+          28733,
+          28783,
+          28750,
+          28723
+        ],
+        "full": {
+          "exact": true,
+          "tensor_count": 264,
+          "mismatched": [],
+          "source_cursor": 92,
+          "restored_cursor": 92,
+          "cursor_exact": true,
+          "probability_parity": {
+            "exact": true,
+            "within_tolerance": true,
+            "max_abs": 0.0
+          },
+          "checkpoint_sha256": "cf6cb8f2dfe522fbcc6c8f5b6c0eb6162a9f36a6d9901554a23521a3cb28f9e6"
+        },
+        "recurrent": {
+          "exact": true,
+          "tensor_count": 120,
+          "mismatched": [],
+          "query_did_not_mutate_bundle": true,
+          "bundle_sha256": "6f9916574610c17d96b0b69f25cd3e5b5ee876c13db0fd896e1684bfd12ebedb"
+        }
+      },
+      "arms": {
+        "A_empty": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -8.68557071685791,
+                -14.487515449523926,
+                -2.6285018920898438,
+                -6.736490726470947,
+                -3.8661839962005615
+              ],
+              "total_logp": -36.40426278114319,
+              "mean_logp": -7.280852556228638
+            },
+            "distractor": {
+              "token_logp": [
+                -14.37307071685791,
+                -5.009854316711426,
+                -2.102797031402588,
+                -5.195924758911133,
+                -3.414393901824951
+              ],
+              "total_logp": -30.096040725708008,
+              "mean_logp": -6.019208145141602
+            }
+          },
+          "gold_nll": 7.280852556228638,
+          "margin": -1.261644411087036,
+          "total_margin": -6.308222055435181,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 20,
+            "distractor": 20
+          }
+        },
+        "B_live_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.3222485780715942,
+                -0.013860050588846207,
+                -0.09950179606676102,
+                -0.055379144847393036,
+                -0.06114855781197548
+              ],
+              "total_logp": -1.55213812738657,
+              "mean_logp": -0.310427625477314
+            },
+            "distractor": {
+              "token_logp": [
+                -11.447248458862305,
+                -4.096304893493652,
+                -1.007216215133667,
+                -0.8281363248825073,
+                -0.594071626663208
+              ],
+              "total_logp": -17.97297751903534,
+              "mean_logp": -3.594595503807068
+            }
+          },
+          "gold_nll": 0.310427625477314,
+          "margin": 3.284167878329754,
+          "total_margin": 16.42083939164877,
+          "query_start_cursors": {
+            "gold": 32,
+            "distractor": 32
+          },
+          "query_end_cursors": {
+            "gold": 52,
+            "distractor": 52
+          }
+        },
+        "C_recurrent_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.5088104009628296,
+                -0.018612729385495186,
+                -0.17314350605010986,
+                -0.08274363726377487,
+                -0.0783805400133133
+              ],
+              "total_logp": -1.8616908136755228,
+              "mean_logp": -0.37233816273510456
+            },
+            "distractor": {
+              "token_logp": [
+                -11.258810043334961,
+                -4.257129669189453,
+                -1.0912714004516602,
+                -0.780433177947998,
+                -0.6357551217079163
+              ],
+              "total_logp": -18.02339941263199,
+              "mean_logp": -3.6046798825263977
+            }
+          },
+          "gold_nll": 0.37233816273510456,
+          "margin": 3.232341719791293,
+          "total_margin": 16.161708598956466,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 20,
+            "distractor": 20
+          }
+        },
+        "D_full_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.3222485780715942,
+                -0.013860050588846207,
+                -0.09950179606676102,
+                -0.055379144847393036,
+                -0.06114855781197548
+              ],
+              "total_logp": -1.55213812738657,
+              "mean_logp": -0.310427625477314
+            },
+            "distractor": {
+              "token_logp": [
+                -11.447248458862305,
+                -4.096304893493652,
+                -1.007216215133667,
+                -0.8281363248825073,
+                -0.594071626663208
+              ],
+              "total_logp": -17.97297751903534,
+              "mean_logp": -3.594595503807068
+            }
+          },
+          "gold_nll": 0.310427625477314,
+          "margin": 3.284167878329754,
+          "total_margin": 16.42083939164877,
+          "query_start_cursors": {
+            "gold": 32,
+            "distractor": 32
+          },
+          "query_end_cursors": {
+            "gold": 52,
+            "distractor": 52
+          }
+        },
+        "E_recurrent_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -2.8823294639587402,
+                -0.023272700607776642,
+                -0.13259054720401764,
+                -0.0436234325170517,
+                -0.028891906142234802
+              ],
+              "total_logp": -3.110708050429821,
+              "mean_logp": -0.6221416100859642
+            },
+            "distractor": {
+              "token_logp": [
+                -11.085454940795898,
+                -4.136087417602539,
+                -0.4968557357788086,
+                -1.629941463470459,
+                -1.3902506828308105
+              ],
+              "total_logp": -18.738590240478516,
+              "mean_logp": -3.7477180480957033
+            }
+          },
+          "gold_nll": 0.6221416100859642,
+          "margin": 3.1255764380097393,
+          "total_margin": 15.627882190048695,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 20,
+            "distractor": 20
+          }
+        },
+        "E_live_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -2.6631991863250732,
+                -0.021128108724951744,
+                -0.1026105284690857,
+                -0.026207782328128815,
+                -0.02076224982738495
+              ],
+              "total_logp": -2.8339078556746244,
+              "mean_logp": -0.5667815711349249
+            },
+            "distractor": {
+              "token_logp": [
+                -11.241324424743652,
+                -4.154275417327881,
+                -0.5161383152008057,
+                -1.6196320056915283,
+                -1.3845748901367188
+              ],
+              "total_logp": -18.915945053100586,
+              "mean_logp": -3.7831890106201174
+            }
+          },
+          "gold_nll": 0.5667815711349249,
+          "margin": 3.2164074394851925,
+          "total_margin": 16.08203719742596,
+          "query_start_cursors": {
+            "gold": 92,
+            "distractor": 92
+          },
+          "query_end_cursors": {
+            "gold": 112,
+            "distractor": 112
+          }
+        },
+        "E_full_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -2.6631991863250732,
+                -0.021128108724951744,
+                -0.1026105284690857,
+                -0.026207782328128815,
+                -0.02076224982738495
+              ],
+              "total_logp": -2.8339078556746244,
+              "mean_logp": -0.5667815711349249
+            },
+            "distractor": {
+              "token_logp": [
+                -11.241324424743652,
+                -4.154275417327881,
+                -0.5161383152008057,
+                -1.6196320056915283,
+                -1.3845748901367188
+              ],
+              "total_logp": -18.915945053100586,
+              "mean_logp": -3.7831890106201174
+            }
+          },
+          "gold_nll": 0.5667815711349249,
+          "margin": 3.2164074394851925,
+          "total_margin": 16.08203719742596,
+          "query_start_cursors": {
+            "gold": 92,
+            "distractor": 92
+          },
+          "query_end_cursors": {
+            "gold": 112,
+            "distractor": 112
+          }
+        }
+      },
+      "historical_bos": {
+        "empty_wrapper": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -7.761495113372803,
+                -14.228915214538574,
+                -2.112478733062744,
+                -6.743370532989502,
+                -3.764777183532715
+              ],
+              "total_logp": -34.61103677749634,
+              "mean_logp": -6.922207355499268
+            },
+            "distractor": {
+              "token_logp": [
+                -14.066182136535645,
+                -5.113569736480713,
+                -1.4569814205169678,
+                -5.4908294677734375,
+                -3.635895252227783
+              ],
+              "total_logp": -29.763458013534546,
+              "mean_logp": -5.952691602706909
+            }
+          },
+          "gold_nll": 6.922207355499268,
+          "margin": -0.9695157527923586,
+          "total_margin": -4.847578763961792,
+          "query_start_cursors": {
+            "gold": 4,
+            "distractor": 4
+          },
+          "query_end_cursors": {
+            "gold": 24,
+            "distractor": 24
+          },
+          "write_tokens": [
+            1,
+            19153,
+            28747,
+            13
+          ]
+        },
+        "exact_record": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.4923793077468872,
+                -0.008936764672398567,
+                -0.11107469350099564,
+                -0.042961087077856064,
+                -0.034266743808984756
+              ],
+              "total_logp": -1.6896185968071222,
+              "mean_logp": -0.33792371936142446
+            },
+            "distractor": {
+              "token_logp": [
+                -11.976754188537598,
+                -4.547053337097168,
+                -0.8137240409851074,
+                -0.6212207078933716,
+                -0.4495961368083954
+              ],
+              "total_logp": -18.40834841132164,
+              "mean_logp": -3.681669682264328
+            }
+          },
+          "gold_nll": 0.33792371936142446,
+          "margin": 3.3437459629029034,
+          "total_margin": 16.718729814514518,
+          "query_start_cursors": {
+            "gold": 33,
+            "distractor": 33
+          },
+          "query_end_cursors": {
+            "gold": 53,
+            "distractor": 53
+          },
+          "write_tokens": [
+            1,
+            19153,
+            28747,
+            13,
+            28792,
+            7740,
+            28747,
+            15219,
+            4459,
+            28793,
+            13,
+            28792,
+            7079,
+            28747,
+            28705,
+            28783,
+            28793,
+            13,
+            1014,
+            2832,
+            3341,
+            3870,
+            354,
+            272,
+            1868,
+            3881,
+            349,
+            307,
+            8344,
+            28733,
+            28783,
+            28750,
+            28723
+          ]
+        }
+      }
+    },
+    {
+      "case": {
+        "index": 5,
+        "domain": "jamscript",
+        "label": "service runtime tag",
+        "gold": "mora-34",
+        "distractor": "tiva-34"
+      },
+      "question": "\nQuestion: What is the current service runtime tag?\nAnswer:",
+      "query_ids": [
+        28705,
+        13,
+        24994,
+        28747,
+        1824,
+        349,
+        272,
+        1868,
+        2372,
+        16183,
+        5846,
+        28804,
+        13,
+        2820,
+        16981,
+        28747
+      ],
+      "targets": {
+        "gold": [
+          2544,
+          28708,
+          28733,
+          28770,
+          28781
+        ],
+        "distractor": [
+          261,
+          5092,
+          28733,
+          28770,
+          28781
+        ]
+      },
+      "equal_target_lengths": true,
+      "exact": {
+        "write_tokens": [
+          19153,
+          28747,
+          13,
+          28792,
+          7740,
+          28747,
+          15219,
+          4459,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28740,
+          28734,
+          28793,
+          13,
+          1014,
+          2372,
+          16183,
+          5846,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          2544,
+          28708,
+          28733,
+          28770,
+          28781,
+          28723
+        ],
+        "full": {
+          "exact": true,
+          "tensor_count": 264,
+          "mismatched": [],
+          "source_cursor": 33,
+          "restored_cursor": 33,
+          "cursor_exact": true,
+          "probability_parity": {
+            "exact": true,
+            "within_tolerance": true,
+            "max_abs": 0.0
+          },
+          "checkpoint_sha256": "c5325eb493bca2f01041be54ba5310030a40766ffc7893bff1e6f25cca9574b1"
+        },
+        "recurrent": {
+          "exact": true,
+          "tensor_count": 120,
+          "mismatched": [],
+          "query_did_not_mutate_bundle": true,
+          "bundle_sha256": "0461b54e0232205bc9263d8505524993518b9f8e46a3852002fff81ef9d7e881"
+        }
+      },
+      "domain": {
+        "write_tokens": [
+          19153,
+          28747,
+          13,
+          28792,
+          7740,
+          28747,
+          15219,
+          4459,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28784,
+          28793,
+          13,
+          1014,
+          23198,
+          18844,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          268,
+          3594,
+          28733,
+          28781,
+          28740,
+          28723,
+          13,
+          28792,
+          7740,
+          28747,
+          15219,
+          4459,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28783,
+          28793,
+          13,
+          1014,
+          2832,
+          3341,
+          3870,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          307,
+          8344,
+          28733,
+          28783,
+          28750,
+          28723,
+          13,
+          28792,
+          7740,
+          28747,
+          15219,
+          4459,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28740,
+          28734,
+          28793,
+          13,
+          1014,
+          2372,
+          16183,
+          5846,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          2544,
+          28708,
+          28733,
+          28770,
+          28781,
+          28723
+        ],
+        "full": {
+          "exact": true,
+          "tensor_count": 264,
+          "mismatched": [],
+          "source_cursor": 92,
+          "restored_cursor": 92,
+          "cursor_exact": true,
+          "probability_parity": {
+            "exact": true,
+            "within_tolerance": true,
+            "max_abs": 0.0
+          },
+          "checkpoint_sha256": "e7dd49e4a7386d82f3780a9138cae141c809e519aae8fc0a514885af19fac87e"
+        },
+        "recurrent": {
+          "exact": true,
+          "tensor_count": 120,
+          "mismatched": [],
+          "query_did_not_mutate_bundle": true,
+          "bundle_sha256": "238b81e294527cd245dfc46169665e0fdb6d39f1d4c343844b8a9ea52b776eff"
+        }
+      },
+      "arms": {
+        "A_empty": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -13.747689247131348,
+                -4.557012557983398,
+                -1.8478246927261353,
+                -4.885407447814941,
+                -5.289783954620361
+              ],
+              "total_logp": -30.327717900276184,
+              "mean_logp": -6.065543580055237
+            },
+            "distractor": {
+              "token_logp": [
+                -7.950814723968506,
+                -10.12893009185791,
+                -0.6446210741996765,
+                -3.977501630783081,
+                -5.2998366355896
+              ],
+              "total_logp": -28.001704156398773,
+              "mean_logp": -5.6003408312797545
+            }
+          },
+          "gold_nll": 6.065543580055237,
+          "margin": -0.4652027487754822,
+          "total_margin": -2.326013743877411,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 20,
+            "distractor": 20
+          }
+        },
+        "B_live_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -2.7761664390563965,
+                -0.08626707643270493,
+                -0.12066195160150528,
+                -0.0748043805360794,
+                -0.05083366110920906
+              ],
+              "total_logp": -3.108733508735895,
+              "mean_logp": -0.621746701747179
+            },
+            "distractor": {
+              "token_logp": [
+                -7.3386664390563965,
+                -9.18761157989502,
+                -0.26734429597854614,
+                -0.8243246078491211,
+                -0.5469446182250977
+              ],
+              "total_logp": -18.16489154100418,
+              "mean_logp": -3.632978308200836
+            }
+          },
+          "gold_nll": 0.621746701747179,
+          "margin": 3.011231606453657,
+          "total_margin": 15.056158032268286,
+          "query_start_cursors": {
+            "gold": 33,
+            "distractor": 33
+          },
+          "query_end_cursors": {
+            "gold": 53,
+            "distractor": 53
+          }
+        },
+        "C_recurrent_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -3.063943862915039,
+                -0.0995846763253212,
+                -0.18497970700263977,
+                -0.1210949569940567,
+                -0.09230878204107285
+              ],
+              "total_logp": -3.5619119852781296,
+              "mean_logp": -0.7123823970556259
+            },
+            "distractor": {
+              "token_logp": [
+                -6.954568862915039,
+                -8.9380464553833,
+                -0.28236624598503113,
+                -0.768719494342804,
+                -0.7647244334220886
+              ],
+              "total_logp": -17.708425492048264,
+              "mean_logp": -3.5416850984096526
+            }
+          },
+          "gold_nll": 0.7123823970556259,
+          "margin": 2.8293027013540266,
+          "total_margin": 14.146513506770134,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 20,
+            "distractor": 20
+          }
+        },
+        "D_full_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -2.7761664390563965,
+                -0.08626707643270493,
+                -0.12066195160150528,
+                -0.0748043805360794,
+                -0.05083366110920906
+              ],
+              "total_logp": -3.108733508735895,
+              "mean_logp": -0.621746701747179
+            },
+            "distractor": {
+              "token_logp": [
+                -7.3386664390563965,
+                -9.18761157989502,
+                -0.26734429597854614,
+                -0.8243246078491211,
+                -0.5469446182250977
+              ],
+              "total_logp": -18.16489154100418,
+              "mean_logp": -3.632978308200836
+            }
+          },
+          "gold_nll": 0.621746701747179,
+          "margin": 3.011231606453657,
+          "total_margin": 15.056158032268286,
+          "query_start_cursors": {
+            "gold": 33,
+            "distractor": 33
+          },
+          "query_end_cursors": {
+            "gold": 53,
+            "distractor": 53
+          }
+        },
+        "E_recurrent_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -3.5802550315856934,
+                -0.05609869211912155,
+                -0.11425957828760147,
+                -0.0993775725364685,
+                -0.051929473876953125
+              ],
+              "total_logp": -3.901920348405838,
+              "mean_logp": -0.7803840696811676
+            },
+            "distractor": {
+              "token_logp": [
+                -6.502130031585693,
+                -7.512933254241943,
+                -0.15910589694976807,
+                -1.4849056005477905,
+                -1.6161422729492188
+              ],
+              "total_logp": -17.275217056274414,
+              "mean_logp": -3.455043411254883
+            }
+          },
+          "gold_nll": 0.7803840696811676,
+          "margin": 2.674659341573715,
+          "total_margin": 13.373296707868576,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 20,
+            "distractor": 20
+          }
+        },
+        "E_live_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -3.379490613937378,
+                -0.047976553440093994,
+                -0.09356345236301422,
+                -0.078971266746521,
+                -0.041546791791915894
+              ],
+              "total_logp": -3.641548678278923,
+              "mean_logp": -0.7283097356557846
+            },
+            "distractor": {
+              "token_logp": [
+                -6.770115852355957,
+                -7.55916690826416,
+                -0.14974448084831238,
+                -1.3977680206298828,
+                -1.293155550956726
+              ],
+              "total_logp": -17.16995081305504,
+              "mean_logp": -3.433990162611008
+            }
+          },
+          "gold_nll": 0.7283097356557846,
+          "margin": 2.7056804269552233,
+          "total_margin": 13.528402134776115,
+          "query_start_cursors": {
+            "gold": 92,
+            "distractor": 92
+          },
+          "query_end_cursors": {
+            "gold": 112,
+            "distractor": 112
+          }
+        },
+        "E_full_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -3.379490613937378,
+                -0.047976553440093994,
+                -0.09356345236301422,
+                -0.078971266746521,
+                -0.041546791791915894
+              ],
+              "total_logp": -3.641548678278923,
+              "mean_logp": -0.7283097356557846
+            },
+            "distractor": {
+              "token_logp": [
+                -6.770115852355957,
+                -7.55916690826416,
+                -0.14974448084831238,
+                -1.3977680206298828,
+                -1.293155550956726
+              ],
+              "total_logp": -17.16995081305504,
+              "mean_logp": -3.433990162611008
+            }
+          },
+          "gold_nll": 0.7283097356557846,
+          "margin": 2.7056804269552233,
+          "total_margin": 13.528402134776115,
+          "query_start_cursors": {
+            "gold": 92,
+            "distractor": 92
+          },
+          "query_end_cursors": {
+            "gold": 112,
+            "distractor": 112
+          }
+        }
+      },
+      "historical_bos": {
+        "empty_wrapper": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -13.684475898742676,
+                -4.29172420501709,
+                -1.5778424739837646,
+                -4.580901145935059,
+                -4.879640102386475
+              ],
+              "total_logp": -29.014583826065063,
+              "mean_logp": -5.802916765213013
+            },
+            "distractor": {
+              "token_logp": [
+                -7.676663875579834,
+                -9.900172233581543,
+                -0.5429958701133728,
+                -4.125547885894775,
+                -4.7265095710754395
+              ],
+              "total_logp": -26.971889436244965,
+              "mean_logp": -5.394377887248993
+            }
+          },
+          "gold_nll": 5.802916765213013,
+          "margin": -0.4085388779640198,
+          "total_margin": -2.042694389820099,
+          "query_start_cursors": {
+            "gold": 4,
+            "distractor": 4
+          },
+          "query_end_cursors": {
+            "gold": 24,
+            "distractor": 24
+          },
+          "write_tokens": [
+            1,
+            19153,
+            28747,
+            13
+          ]
+        },
+        "exact_record": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -2.7994492053985596,
+                -0.0805663913488388,
+                -0.1316225528717041,
+                -0.055219538509845734,
+                -0.04346776008605957
+              ],
+              "total_logp": -3.110325448215008,
+              "mean_logp": -0.6220650896430016
+            },
+            "distractor": {
+              "token_logp": [
+                -7.5494489669799805,
+                -9.542131423950195,
+                -0.2962774634361267,
+                -0.7318523526191711,
+                -0.5100194215774536
+              ],
+              "total_logp": -18.629729628562927,
+              "mean_logp": -3.7259459257125855
+            }
+          },
+          "gold_nll": 0.6220650896430016,
+          "margin": 3.103880836069584,
+          "total_margin": 15.51940418034792,
+          "query_start_cursors": {
+            "gold": 34,
+            "distractor": 34
+          },
+          "query_end_cursors": {
+            "gold": 54,
+            "distractor": 54
+          },
+          "write_tokens": [
+            1,
+            19153,
+            28747,
+            13,
+            28792,
+            7740,
+            28747,
+            15219,
+            4459,
+            28793,
+            13,
+            28792,
+            7079,
+            28747,
+            28705,
+            28740,
+            28734,
+            28793,
+            13,
+            1014,
+            2372,
+            16183,
+            5846,
+            354,
+            272,
+            1868,
+            3881,
+            349,
+            2544,
+            28708,
+            28733,
+            28770,
+            28781,
+            28723
+          ]
+        }
+      }
+    },
+    {
+      "case": {
+        "index": 6,
+        "domain": "minicells",
+        "label": "dataset snapshot ID",
+        "gold": "voro-62",
+        "distractor": "sena-62"
+      },
+      "question": "\nQuestion: What is the current dataset snapshot ID?\nAnswer:",
+      "query_ids": [
+        28705,
+        13,
+        24994,
+        28747,
+        1824,
+        349,
+        272,
+        1868,
+        13466,
+        20304,
+        4519,
+        28804,
+        13,
+        2820,
+        16981,
+        28747
+      ],
+      "targets": {
+        "gold": [
+          6876,
+          28709,
+          28733,
+          28784,
+          28750
+        ],
+        "distractor": [
+          268,
+          3594,
+          28733,
+          28784,
+          28750
+        ]
+      },
+      "equal_target_lengths": true,
+      "exact": {
+        "write_tokens": [
+          19153,
+          28747,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          294,
+          8855,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28740,
+          28750,
+          28793,
+          13,
+          1014,
+          13466,
+          20304,
+          4519,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          6876,
+          28709,
+          28733,
+          28784,
+          28750,
+          28723
+        ],
+        "full": {
+          "exact": true,
+          "tensor_count": 264,
+          "mismatched": [],
+          "source_cursor": 34,
+          "restored_cursor": 34,
+          "cursor_exact": true,
+          "probability_parity": {
+            "exact": true,
+            "within_tolerance": true,
+            "max_abs": 0.0
+          },
+          "checkpoint_sha256": "fe2f983f7591f4bcddc3a81c081db6a4a789f0ff6d2ef619704d1d252dbcdf21"
+        },
+        "recurrent": {
+          "exact": true,
+          "tensor_count": 120,
+          "mismatched": [],
+          "query_did_not_mutate_bundle": true,
+          "bundle_sha256": "1088af94629f8e04a667c27e86ebe09ecf58f4cd506567b20d3fb665326e3979"
+        }
+      },
+      "domain": {
+        "write_tokens": [
+          19153,
+          28747,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          294,
+          8855,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28740,
+          28781,
+          28793,
+          13,
+          1014,
+          4154,
+          1482,
+          18960,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          261,
+          5092,
+          28733,
+          28782,
+          28770,
+          28723,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          294,
+          8855,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28740,
+          28784,
+          28793,
+          13,
+          1014,
+          2229,
+          1877,
+          2275,
+          3870,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          307,
+          8344,
+          28733,
+          28787,
+          28783,
+          28723,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          294,
+          8855,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28740,
+          28750,
+          28793,
+          13,
+          1014,
+          13466,
+          20304,
+          4519,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          6876,
+          28709,
+          28733,
+          28784,
+          28750,
+          28723
+        ],
+        "full": {
+          "exact": true,
+          "tensor_count": 264,
+          "mismatched": [],
+          "source_cursor": 99,
+          "restored_cursor": 99,
+          "cursor_exact": true,
+          "probability_parity": {
+            "exact": true,
+            "within_tolerance": true,
+            "max_abs": 0.0
+          },
+          "checkpoint_sha256": "aa7beb047c56faab3673ad19b86f12427bba809405f67045b714367120f024ac"
+        },
+        "recurrent": {
+          "exact": true,
+          "tensor_count": 120,
+          "mismatched": [],
+          "query_did_not_mutate_bundle": true,
+          "bundle_sha256": "6b8fb8d94911715acb83b067a6cabdcc1ddb2f36bb57dab6c71653fdf214cb54"
+        }
+      },
+      "arms": {
+        "A_empty": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -14.688465118408203,
+                -4.742713451385498,
+                -1.7769417762756348,
+                -4.379077911376953,
+                -2.9857571125030518
+              ],
+              "total_logp": -28.57295536994934,
+              "mean_logp": -5.714591073989868
+            },
+            "distractor": {
+              "token_logp": [
+                -8.141590118408203,
+                -8.905118942260742,
+                -1.2991000413894653,
+                -5.0049285888671875,
+                -2.9322712421417236
+              ],
+              "total_logp": -26.283008933067322,
+              "mean_logp": -5.256601786613464
+            }
+          },
+          "gold_nll": 5.714591073989868,
+          "margin": -0.457989287376404,
+          "total_margin": -2.289946436882019,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 20,
+            "distractor": 20
+          }
+        },
+        "B_live_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -4.8623223304748535,
+                -0.04262152314186096,
+                -0.038636837154626846,
+                -0.11417907476425171,
+                -0.06866166740655899
+              ],
+              "total_logp": -5.126421432942152,
+              "mean_logp": -1.0252842865884304
+            },
+            "distractor": {
+              "token_logp": [
+                -7.5498223304748535,
+                -9.493764877319336,
+                -0.6283877491950989,
+                -1.7970809936523438,
+                -0.455321729183197
+              ],
+              "total_logp": -19.92437767982483,
+              "mean_logp": -3.984875535964966
+            }
+          },
+          "gold_nll": 1.0252842865884304,
+          "margin": 2.9595912493765355,
+          "total_margin": 14.797956246882677,
+          "query_start_cursors": {
+            "gold": 34,
+            "distractor": 34
+          },
+          "query_end_cursors": {
+            "gold": 54,
+            "distractor": 54
+          }
+        },
+        "C_recurrent_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -4.5040788650512695,
+                -0.06552916020154953,
+                -0.05830753967165947,
+                -0.20661364495754242,
+                -0.09030205011367798
+              ],
+              "total_logp": -4.924831259995699,
+              "mean_logp": -0.9849662519991398
+            },
+            "distractor": {
+              "token_logp": [
+                -7.2540788650512695,
+                -9.744779586791992,
+                -0.7522448897361755,
+                -1.8280247449874878,
+                -0.7505530714988708
+              ],
+              "total_logp": -20.329681158065796,
+              "mean_logp": -4.0659362316131595
+            }
+          },
+          "gold_nll": 0.9849662519991398,
+          "margin": 3.0809699796140197,
+          "total_margin": 15.404849898070097,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 20,
+            "distractor": 20
+          }
+        },
+        "D_full_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -4.8623223304748535,
+                -0.04262152314186096,
+                -0.038636837154626846,
+                -0.11417907476425171,
+                -0.06866166740655899
+              ],
+              "total_logp": -5.126421432942152,
+              "mean_logp": -1.0252842865884304
+            },
+            "distractor": {
+              "token_logp": [
+                -7.5498223304748535,
+                -9.493764877319336,
+                -0.6283877491950989,
+                -1.7970809936523438,
+                -0.455321729183197
+              ],
+              "total_logp": -19.92437767982483,
+              "mean_logp": -3.984875535964966
+            }
+          },
+          "gold_nll": 1.0252842865884304,
+          "margin": 2.9595912493765355,
+          "total_margin": 14.797956246882677,
+          "query_start_cursors": {
+            "gold": 34,
+            "distractor": 34
+          },
+          "query_end_cursors": {
+            "gold": 54,
+            "distractor": 54
+          }
+        },
+        "E_recurrent_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -4.649113178253174,
+                -0.028026165440678596,
+                -0.03138124570250511,
+                -0.16481131315231323,
+                -0.08887805044651031
+              ],
+              "total_logp": -4.962209952995181,
+              "mean_logp": -0.9924419905990363
+            },
+            "distractor": {
+              "token_logp": [
+                -6.820988178253174,
+                -7.699261665344238,
+                -0.18488141894340515,
+                -2.214517831802368,
+                -1.9345266819000244
+              ],
+              "total_logp": -18.85417577624321,
+              "mean_logp": -3.770835155248642
+            }
+          },
+          "gold_nll": 0.9924419905990363,
+          "margin": 2.7783931646496054,
+          "total_margin": 13.891965823248029,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 20,
+            "distractor": 20
+          }
+        },
+        "E_live_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -4.675305366516113,
+                -0.023773616179823875,
+                -0.022132188081741333,
+                -0.10952796041965485,
+                -0.04664841666817665
+              ],
+              "total_logp": -4.87738754786551,
+              "mean_logp": -0.975477509573102
+            },
+            "distractor": {
+              "token_logp": [
+                -6.815930366516113,
+                -7.89702844619751,
+                -0.16675430536270142,
+                -2.1858291625976562,
+                -1.760286569595337
+              ],
+              "total_logp": -18.825828850269318,
+              "mean_logp": -3.7651657700538634
+            }
+          },
+          "gold_nll": 0.975477509573102,
+          "margin": 2.7896882604807614,
+          "total_margin": 13.948441302403808,
+          "query_start_cursors": {
+            "gold": 99,
+            "distractor": 99
+          },
+          "query_end_cursors": {
+            "gold": 119,
+            "distractor": 119
+          }
+        },
+        "E_full_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -4.675305366516113,
+                -0.023773616179823875,
+                -0.022132188081741333,
+                -0.10952796041965485,
+                -0.04664841666817665
+              ],
+              "total_logp": -4.87738754786551,
+              "mean_logp": -0.975477509573102
+            },
+            "distractor": {
+              "token_logp": [
+                -6.815930366516113,
+                -7.89702844619751,
+                -0.16675430536270142,
+                -2.1858291625976562,
+                -1.760286569595337
+              ],
+              "total_logp": -18.825828850269318,
+              "mean_logp": -3.7651657700538634
+            }
+          },
+          "gold_nll": 0.975477509573102,
+          "margin": 2.7896882604807614,
+          "total_margin": 13.948441302403808,
+          "query_start_cursors": {
+            "gold": 99,
+            "distractor": 99
+          },
+          "query_end_cursors": {
+            "gold": 119,
+            "distractor": 119
+          }
+        }
+      },
+      "historical_bos": {
+        "empty_wrapper": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -14.938427925109863,
+                -4.95863151550293,
+                -1.3817987442016602,
+                -4.441193103790283,
+                -2.9094197750091553
+              ],
+              "total_logp": -28.62947106361389,
+              "mean_logp": -5.725894212722778
+            },
+            "distractor": {
+              "token_logp": [
+                -7.719677448272705,
+                -9.911348342895508,
+                -1.0863268375396729,
+                -5.039328575134277,
+                -2.9398186206817627
+              ],
+              "total_logp": -26.696499824523926,
+              "mean_logp": -5.339299964904785
+            }
+          },
+          "gold_nll": 5.725894212722778,
+          "margin": -0.38659424781799334,
+          "total_margin": -1.9329712390899658,
+          "query_start_cursors": {
+            "gold": 4,
+            "distractor": 4
+          },
+          "query_end_cursors": {
+            "gold": 24,
+            "distractor": 24
+          },
+          "write_tokens": [
+            1,
+            19153,
+            28747,
+            13
+          ]
+        },
+        "exact_record": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -4.200409889221191,
+                -0.04472317919135094,
+                -0.038502298295497894,
+                -0.05114190652966499,
+                -0.02735641784965992
+              ],
+              "total_logp": -4.362133691087365,
+              "mean_logp": -0.8724267382174731
+            },
+            "distractor": {
+              "token_logp": [
+                -7.528534889221191,
+                -9.820178031921387,
+                -0.668769359588623,
+                -1.482346534729004,
+                -0.35213586688041687
+              ],
+              "total_logp": -19.851964682340622,
+              "mean_logp": -3.9703929364681243
+            }
+          },
+          "gold_nll": 0.8724267382174731,
+          "margin": 3.097966198250651,
+          "total_margin": 15.489830991253257,
+          "query_start_cursors": {
+            "gold": 35,
+            "distractor": 35
+          },
+          "query_end_cursors": {
+            "gold": 55,
+            "distractor": 55
+          },
+          "write_tokens": [
+            1,
+            19153,
+            28747,
+            13,
+            28792,
+            7740,
+            28747,
+            1187,
+            294,
+            8855,
+            28793,
+            13,
+            28792,
+            7079,
+            28747,
+            28705,
+            28740,
+            28750,
+            28793,
+            13,
+            1014,
+            13466,
+            20304,
+            4519,
+            354,
+            272,
+            1868,
+            3881,
+            349,
+            6876,
+            28709,
+            28733,
+            28784,
+            28750,
+            28723
+          ]
+        }
+      }
+    },
+    {
+      "case": {
+        "index": 7,
+        "domain": "minicells",
+        "label": "training run alias",
+        "gold": "tiva-53",
+        "distractor": "mora-53"
+      },
+      "question": "\nQuestion: What is the current training run alias?\nAnswer:",
+      "query_ids": [
+        28705,
+        13,
+        24994,
+        28747,
+        1824,
+        349,
+        272,
+        1868,
+        4154,
+        1482,
+        18960,
+        28804,
+        13,
+        2820,
+        16981,
+        28747
+      ],
+      "targets": {
+        "gold": [
+          261,
+          5092,
+          28733,
+          28782,
+          28770
+        ],
+        "distractor": [
+          2544,
+          28708,
+          28733,
+          28782,
+          28770
+        ]
+      },
+      "equal_target_lengths": true,
+      "exact": {
+        "write_tokens": [
+          19153,
+          28747,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          294,
+          8855,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28740,
+          28781,
+          28793,
+          13,
+          1014,
+          4154,
+          1482,
+          18960,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          261,
+          5092,
+          28733,
+          28782,
+          28770,
+          28723
+        ],
+        "full": {
+          "exact": true,
+          "tensor_count": 264,
+          "mismatched": [],
+          "source_cursor": 34,
+          "restored_cursor": 34,
+          "cursor_exact": true,
+          "probability_parity": {
+            "exact": true,
+            "within_tolerance": true,
+            "max_abs": 0.0
+          },
+          "checkpoint_sha256": "486294f515a2c222f2562de4de01b535b9a4bea7757fdf536dd33007a4b7b491"
+        },
+        "recurrent": {
+          "exact": true,
+          "tensor_count": 120,
+          "mismatched": [],
+          "query_did_not_mutate_bundle": true,
+          "bundle_sha256": "06eaa37ec21a766c22b090c00b10d233dc6be74d827cdea818f1a9a5444a4a09"
+        }
+      },
+      "domain": {
+        "write_tokens": [
+          19153,
+          28747,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          294,
+          8855,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28740,
+          28750,
+          28793,
+          13,
+          1014,
+          13466,
+          20304,
+          4519,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          6876,
+          28709,
+          28733,
+          28784,
+          28750,
+          28723,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          294,
+          8855,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28740,
+          28784,
+          28793,
+          13,
+          1014,
+          2229,
+          1877,
+          2275,
+          3870,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          307,
+          8344,
+          28733,
+          28787,
+          28783,
+          28723,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          294,
+          8855,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28740,
+          28781,
+          28793,
+          13,
+          1014,
+          4154,
+          1482,
+          18960,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          261,
+          5092,
+          28733,
+          28782,
+          28770,
+          28723
+        ],
+        "full": {
+          "exact": true,
+          "tensor_count": 264,
+          "mismatched": [],
+          "source_cursor": 99,
+          "restored_cursor": 99,
+          "cursor_exact": true,
+          "probability_parity": {
+            "exact": true,
+            "within_tolerance": true,
+            "max_abs": 0.0
+          },
+          "checkpoint_sha256": "d78e671c125fe00d5b21620a4dbe3505324e4e582743aeb15143f73b7b94660b"
+        },
+        "recurrent": {
+          "exact": true,
+          "tensor_count": 120,
+          "mismatched": [],
+          "query_did_not_mutate_bundle": true,
+          "bundle_sha256": "b0b7558c4769532228fb0b780df30e4c39ea4429e2859dd55ec4431d96f0b532"
+        }
+      },
+      "arms": {
+        "A_empty": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -7.170959949493408,
+                -12.716012954711914,
+                -1.234358549118042,
+                -5.087547779083252,
+                -3.7057034969329834
+              ],
+              "total_logp": -29.9145827293396,
+              "mean_logp": -5.98291654586792
+            },
+            "distractor": {
+              "token_logp": [
+                -13.90533447265625,
+                -3.740993022918701,
+                -2.3920130729675293,
+                -5.807211875915527,
+                -3.558919906616211
+              ],
+              "total_logp": -29.40447235107422,
+              "mean_logp": -5.880894470214844
+            }
+          },
+          "gold_nll": 5.98291654586792,
+          "margin": -0.10202207565307653,
+          "total_margin": -0.5101103782653809,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 20,
+            "distractor": 20
+          }
+        },
+        "B_live_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.0123050212860107,
+                -0.0599086619913578,
+                -0.0489843524992466,
+                -0.12169919908046722,
+                -0.07294660806655884
+              ],
+              "total_logp": -1.3158438429236412,
+              "mean_logp": -0.26316876858472826
+            },
+            "distractor": {
+              "token_logp": [
+                -12.26230525970459,
+                -3.3220369815826416,
+                -0.8384796977043152,
+                -0.8205502033233643,
+                -0.603666365146637
+              ],
+              "total_logp": -17.847038507461548,
+              "mean_logp": -3.5694077014923096
+            }
+          },
+          "gold_nll": 0.26316876858472826,
+          "margin": 3.3062389329075814,
+          "total_margin": 16.531194664537907,
+          "query_start_cursors": {
+            "gold": 34,
+            "distractor": 34
+          },
+          "query_end_cursors": {
+            "gold": 54,
+            "distractor": 54
+          }
+        },
+        "C_recurrent_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.168877363204956,
+                -0.05410033464431763,
+                -0.07194748520851135,
+                -0.16831421852111816,
+                -0.09233584254980087
+              ],
+              "total_logp": -1.555575244128704,
+              "mean_logp": -0.3111150488257408
+            },
+            "distractor": {
+              "token_logp": [
+                -12.278252601623535,
+                -3.262718915939331,
+                -0.8875404596328735,
+                -0.8049761056900024,
+                -0.7684483528137207
+              ],
+              "total_logp": -18.001936435699463,
+              "mean_logp": -3.6003872871398928
+            }
+          },
+          "gold_nll": 0.3111150488257408,
+          "margin": 3.289272238314152,
+          "total_margin": 16.44636119157076,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 20,
+            "distractor": 20
+          }
+        },
+        "D_full_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.0123050212860107,
+                -0.0599086619913578,
+                -0.0489843524992466,
+                -0.12169919908046722,
+                -0.07294660806655884
+              ],
+              "total_logp": -1.3158438429236412,
+              "mean_logp": -0.26316876858472826
+            },
+            "distractor": {
+              "token_logp": [
+                -12.26230525970459,
+                -3.3220369815826416,
+                -0.8384796977043152,
+                -0.8205502033233643,
+                -0.603666365146637
+              ],
+              "total_logp": -17.847038507461548,
+              "mean_logp": -3.5694077014923096
+            }
+          },
+          "gold_nll": 0.26316876858472826,
+          "margin": 3.3062389329075814,
+          "total_margin": 16.531194664537907,
+          "query_start_cursors": {
+            "gold": 34,
+            "distractor": 34
+          },
+          "query_end_cursors": {
+            "gold": 54,
+            "distractor": 54
+          }
+        },
+        "E_recurrent_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.5181633234024048,
+                -0.027898767963051796,
+                -0.05091002210974693,
+                -0.18459630012512207,
+                -0.097966767847538
+              ],
+              "total_logp": -1.8795351814478636,
+              "mean_logp": -0.3759070362895727
+            },
+            "distractor": {
+              "token_logp": [
+                -11.440038681030273,
+                -2.7728588581085205,
+                -0.2950441539287567,
+                -1.5811911821365356,
+                -1.758785367012024
+              ],
+              "total_logp": -17.84791824221611,
+              "mean_logp": -3.569583648443222
+            }
+          },
+          "gold_nll": 0.3759070362895727,
+          "margin": 3.193676612153649,
+          "total_margin": 15.968383060768247,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 20,
+            "distractor": 20
+          }
+        },
+        "E_live_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.3009716272354126,
+                -0.021499082446098328,
+                -0.027512185275554657,
+                -0.11717218160629272,
+                -0.05313577502965927
+              ],
+              "total_logp": -1.5202908515930176,
+              "mean_logp": -0.3040581703186035
+            },
+            "distractor": {
+              "token_logp": [
+                -11.332221984863281,
+                -2.7470788955688477,
+                -0.24003106355667114,
+                -1.4439746141433716,
+                -1.4179527759552002
+              ],
+              "total_logp": -17.181259334087372,
+              "mean_logp": -3.436251866817474
+            }
+          },
+          "gold_nll": 0.3040581703186035,
+          "margin": 3.1321936964988706,
+          "total_margin": 15.660968482494354,
+          "query_start_cursors": {
+            "gold": 99,
+            "distractor": 99
+          },
+          "query_end_cursors": {
+            "gold": 119,
+            "distractor": 119
+          }
+        },
+        "E_full_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.3009716272354126,
+                -0.021499082446098328,
+                -0.027512185275554657,
+                -0.11717218160629272,
+                -0.05313577502965927
+              ],
+              "total_logp": -1.5202908515930176,
+              "mean_logp": -0.3040581703186035
+            },
+            "distractor": {
+              "token_logp": [
+                -11.332221984863281,
+                -2.7470788955688477,
+                -0.24003106355667114,
+                -1.4439746141433716,
+                -1.4179527759552002
+              ],
+              "total_logp": -17.181259334087372,
+              "mean_logp": -3.436251866817474
+            }
+          },
+          "gold_nll": 0.3040581703186035,
+          "margin": 3.1321936964988706,
+          "total_margin": 15.660968482494354,
+          "query_start_cursors": {
+            "gold": 99,
+            "distractor": 99
+          },
+          "query_end_cursors": {
+            "gold": 119,
+            "distractor": 119
+          }
+        }
+      },
+      "historical_bos": {
+        "empty_wrapper": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -6.2845611572265625,
+                -12.22236442565918,
+                -1.0500521659851074,
+                -5.090595722198486,
+                -3.2698326110839844
+              ],
+              "total_logp": -27.91740608215332,
+              "mean_logp": -5.583481216430664
+            },
+            "distractor": {
+              "token_logp": [
+                -12.839248657226562,
+                -3.5901520252227783,
+                -1.9247251749038696,
+                -5.66707181930542,
+                -3.1743412017822266
+              ],
+              "total_logp": -27.195538878440857,
+              "mean_logp": -5.439107775688171
+            }
+          },
+          "gold_nll": 5.583481216430664,
+          "margin": -0.14437344074249303,
+          "total_margin": -0.7218672037124634,
+          "query_start_cursors": {
+            "gold": 4,
+            "distractor": 4
+          },
+          "query_end_cursors": {
+            "gold": 24,
+            "distractor": 24
+          },
+          "write_tokens": [
+            1,
+            19153,
+            28747,
+            13
+          ]
+        },
+        "exact_record": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -0.8464999794960022,
+                -0.04432366043329239,
+                -0.04102541133761406,
+                -0.07300933450460434,
+                -0.048040974885225296
+              ],
+              "total_logp": -1.0528993606567383,
+              "mean_logp": -0.21057987213134766
+            },
+            "distractor": {
+              "token_logp": [
+                -11.518375396728516,
+                -3.3003242015838623,
+                -0.8608670234680176,
+                -0.7589734792709351,
+                -0.5021359920501709
+              ],
+              "total_logp": -16.9406760931015,
+              "mean_logp": -3.3881352186203
+            }
+          },
+          "gold_nll": 0.21057987213134766,
+          "margin": 3.1775553464889525,
+          "total_margin": 15.887776732444763,
+          "query_start_cursors": {
+            "gold": 35,
+            "distractor": 35
+          },
+          "query_end_cursors": {
+            "gold": 55,
+            "distractor": 55
+          },
+          "write_tokens": [
+            1,
+            19153,
+            28747,
+            13,
+            28792,
+            7740,
+            28747,
+            1187,
+            294,
+            8855,
+            28793,
+            13,
+            28792,
+            7079,
+            28747,
+            28705,
+            28740,
+            28781,
+            28793,
+            13,
+            1014,
+            4154,
+            1482,
+            18960,
+            354,
+            272,
+            1868,
+            3881,
+            349,
+            261,
+            5092,
+            28733,
+            28782,
+            28770,
+            28723
+          ]
+        }
+      }
+    },
+    {
+      "case": {
+        "index": 8,
+        "domain": "minicells",
+        "label": "model checkpoint label",
+        "gold": "nalo-78",
+        "distractor": "veka-78"
+      },
+      "question": "\nQuestion: What is the current model checkpoint label?\nAnswer:",
+      "query_ids": [
+        28705,
+        13,
+        24994,
+        28747,
+        1824,
+        349,
+        272,
+        1868,
+        2229,
+        1877,
+        2275,
+        3870,
+        28804,
+        13,
+        2820,
+        16981,
+        28747
+      ],
+      "targets": {
+        "gold": [
+          307,
+          8344,
+          28733,
+          28787,
+          28783
+        ],
+        "distractor": [
+          1773,
+          2117,
+          28733,
+          28787,
+          28783
+        ]
+      },
+      "equal_target_lengths": true,
+      "exact": {
+        "write_tokens": [
+          19153,
+          28747,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          294,
+          8855,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28740,
+          28784,
+          28793,
+          13,
+          1014,
+          2229,
+          1877,
+          2275,
+          3870,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          307,
+          8344,
+          28733,
+          28787,
+          28783,
+          28723
+        ],
+        "full": {
+          "exact": true,
+          "tensor_count": 264,
+          "mismatched": [],
+          "source_cursor": 35,
+          "restored_cursor": 35,
+          "cursor_exact": true,
+          "probability_parity": {
+            "exact": true,
+            "within_tolerance": true,
+            "max_abs": 0.0
+          },
+          "checkpoint_sha256": "476558f6bc708836be68112072c7dc5a4691c22439c04e8fdf9cc1b572d41d0b"
+        },
+        "recurrent": {
+          "exact": true,
+          "tensor_count": 120,
+          "mismatched": [],
+          "query_did_not_mutate_bundle": true,
+          "bundle_sha256": "cb7a6dc373639e0ea2c0ab5eb246bcb692ebc247e1f374d6b6e8141a3bd9c188"
+        }
+      },
+      "domain": {
+        "write_tokens": [
+          19153,
+          28747,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          294,
+          8855,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28740,
+          28750,
+          28793,
+          13,
+          1014,
+          13466,
+          20304,
+          4519,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          6876,
+          28709,
+          28733,
+          28784,
+          28750,
+          28723,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          294,
+          8855,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28740,
+          28781,
+          28793,
+          13,
+          1014,
+          4154,
+          1482,
+          18960,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          261,
+          5092,
+          28733,
+          28782,
+          28770,
+          28723,
+          13,
+          28792,
+          7740,
+          28747,
+          1187,
+          294,
+          8855,
+          28793,
+          13,
+          28792,
+          7079,
+          28747,
+          28705,
+          28740,
+          28784,
+          28793,
+          13,
+          1014,
+          2229,
+          1877,
+          2275,
+          3870,
+          354,
+          272,
+          1868,
+          3881,
+          349,
+          307,
+          8344,
+          28733,
+          28787,
+          28783,
+          28723
+        ],
+        "full": {
+          "exact": true,
+          "tensor_count": 264,
+          "mismatched": [],
+          "source_cursor": 99,
+          "restored_cursor": 99,
+          "cursor_exact": true,
+          "probability_parity": {
+            "exact": true,
+            "within_tolerance": true,
+            "max_abs": 0.0
+          },
+          "checkpoint_sha256": "439c445217e0582141d7d864aa38e0f614a68f23ba2405bccd19cbde27d8b38b"
+        },
+        "recurrent": {
+          "exact": true,
+          "tensor_count": 120,
+          "mismatched": [],
+          "query_did_not_mutate_bundle": true,
+          "bundle_sha256": "7a49be059ae948fdc7afd99aa12cda5c5bb097f23119ba47a795dac572e1497c"
+        }
+      },
+      "arms": {
+        "A_empty": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -8.563030242919922,
+                -14.459151268005371,
+                -2.3560476303100586,
+                -6.4179911613464355,
+                -3.175693988800049
+              ],
+              "total_logp": -34.971914291381836,
+              "mean_logp": -6.994382858276367
+            },
+            "distractor": {
+              "token_logp": [
+                -13.031780242919922,
+                -6.868129730224609,
+                -2.3822662830352783,
+                -4.963456630706787,
+                -3.3093385696411133
+              ],
+              "total_logp": -30.55497145652771,
+              "mean_logp": -6.110994291305542
+            }
+          },
+          "gold_nll": 6.994382858276367,
+          "margin": -0.883388566970825,
+          "total_margin": -4.416942834854126,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 21,
+            "distractor": 21
+          }
+        },
+        "B_live_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.3323653936386108,
+                -0.00710449181497097,
+                -0.058399077504873276,
+                -0.06437069922685623,
+                -0.09158121794462204
+              ],
+              "total_logp": -1.5538208801299334,
+              "mean_logp": -0.31076417602598666
+            },
+            "distractor": {
+              "token_logp": [
+                -11.332365036010742,
+                -5.89357852935791,
+                -0.787337064743042,
+                -0.9223440289497375,
+                -0.48507872223854065
+              ],
+              "total_logp": -19.420703381299973,
+              "mean_logp": -3.8841406762599946
+            }
+          },
+          "gold_nll": 0.31076417602598666,
+          "margin": 3.573376500234008,
+          "total_margin": 17.86688250117004,
+          "query_start_cursors": {
+            "gold": 35,
+            "distractor": 35
+          },
+          "query_end_cursors": {
+            "gold": 56,
+            "distractor": 56
+          }
+        },
+        "C_recurrent_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.8665491342544556,
+                -0.01147209107875824,
+                -0.10874877870082855,
+                -0.10321227461099625,
+                -0.1190444827079773
+              ],
+              "total_logp": -2.209026761353016,
+              "mean_logp": -0.4418053522706032
+            },
+            "distractor": {
+              "token_logp": [
+                -11.600924491882324,
+                -5.782279968261719,
+                -0.8977263569831848,
+                -0.9636510014533997,
+                -0.6582475900650024
+              ],
+              "total_logp": -19.90282940864563,
+              "mean_logp": -3.980565881729126
+            }
+          },
+          "gold_nll": 0.4418053522706032,
+          "margin": 3.5387605294585227,
+          "total_margin": 17.693802647292614,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 21,
+            "distractor": 21
+          }
+        },
+        "D_full_exact": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.3323653936386108,
+                -0.00710449181497097,
+                -0.058399077504873276,
+                -0.06437069922685623,
+                -0.09158121794462204
+              ],
+              "total_logp": -1.5538208801299334,
+              "mean_logp": -0.31076417602598666
+            },
+            "distractor": {
+              "token_logp": [
+                -11.332365036010742,
+                -5.89357852935791,
+                -0.787337064743042,
+                -0.9223440289497375,
+                -0.48507872223854065
+              ],
+              "total_logp": -19.420703381299973,
+              "mean_logp": -3.8841406762599946
+            }
+          },
+          "gold_nll": 0.31076417602598666,
+          "margin": 3.573376500234008,
+          "total_margin": 17.86688250117004,
+          "query_start_cursors": {
+            "gold": 35,
+            "distractor": 35
+          },
+          "query_end_cursors": {
+            "gold": 56,
+            "distractor": 56
+          }
+        },
+        "E_recurrent_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -2.7366714477539062,
+                -0.011489768512547016,
+                -0.14317087829113007,
+                -0.06511563807725906,
+                -0.093974269926548
+              ],
+              "total_logp": -3.0504220025613904,
+              "mean_logp": -0.6100844005122781
+            },
+            "distractor": {
+              "token_logp": [
+                -9.549171447753906,
+                -5.180534839630127,
+                -0.30092063546180725,
+                -1.3663051128387451,
+                -1.2516841888427734
+              ],
+              "total_logp": -17.64861622452736,
+              "mean_logp": -3.5297232449054716
+            }
+          },
+          "gold_nll": 0.6100844005122781,
+          "margin": 2.9196388443931935,
+          "total_margin": 14.598194221965969,
+          "query_start_cursors": {
+            "gold": 0,
+            "distractor": 0
+          },
+          "query_end_cursors": {
+            "gold": 21,
+            "distractor": 21
+          }
+        },
+        "E_live_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -2.2104687690734863,
+                -0.007957542315125465,
+                -0.05502470210194588,
+                -0.041745640337467194,
+                -0.07467373460531235
+              ],
+              "total_logp": -2.389870388433337,
+              "mean_logp": -0.47797407768666744
+            },
+            "distractor": {
+              "token_logp": [
+                -9.569843292236328,
+                -5.1836090087890625,
+                -0.26035693287849426,
+                -1.3653745651245117,
+                -1.0030238628387451
+              ],
+              "total_logp": -17.38220766186714,
+              "mean_logp": -3.4764415323734283
+            }
+          },
+          "gold_nll": 0.47797407768666744,
+          "margin": 2.998467454686761,
+          "total_margin": 14.992337273433805,
+          "query_start_cursors": {
+            "gold": 99,
+            "distractor": 99
+          },
+          "query_end_cursors": {
+            "gold": 120,
+            "distractor": 120
+          }
+        },
+        "E_full_domain": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -2.2104687690734863,
+                -0.007957542315125465,
+                -0.05502470210194588,
+                -0.041745640337467194,
+                -0.07467373460531235
+              ],
+              "total_logp": -2.389870388433337,
+              "mean_logp": -0.47797407768666744
+            },
+            "distractor": {
+              "token_logp": [
+                -9.569843292236328,
+                -5.1836090087890625,
+                -0.26035693287849426,
+                -1.3653745651245117,
+                -1.0030238628387451
+              ],
+              "total_logp": -17.38220766186714,
+              "mean_logp": -3.4764415323734283
+            }
+          },
+          "gold_nll": 0.47797407768666744,
+          "margin": 2.998467454686761,
+          "total_margin": 14.992337273433805,
+          "query_start_cursors": {
+            "gold": 99,
+            "distractor": 99
+          },
+          "query_end_cursors": {
+            "gold": 120,
+            "distractor": 120
+          }
+        }
+      },
+      "historical_bos": {
+        "empty_wrapper": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -8.194734573364258,
+                -14.464492797851562,
+                -2.0317225456237793,
+                -6.048736572265625,
+                -3.072890281677246
+              ],
+              "total_logp": -33.81257677078247,
+              "mean_logp": -6.762515354156494
+            },
+            "distractor": {
+              "token_logp": [
+                -12.850984573364258,
+                -6.1407999992370605,
+                -2.0712475776672363,
+                -4.810029983520508,
+                -3.1106395721435547
+              ],
+              "total_logp": -28.983701705932617,
+              "mean_logp": -5.796740341186523
+            }
+          },
+          "gold_nll": 6.762515354156494,
+          "margin": -0.9657750129699707,
+          "total_margin": -4.8288750648498535,
+          "query_start_cursors": {
+            "gold": 4,
+            "distractor": 4
+          },
+          "query_end_cursors": {
+            "gold": 25,
+            "distractor": 25
+          },
+          "write_tokens": [
+            1,
+            19153,
+            28747,
+            13
+          ]
+        },
+        "exact_record": {
+          "candidates": {
+            "gold": {
+              "token_logp": [
+                -1.3480461835861206,
+                -0.004590093623846769,
+                -0.0728294625878334,
+                -0.048288747668266296,
+                -0.0791940912604332
+              ],
+              "total_logp": -1.5529485787265003,
+              "mean_logp": -0.31058971574530003
+            },
+            "distractor": {
+              "token_logp": [
+                -11.28554630279541,
+                -5.683926582336426,
+                -0.8278708457946777,
+                -0.9158107042312622,
+                -0.5523857474327087
+              ],
+              "total_logp": -19.265540182590485,
+              "mean_logp": -3.8531080365180967
+            }
+          },
+          "gold_nll": 0.31058971574530003,
+          "margin": 3.5425183207727966,
+          "total_margin": 17.712591603863984,
+          "query_start_cursors": {
+            "gold": 36,
+            "distractor": 36
+          },
+          "query_end_cursors": {
+            "gold": 57,
+            "distractor": 57
+          },
+          "write_tokens": [
+            1,
+            19153,
+            28747,
+            13,
+            28792,
+            7740,
+            28747,
+            1187,
+            294,
+            8855,
+            28793,
+            13,
+            28792,
+            7079,
+            28747,
+            28705,
+            28740,
+            28784,
+            28793,
+            13,
+            1014,
+            2229,
+            1877,
+            2275,
+            3870,
+            354,
+            272,
+            1868,
+            3881,
+            349,
+            307,
+            8344,
+            28733,
+            28787,
+            28783,
+            28723
+          ]
+        }
+      }
+    }
+  ],
+  "summary": {
+    "arms": {
+      "A_empty": {
+        "positive_margins": 2,
+        "mean_margin": -0.32289799716737533,
+        "mean_gold_nll": 6.312523619333903
+      },
+      "B_live_exact": {
+        "positive_margins": 9,
+        "mean_margin": 3.3761566600037947,
+        "mean_gold_nll": 0.47129740243156754
+      },
+      "C_recurrent_exact": {
+        "positive_margins": 9,
+        "mean_margin": 3.3368437386221355,
+        "mean_gold_nll": 0.5281707356373468
+      },
+      "D_full_exact": {
+        "positive_margins": 9,
+        "mean_margin": 3.3761566600037947,
+        "mean_gold_nll": 0.47129740243156754
+      },
+      "E_recurrent_domain": {
+        "positive_margins": 9,
+        "mean_margin": 3.057771604280505,
+        "mean_gold_nll": 0.697758474925326
+      },
+      "E_live_domain": {
+        "positive_margins": 9,
+        "mean_margin": 3.0741508691675135,
+        "mean_gold_nll": 0.6290493280523353
+      },
+      "E_full_domain": {
+        "positive_margins": 9,
+        "mean_margin": 3.0741508691675135,
+        "mean_gold_nll": 0.6290493280523353
+      }
+    },
+    "paired": {
+      "context_b_vs_a": {
+        "mean_delta_margin": 3.6990546571711698,
+        "mean_delta_gold_nll": -5.841226216902335,
+        "improved_margin": 9,
+        "lower_gold_nll": 9,
+        "cases": 9
+      },
+      "recurrent_c_vs_b": {
+        "mean_delta_margin": -0.03931292138165901,
+        "mean_delta_gold_nll": 0.056873333205779385,
+        "improved_margin": 2,
+        "lower_gold_nll": 2,
+        "cases": 9
+      },
+      "full_d_vs_b": {
+        "mean_delta_margin": 0.0,
+        "mean_delta_gold_nll": 0.0,
+        "improved_margin": 0,
+        "lower_gold_nll": 0,
+        "cases": 9
+      },
+      "domain_e_vs_c": {
+        "mean_delta_margin": -0.2790721343416307,
+        "mean_delta_gold_nll": 0.1695877392879791,
+        "improved_margin": 1,
+        "lower_gold_nll": 0,
+        "cases": 9
+      },
+      "live_domain_vs_exact": {
+        "mean_delta_margin": -0.3020057908362813,
+        "mean_delta_gold_nll": 0.15775192562076779,
+        "improved_margin": 1,
+        "lower_gold_nll": 1,
+        "cases": 9
+      },
+      "full_domain_vs_exact": {
+        "mean_delta_margin": -0.3020057908362813,
+        "mean_delta_gold_nll": 0.15775192562076779,
+        "improved_margin": 1,
+        "lower_gold_nll": 1,
+        "cases": 9
+      }
+    },
+    "controls": {
+      "full_cache_fields_exact": true,
+      "full_cache_score_parity": true,
+      "sdk_recurrent_write_parity": true
+    },
+    "historical_bos_control": {
+      "exact_positive_margins": 9,
+      "empty_positive_margins": 3,
+      "mean_delta_margin": 3.6121557543778584,
+      "mean_delta_gold_nll": -5.607085990584973
+    }
+  },
+  "diagnosis": "Matched single-Cell paths measured on the historical development fixture.",
+  "elapsed_seconds": 343.17228488099994
+}
