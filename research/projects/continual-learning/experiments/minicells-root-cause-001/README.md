@@ -252,3 +252,35 @@ matching schedules across arms and retains layer 0 and layer 1 attention
 output differences. It measures final Logits, routing and cache differences
 against the original Phase A bounds. A.4 remains the separate generation
 and long-input acceptance stage.
+
+## Phase A.4 base runtime acceptance
+
+A.3.2 made all three split schedules pass the frozen Logits and cache
+tolerances on the short prompt. Its fixed-input probe independently
+matched valid outputs and final states when padded recurrence steps were
+omitted. [A.3.2 artifacts](https://github.com/ArcheLabs/mini-cells/tree/6db20d54ee066816e2319e71be390fb32a026dbc/artifacts/experiments/minicells-root-cause-001/a32-2c7144a3b953).
+
+Run [kaggle_phase_a4.py](kaggle_phase_a4.py) in Kaggle Script mode with a GPU,
+Internet and the existing GitHub secret. The run uses pinned FP16 1.3B
+weights and carries forward the scoped A.3, A.3.1 and A.3.2 corrections.
+It repeats the Phase A prompt matrix with a 32-token generation budget
+and the frozen 4/6 BOS plain-continuation gate. The short anchor additionally
+compares all three split schedules for Logits, caches and exact greedy
+token-sequence agreement.
+
+The 132-token fixture tests bounded recurrent chunks, all-tokenwise
+execution, whole native Chunk prefill, two native chunks, native
+prefill with tokenwise decode and a 65/64-token mixed schedule. These
+calls log the actual Delta entry point, input dtype and sequence length,
+and compare against the bounded recurrent reference. Both Delta paths
+disable padded expert transitions. The MoM Chunk input cast remains BF16.
+The SDK's own 65-token request and the direct pinned Chunk invocation are
+reported separately. A native Chunk failure is recorded with its traceback
+and blocks dependent native schedules. It leaves the completed short and
+long recurrent controls in the result. Phase B is gated on all A.4 checks.
+
+The entry selects one device. A T4 run remains comparable to earlier
+phases, and the SDK's native BF16 guard prevents its 65-token gate from
+passing there. A native BF16 accelerator can run the full acceptance
+matrix under a separately reported accelerator profile. Results from
+different device profiles are not pooled.

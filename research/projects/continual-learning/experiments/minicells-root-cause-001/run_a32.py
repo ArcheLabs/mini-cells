@@ -1,7 +1,7 @@
 """Isolate padded expert transitions in the pinned MoM Delta recurrence."""
 import argparse
 from collections import deque
-from contextlib import contextmanager
+from contextlib import ExitStack, contextmanager
 from hashlib import sha256
 from importlib.metadata import version
 from pathlib import Path
@@ -32,7 +32,7 @@ def no_padding_transitions(arguments, valid):
 
 
 @contextmanager
-def expert_delta_policy(ops, layers, *, apply, capture=None):
+def expert_delta_policy(ops, layers, *, apply, capture=None, allow_chunk=False, observe=None):
     original_transform = ops.transform
     original_delta = ops.fused_recurrent_gated_delta_rule
     pending = deque()
@@ -48,32 +48,47 @@ def expert_delta_policy(ops, layers, *, apply, capture=None):
         chunk = call_index // len(layers)
         call_index += 1
         valid = F.pad(mask, (packed.shape[2] - mask.shape[1], 0), value=False)
-        # Match the pinned batch-one short-path branch that skips empty lanes.
-        active = packed.reshape(num_memories, -1).any(dim=1).tolist()
+        chunk_kernel = allow_chunk and x.shape[1] > 64 and layers[layer].attn.mode == "chunk"
+        kind = "chunk" if chunk_kernel else "recurrent"
+        # Only the pinned short path skips empty lanes.
+        active = [True] * num_memories if chunk_kernel else packed.reshape(num_memories, -1).any(dim=1).tolist()
         positions = (packed_positions(indices, order, mask, selected_memories.shape[-1], 0, packed.shape[2])
                      if capture is not None and (layer, chunk) == (1, 1) else None)
         for expert, runs_delta in enumerate(active):
             if runs_delta:
-                pending.append((layer, chunk, expert, valid[expert], None if positions is None else positions[expert]))
+                pending.append((kind, expert, valid[expert], None if positions is None else positions[expert]))
         if layers[layer].attn.shared_mem:
-            pending.append((layer, chunk, None, None, None))
+            pending.append((kind, None, None, None))
         return result
 
-    def recurrent(**kwargs):
-        if not pending:
-            raise RuntimeError("Unexpected Delta call outside the recorded MoM layer")
-        layer, chunk, expert, valid, positions = pending.popleft()
-        if expert is None:
-            return original_delta(**kwargs)
-        if kwargs["q"].shape[:2] != (1, valid.numel()) or kwargs["cu_seqlens"] is not None:
-            raise RuntimeError("Expected the pinned dense expert Delta call")
-        if positions is not None:
-            capture(expert, positions, kwargs)
-        if apply:
-            kwargs = no_padding_transitions(kwargs, valid)
-        return original_delta(**kwargs)
+    def observed_delta(original, kind):
+        def invoke(**kwargs):
+            if not pending:
+                raise RuntimeError("Unexpected Delta call outside the recorded MoM layer")
+            expected_kind, expert, valid, positions = pending.popleft()
+            if kind != expected_kind:
+                raise RuntimeError(f"Expected {expected_kind} Delta dispatch, observed {kind}")
+            if expert is not None:
+                if kwargs["q"].shape[:2] != (1, valid.numel()) or kwargs["cu_seqlens"] is not None:
+                    raise RuntimeError("Expected the pinned dense expert Delta call")
+                if positions is not None:
+                    capture(expert, positions, kwargs)
+                if apply:
+                    kwargs = no_padding_transitions(kwargs, valid)
+            if observe is not None:
+                observe("attempted", kind, kwargs["q"])
+            result = original(**kwargs)
+            if observe is not None:
+                observe("returned", kind, kwargs["q"])
+            return result
+        return invoke
 
-    with patch.object(ops, "transform", transform), patch.object(ops, "fused_recurrent_gated_delta_rule", recurrent):
+    with ExitStack() as stack:
+        stack.enter_context(patch.object(ops, "transform", transform))
+        stack.enter_context(patch.object(ops, "fused_recurrent_gated_delta_rule", observed_delta(original_delta, "recurrent")))
+        if allow_chunk:
+            chunk_delta = observed_delta(ops.chunk_gated_delta_rule, "chunk")
+            stack.enter_context(patch.object(ops, "chunk_gated_delta_rule", chunk_delta))
         yield
         if pending:
             raise RuntimeError("Incomplete final expert Delta layer")
