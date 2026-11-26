@@ -1,0 +1,2201 @@
+{
+  "format": "minicells.root-cause.001.phase-a31.v1",
+  "status": "INCONCLUSIVE",
+  "engineering_status": "PASS",
+  "model_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+  "tolerance": {
+    "atol": 0.25,
+    "rtol": 0.02
+  },
+  "environment": {
+    "timestamp": "2026-11-26T12:10:17.159845+00:00",
+    "python": "3.13.16 (main, Oct  1 2026, 15:40:24) [GCC 13.3.0]",
+    "torch": "2.11.0+cu130",
+    "physical_devices": [
+      {
+        "name": "Tesla T4",
+        "total_mib": "15360",
+        "free_mib": "14912",
+        "driver": "580.178.04",
+        "compute_capability": "7.5"
+      },
+      {
+        "name": "Tesla T4",
+        "total_mib": "15360",
+        "free_mib": "14912",
+        "driver": "580.178.04",
+        "compute_capability": "7.5"
+      }
+    ],
+    "hardware_status": "T4_PRESENT",
+    "cuda_runtime": "13.0",
+    "fla": "0.2.2",
+    "triton": "3.6.0"
+  },
+  "a3_results_commit": "cfa5e9c0d0ee4ff8c89cc49dd605be5f968f9f4b",
+  "identity": {
+    "model_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+    "model_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+    "architecture": "mom-gated-deltanet",
+    "mom_revision": "125038087b71b635c171cec857bd0f21d10955b6",
+    "tokenizer_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+    "tokenizer_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+    "tokenizer_hash": "90e3e115a745594abd2167554dcf472ea00d4852465c03b5482309d9036f4c49",
+    "tokenizer_files": {
+      "special_tokens_map.json": "4452b845ab9ca2afa863f59f1411a959e8a32bb4334e264b0e71d5d17dd4dcb9",
+      "tokenizer.json": "a2699839c243202a04a90537576fc719283f638e90fe80feb469888275289575",
+      "tokenizer_config.json": "cc3fdc5126e4d2e3a3934bc29779bf811c2eeefb60237017cddfd03acf9a7562"
+    },
+    "config_hash": "b99c19cdd75493abb6dfe0d5e991ebaac8d5af963b75c0ea2f73a6f496204341",
+    "weights_sha256": "08820287a91c2bc10f1fafe8b149dbf027ae51768530027c711dc240f7d53771",
+    "dtype": "float16",
+    "num_hidden_layers": 24,
+    "num_memories": 4,
+    "shared_memory": true,
+    "topk": 2,
+    "torch": "2.11.0+cu130",
+    "triton": "3.6.0",
+    "transformers": "4.51.3",
+    "flash-linear-attention": "0.2.2",
+    "parameters": 1552884000
+  },
+  "fixture": {
+    "id": "france",
+    "style": "continuation",
+    "text": "The capital of France is",
+    "target": "Paris"
+  },
+  "tokens": [
+    1,
+    415,
+    5565,
+    302,
+    4843,
+    349
+  ],
+  "arms": {
+    "a3_both": {
+      "whole": {
+        "calls": 24,
+        "nonchronological": 0,
+        "convolution_backends": [
+          "fla_triton_prefill"
+        ]
+      },
+      "splits": {
+        "prefill_decode": {
+          "chunks": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "packing": {
+            "calls": 120,
+            "nonchronological": 0,
+            "convolution_backends": [
+              "fla_triton_decode",
+              "fla_triton_prefill"
+            ]
+          },
+          "logits": {
+            "pass_": false,
+            "shape": [
+              1,
+              6,
+              32000
+            ],
+            "max_abs": 1.6435546875,
+            "mean_abs": 0.061142876744270325,
+            "within_fraction": 0.990192711353302,
+            "top1_agreement": 1.0
+          },
+          "first_exact_difference": {
+            "layer": 0,
+            "stage": "router_logits",
+            "exact": false,
+            "first_changed_token": 3,
+            "first_outside_tolerance_token": null,
+            "comparison": {
+              "pass_": true,
+              "shape": [
+                1,
+                6,
+                4
+              ],
+              "max_abs": 0.00048828125,
+              "mean_abs": 2.8133392333984375e-05,
+              "within_fraction": 1.0,
+              "top1_agreement": 1.0
+            }
+          },
+          "first_outside_tolerance": {
+            "layer": 0,
+            "stage": "expert_q_after_conv",
+            "exact": false,
+            "first_changed_token": 3,
+            "first_outside_tolerance_token": 3,
+            "comparison": {
+              "pass_": false,
+              "shape": [
+                1,
+                5,
+                1024
+              ],
+              "max_abs": 32.5625,
+              "mean_abs": 0.17255181074142456,
+              "within_fraction": 0.950976550579071,
+              "top1_agreement": 1.0
+            },
+            "expert": 3,
+            "compared_tokens": [
+              0,
+              1,
+              3,
+              4,
+              5
+            ],
+            "whole_only_tokens": [],
+            "split_only_tokens": []
+          },
+          "routing": {
+            "layer_tokens": 144,
+            "set_agreement": 1.0,
+            "order_agreement": 0.9930555555555556,
+            "changed_sets": 0,
+            "same_set_different_order": 1,
+            "first_set_change": null,
+            "first_rank_only_change": {
+              "layer": 22,
+              "token": 5,
+              "whole": [
+                3,
+                1
+              ],
+              "split": [
+                1,
+                3
+              ]
+            },
+            "set_changes": []
+          },
+          "cache": {
+            "pass_": false,
+            "tensor_count": 251,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [
+              "0.conv_state.0.0",
+              "0.conv_state.1.0",
+              "0.conv_state.2.0",
+              "0.recurrent_state.0",
+              "0.recurrent_state.3",
+              "1.conv_state.0.0",
+              "1.conv_state.0.1",
+              "1.conv_state.1.0",
+              "1.conv_state.1.1",
+              "1.conv_state.2.0",
+              "1.conv_state.2.1",
+              "1.recurrent_state.2",
+              "1.recurrent_state.3",
+              "10.conv_state.0.0",
+              "10.conv_state.0.1",
+              "10.conv_state.1.0",
+              "10.conv_state.1.1",
+              "10.conv_state.2.0",
+              "10.conv_state.2.1",
+              "10.recurrent_state.1",
+              "10.recurrent_state.3",
+              "11.conv_state.0.0",
+              "11.conv_state.0.1",
+              "11.conv_state.1.0",
+              "11.conv_state.1.1",
+              "11.conv_state.2.0",
+              "11.conv_state.2.1",
+              "11.recurrent_state.3",
+              "12.conv_state.0.0",
+              "12.conv_state.0.1",
+              "12.conv_state.1.0",
+              "12.conv_state.1.1",
+              "12.conv_state.2.0",
+              "12.conv_state.2.1",
+              "12.recurrent_state.2",
+              "12.recurrent_state.3",
+              "13.conv_state.0.0",
+              "13.conv_state.0.1",
+              "13.conv_state.1.0",
+              "13.conv_state.1.1",
+              "13.conv_state.2.0",
+              "13.conv_state.2.1",
+              "13.recurrent_state.2",
+              "14.conv_state.0.0",
+              "14.conv_state.0.1",
+              "14.conv_state.1.0",
+              "14.conv_state.1.1",
+              "14.conv_state.2.0",
+              "14.conv_state.2.1",
+              "15.conv_state.0.0",
+              "15.conv_state.0.1",
+              "15.conv_state.1.0",
+              "15.conv_state.1.1",
+              "15.conv_state.2.0",
+              "15.conv_state.2.1",
+              "15.recurrent_state.0",
+              "15.recurrent_state.2",
+              "16.conv_state.0.0",
+              "16.conv_state.0.1",
+              "16.conv_state.1.0",
+              "16.conv_state.1.1",
+              "16.conv_state.2.0",
+              "16.conv_state.2.1",
+              "17.conv_state.0.0",
+              "17.conv_state.0.1",
+              "17.conv_state.1.0",
+              "17.conv_state.1.1",
+              "17.conv_state.2.0",
+              "17.conv_state.2.1",
+              "17.recurrent_state.0",
+              "17.recurrent_state.2",
+              "18.conv_state.0.0",
+              "18.conv_state.0.1",
+              "18.conv_state.1.0",
+              "18.conv_state.1.1",
+              "18.conv_state.2.0",
+              "18.conv_state.2.1",
+              "18.recurrent_state.3",
+              "19.conv_state.0.0",
+              "19.conv_state.0.1",
+              "19.conv_state.1.0",
+              "19.conv_state.1.1",
+              "19.conv_state.2.0",
+              "19.conv_state.2.1",
+              "19.recurrent_state.0",
+              "19.recurrent_state.1",
+              "19.recurrent_state.2",
+              "19.recurrent_state.3",
+              "19.recurrent_state.4",
+              "2.conv_state.0.0",
+              "2.conv_state.0.1",
+              "2.conv_state.1.0",
+              "2.conv_state.1.1",
+              "2.conv_state.2.0",
+              "2.conv_state.2.1",
+              "2.recurrent_state.0",
+              "2.recurrent_state.2",
+              "2.recurrent_state.3",
+              "20.conv_state.0.0",
+              "20.conv_state.0.1",
+              "20.conv_state.1.0",
+              "20.conv_state.1.1",
+              "20.conv_state.2.0",
+              "20.conv_state.2.1",
+              "20.recurrent_state.0",
+              "20.recurrent_state.1",
+              "20.recurrent_state.2",
+              "20.recurrent_state.3",
+              "21.conv_state.0.0",
+              "21.conv_state.0.1",
+              "21.conv_state.1.0",
+              "21.conv_state.1.1",
+              "21.conv_state.2.0",
+              "21.conv_state.2.1",
+              "21.recurrent_state.2",
+              "21.recurrent_state.3",
+              "21.recurrent_state.4",
+              "22.conv_state.0.0",
+              "22.conv_state.0.1",
+              "22.conv_state.1.0",
+              "22.conv_state.1.1",
+              "22.conv_state.2.0",
+              "22.conv_state.2.1",
+              "22.recurrent_state.1",
+              "22.recurrent_state.2",
+              "22.recurrent_state.3",
+              "23.conv_state.0.0",
+              "23.conv_state.0.1",
+              "23.conv_state.1.0",
+              "23.conv_state.1.1",
+              "23.conv_state.2.0",
+              "23.conv_state.2.1",
+              "3.conv_state.0.0",
+              "3.conv_state.0.1",
+              "3.conv_state.1.0",
+              "3.conv_state.1.1",
+              "3.conv_state.2.0",
+              "3.conv_state.2.1",
+              "3.recurrent_state.1",
+              "4.conv_state.0.0",
+              "4.conv_state.0.1",
+              "4.conv_state.1.0",
+              "4.conv_state.1.1",
+              "4.conv_state.2.0",
+              "4.conv_state.2.1",
+              "4.recurrent_state.0",
+              "4.recurrent_state.1",
+              "4.recurrent_state.3",
+              "5.conv_state.0.0",
+              "5.conv_state.0.1",
+              "5.conv_state.1.0",
+              "5.conv_state.1.1",
+              "5.conv_state.2.0",
+              "5.conv_state.2.1",
+              "5.recurrent_state.0",
+              "5.recurrent_state.2",
+              "6.conv_state.0.0",
+              "6.conv_state.0.1",
+              "6.conv_state.1.0",
+              "6.conv_state.1.1",
+              "6.conv_state.2.0",
+              "6.conv_state.2.1",
+              "6.recurrent_state.0",
+              "6.recurrent_state.3",
+              "7.conv_state.0.0",
+              "7.conv_state.0.1",
+              "7.conv_state.1.0",
+              "7.conv_state.1.1",
+              "7.conv_state.2.0",
+              "7.conv_state.2.1",
+              "7.recurrent_state.0",
+              "7.recurrent_state.3",
+              "8.conv_state.0.0",
+              "8.conv_state.0.1",
+              "8.conv_state.1.0",
+              "8.conv_state.1.1",
+              "8.conv_state.2.0",
+              "8.conv_state.2.1",
+              "8.recurrent_state.1",
+              "8.recurrent_state.3",
+              "9.conv_state.0.0",
+              "9.conv_state.0.1",
+              "9.conv_state.1.0",
+              "9.conv_state.1.1",
+              "9.conv_state.2.0",
+              "9.conv_state.2.1",
+              "9.recurrent_state.1",
+              "9.recurrent_state.2",
+              "9.recurrent_state.3"
+            ],
+            "max_abs": 74.3125
+          },
+          "cache_cursor": 6,
+          "whole_cache_cursor": 6
+        },
+        "two_chunks": {
+          "chunks": [
+            2,
+            4
+          ],
+          "packing": {
+            "calls": 48,
+            "nonchronological": 0,
+            "convolution_backends": [
+              "fla_triton_prefill"
+            ]
+          },
+          "logits": {
+            "pass_": false,
+            "shape": [
+              1,
+              6,
+              32000
+            ],
+            "max_abs": 0.84375,
+            "mean_abs": 0.06785702705383301,
+            "within_fraction": 0.9976562261581421,
+            "top1_agreement": 1.0
+          },
+          "first_exact_difference": {
+            "layer": 0,
+            "stage": "expert_q_after_conv",
+            "exact": false,
+            "first_changed_token": 3,
+            "first_outside_tolerance_token": 3,
+            "comparison": {
+              "pass_": false,
+              "shape": [
+                1,
+                5,
+                1024
+              ],
+              "max_abs": 32.5625,
+              "mean_abs": 0.1725461184978485,
+              "within_fraction": 0.950976550579071,
+              "top1_agreement": 1.0
+            },
+            "expert": 3,
+            "compared_tokens": [
+              0,
+              1,
+              3,
+              4,
+              5
+            ],
+            "whole_only_tokens": [],
+            "split_only_tokens": []
+          },
+          "first_outside_tolerance": {
+            "layer": 0,
+            "stage": "expert_q_after_conv",
+            "exact": false,
+            "first_changed_token": 3,
+            "first_outside_tolerance_token": 3,
+            "comparison": {
+              "pass_": false,
+              "shape": [
+                1,
+                5,
+                1024
+              ],
+              "max_abs": 32.5625,
+              "mean_abs": 0.1725461184978485,
+              "within_fraction": 0.950976550579071,
+              "top1_agreement": 1.0
+            },
+            "expert": 3,
+            "compared_tokens": [
+              0,
+              1,
+              3,
+              4,
+              5
+            ],
+            "whole_only_tokens": [],
+            "split_only_tokens": []
+          },
+          "routing": {
+            "layer_tokens": 144,
+            "set_agreement": 0.9861111111111112,
+            "order_agreement": 0.9861111111111112,
+            "changed_sets": 2,
+            "same_set_different_order": 0,
+            "first_set_change": {
+              "layer": 5,
+              "token": 2,
+              "whole": [
+                2,
+                1
+              ],
+              "split": [
+                2,
+                0
+              ],
+              "whole_probability_margin": 0.002323731780052185,
+              "split_probability_margin": 0.012455075979232788,
+              "whole_logit_margin": 0.009521484375,
+              "split_logit_margin": 0.051239013671875
+            },
+            "first_rank_only_change": null,
+            "set_changes": [
+              {
+                "layer": 5,
+                "token": 2,
+                "whole": [
+                  2,
+                  1
+                ],
+                "split": [
+                  2,
+                  0
+                ],
+                "whole_probability_margin": 0.002323731780052185,
+                "split_probability_margin": 0.012455075979232788,
+                "whole_logit_margin": 0.009521484375,
+                "split_logit_margin": 0.051239013671875
+              },
+              {
+                "layer": 8,
+                "token": 2,
+                "whole": [
+                  0,
+                  3
+                ],
+                "split": [
+                  0,
+                  2
+                ],
+                "whole_probability_margin": 0.0064536333084106445,
+                "split_probability_margin": 0.07519184052944183,
+                "whole_logit_margin": 0.025482177734375,
+                "split_logit_margin": 0.28546142578125
+              }
+            ]
+          },
+          "cache": {
+            "pass_": false,
+            "tensor_count": 251,
+            "missing": [],
+            "unexpected": [
+              "8.recurrent_state.2"
+            ],
+            "mismatched": [
+              "0.conv_state.0.0",
+              "0.conv_state.1.0",
+              "0.conv_state.2.0",
+              "0.recurrent_state.0",
+              "0.recurrent_state.3",
+              "1.conv_state.0.0",
+              "1.conv_state.0.1",
+              "1.conv_state.1.0",
+              "1.conv_state.1.1",
+              "1.conv_state.2.0",
+              "1.conv_state.2.1",
+              "1.recurrent_state.2",
+              "1.recurrent_state.3",
+              "10.conv_state.0.0",
+              "10.conv_state.0.1",
+              "10.conv_state.1.0",
+              "10.conv_state.1.1",
+              "10.conv_state.2.0",
+              "10.conv_state.2.1",
+              "10.recurrent_state.1",
+              "10.recurrent_state.3",
+              "11.conv_state.0.0",
+              "11.conv_state.0.1",
+              "11.conv_state.1.0",
+              "11.conv_state.1.1",
+              "11.conv_state.2.0",
+              "11.conv_state.2.1",
+              "11.recurrent_state.3",
+              "12.conv_state.0.0",
+              "12.conv_state.0.1",
+              "12.conv_state.1.0",
+              "12.conv_state.1.1",
+              "12.conv_state.2.0",
+              "12.conv_state.2.1",
+              "12.recurrent_state.3",
+              "13.conv_state.0.0",
+              "13.conv_state.0.1",
+              "13.conv_state.1.0",
+              "13.conv_state.1.1",
+              "13.conv_state.2.0",
+              "13.conv_state.2.1",
+              "13.recurrent_state.2",
+              "14.conv_state.0.0",
+              "14.conv_state.0.1",
+              "14.conv_state.1.0",
+              "14.conv_state.1.1",
+              "14.conv_state.2.0",
+              "14.conv_state.2.1",
+              "15.conv_state.0.0",
+              "15.conv_state.0.1",
+              "15.conv_state.1.0",
+              "15.conv_state.1.1",
+              "15.conv_state.2.0",
+              "15.conv_state.2.1",
+              "15.recurrent_state.0",
+              "15.recurrent_state.1",
+              "15.recurrent_state.2",
+              "16.conv_state.0.0",
+              "16.conv_state.0.1",
+              "16.conv_state.1.0",
+              "16.conv_state.1.1",
+              "16.conv_state.2.0",
+              "16.conv_state.2.1",
+              "17.conv_state.0.0",
+              "17.conv_state.0.1",
+              "17.conv_state.1.0",
+              "17.conv_state.1.1",
+              "17.conv_state.2.0",
+              "17.conv_state.2.1",
+              "17.recurrent_state.0",
+              "17.recurrent_state.1",
+              "17.recurrent_state.2",
+              "17.recurrent_state.3",
+              "18.conv_state.0.0",
+              "18.conv_state.0.1",
+              "18.conv_state.1.0",
+              "18.conv_state.1.1",
+              "18.conv_state.2.0",
+              "18.conv_state.2.1",
+              "18.recurrent_state.0",
+              "18.recurrent_state.3",
+              "19.conv_state.0.0",
+              "19.conv_state.0.1",
+              "19.conv_state.1.0",
+              "19.conv_state.1.1",
+              "19.conv_state.2.0",
+              "19.conv_state.2.1",
+              "19.recurrent_state.1",
+              "19.recurrent_state.2",
+              "19.recurrent_state.3",
+              "2.conv_state.0.0",
+              "2.conv_state.0.1",
+              "2.conv_state.1.0",
+              "2.conv_state.1.1",
+              "2.conv_state.2.0",
+              "2.conv_state.2.1",
+              "2.recurrent_state.0",
+              "2.recurrent_state.2",
+              "2.recurrent_state.3",
+              "2.recurrent_state.4",
+              "20.conv_state.0.0",
+              "20.conv_state.0.1",
+              "20.conv_state.1.0",
+              "20.conv_state.1.1",
+              "20.conv_state.2.0",
+              "20.conv_state.2.1",
+              "20.recurrent_state.0",
+              "20.recurrent_state.2",
+              "21.conv_state.0.0",
+              "21.conv_state.0.1",
+              "21.conv_state.1.0",
+              "21.conv_state.1.1",
+              "21.conv_state.2.0",
+              "21.conv_state.2.1",
+              "21.recurrent_state.0",
+              "21.recurrent_state.2",
+              "21.recurrent_state.3",
+              "21.recurrent_state.4",
+              "22.conv_state.0.0",
+              "22.conv_state.0.1",
+              "22.conv_state.1.0",
+              "22.conv_state.1.1",
+              "22.conv_state.2.0",
+              "22.conv_state.2.1",
+              "22.recurrent_state.1",
+              "22.recurrent_state.2",
+              "23.conv_state.0.0",
+              "23.conv_state.0.1",
+              "23.conv_state.1.0",
+              "23.conv_state.1.1",
+              "23.conv_state.2.0",
+              "23.conv_state.2.1",
+              "23.recurrent_state.2",
+              "3.conv_state.0.0",
+              "3.conv_state.0.1",
+              "3.conv_state.1.0",
+              "3.conv_state.1.1",
+              "3.conv_state.2.0",
+              "3.conv_state.2.1",
+              "3.recurrent_state.1",
+              "3.recurrent_state.4",
+              "4.conv_state.0.0",
+              "4.conv_state.0.1",
+              "4.conv_state.1.0",
+              "4.conv_state.1.1",
+              "4.conv_state.2.0",
+              "4.conv_state.2.1",
+              "4.recurrent_state.0",
+              "4.recurrent_state.1",
+              "4.recurrent_state.4",
+              "5.conv_state.0.0",
+              "5.conv_state.0.1",
+              "5.conv_state.1.0",
+              "5.conv_state.1.1",
+              "5.conv_state.2.0",
+              "5.conv_state.2.1",
+              "5.recurrent_state.0",
+              "5.recurrent_state.1",
+              "5.recurrent_state.2",
+              "5.recurrent_state.4",
+              "6.conv_state.0.0",
+              "6.conv_state.0.1",
+              "6.conv_state.1.0",
+              "6.conv_state.1.1",
+              "6.conv_state.2.0",
+              "6.conv_state.2.1",
+              "6.recurrent_state.0",
+              "6.recurrent_state.3",
+              "7.conv_state.0.0",
+              "7.conv_state.0.1",
+              "7.conv_state.1.0",
+              "7.conv_state.1.1",
+              "7.conv_state.2.0",
+              "7.conv_state.2.1",
+              "7.recurrent_state.0",
+              "7.recurrent_state.2",
+              "7.recurrent_state.3",
+              "8.conv_state.0.0",
+              "8.conv_state.0.1",
+              "8.conv_state.1.0",
+              "8.conv_state.1.1",
+              "8.conv_state.2.0",
+              "8.conv_state.2.1",
+              "8.recurrent_state.0",
+              "8.recurrent_state.1",
+              "8.recurrent_state.3",
+              "9.conv_state.0.0",
+              "9.conv_state.0.1",
+              "9.conv_state.1.0",
+              "9.conv_state.1.1",
+              "9.conv_state.2.0",
+              "9.conv_state.2.1",
+              "9.recurrent_state.1",
+              "9.recurrent_state.2",
+              "9.recurrent_state.3",
+              "9.recurrent_state.4"
+            ],
+            "max_abs": 74.3125
+          },
+          "cache_cursor": 6,
+          "whole_cache_cursor": 6
+        },
+        "tokenwise": {
+          "chunks": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "packing": {
+            "calls": 144,
+            "nonchronological": 0,
+            "convolution_backends": [
+              "fla_triton_decode"
+            ]
+          },
+          "logits": {
+            "pass_": false,
+            "shape": [
+              1,
+              6,
+              32000
+            ],
+            "max_abs": 1.873046875,
+            "mean_abs": 0.061364106833934784,
+            "within_fraction": 0.9896770715713501,
+            "top1_agreement": 1.0
+          },
+          "first_exact_difference": {
+            "layer": 0,
+            "stage": "router_logits",
+            "exact": false,
+            "first_changed_token": 0,
+            "first_outside_tolerance_token": null,
+            "comparison": {
+              "pass_": true,
+              "shape": [
+                1,
+                6,
+                4
+              ],
+              "max_abs": 0.00048828125,
+              "mean_abs": 7.009506225585938e-05,
+              "within_fraction": 1.0,
+              "top1_agreement": 1.0
+            }
+          },
+          "first_outside_tolerance": {
+            "layer": 0,
+            "stage": "expert_q_after_conv",
+            "exact": false,
+            "first_changed_token": 0,
+            "first_outside_tolerance_token": 3,
+            "comparison": {
+              "pass_": false,
+              "shape": [
+                1,
+                5,
+                1024
+              ],
+              "max_abs": 32.5625,
+              "mean_abs": 0.1725517213344574,
+              "within_fraction": 0.950976550579071,
+              "top1_agreement": 1.0
+            },
+            "expert": 3,
+            "compared_tokens": [
+              0,
+              1,
+              3,
+              4,
+              5
+            ],
+            "whole_only_tokens": [],
+            "split_only_tokens": []
+          },
+          "routing": {
+            "layer_tokens": 144,
+            "set_agreement": 1.0,
+            "order_agreement": 0.9930555555555556,
+            "changed_sets": 0,
+            "same_set_different_order": 1,
+            "first_set_change": null,
+            "first_rank_only_change": {
+              "layer": 22,
+              "token": 5,
+              "whole": [
+                3,
+                1
+              ],
+              "split": [
+                1,
+                3
+              ]
+            },
+            "set_changes": []
+          },
+          "cache": {
+            "pass_": false,
+            "tensor_count": 251,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [
+              "0.conv_state.0.0",
+              "0.conv_state.1.0",
+              "0.conv_state.2.0",
+              "0.recurrent_state.0",
+              "0.recurrent_state.3",
+              "1.conv_state.0.0",
+              "1.conv_state.0.1",
+              "1.conv_state.1.0",
+              "1.conv_state.1.1",
+              "1.conv_state.2.0",
+              "1.conv_state.2.1",
+              "1.recurrent_state.2",
+              "1.recurrent_state.3",
+              "10.conv_state.0.0",
+              "10.conv_state.0.1",
+              "10.conv_state.1.0",
+              "10.conv_state.1.1",
+              "10.conv_state.2.0",
+              "10.conv_state.2.1",
+              "10.recurrent_state.1",
+              "10.recurrent_state.3",
+              "11.conv_state.0.0",
+              "11.conv_state.0.1",
+              "11.conv_state.1.0",
+              "11.conv_state.1.1",
+              "11.conv_state.2.0",
+              "11.conv_state.2.1",
+              "11.recurrent_state.3",
+              "12.conv_state.0.0",
+              "12.conv_state.0.1",
+              "12.conv_state.1.0",
+              "12.conv_state.1.1",
+              "12.conv_state.2.0",
+              "12.conv_state.2.1",
+              "12.recurrent_state.2",
+              "12.recurrent_state.3",
+              "13.conv_state.0.0",
+              "13.conv_state.0.1",
+              "13.conv_state.1.0",
+              "13.conv_state.1.1",
+              "13.conv_state.2.0",
+              "13.conv_state.2.1",
+              "13.recurrent_state.2",
+              "14.conv_state.0.0",
+              "14.conv_state.0.1",
+              "14.conv_state.1.0",
+              "14.conv_state.1.1",
+              "14.conv_state.2.0",
+              "14.conv_state.2.1",
+              "15.conv_state.0.0",
+              "15.conv_state.0.1",
+              "15.conv_state.1.0",
+              "15.conv_state.1.1",
+              "15.conv_state.2.0",
+              "15.conv_state.2.1",
+              "15.recurrent_state.0",
+              "15.recurrent_state.2",
+              "16.conv_state.0.0",
+              "16.conv_state.0.1",
+              "16.conv_state.1.0",
+              "16.conv_state.1.1",
+              "16.conv_state.2.0",
+              "16.conv_state.2.1",
+              "17.conv_state.0.0",
+              "17.conv_state.0.1",
+              "17.conv_state.1.0",
+              "17.conv_state.1.1",
+              "17.conv_state.2.0",
+              "17.conv_state.2.1",
+              "17.recurrent_state.0",
+              "17.recurrent_state.2",
+              "18.conv_state.0.0",
+              "18.conv_state.0.1",
+              "18.conv_state.1.0",
+              "18.conv_state.1.1",
+              "18.conv_state.2.0",
+              "18.conv_state.2.1",
+              "18.recurrent_state.3",
+              "19.conv_state.0.0",
+              "19.conv_state.0.1",
+              "19.conv_state.1.0",
+              "19.conv_state.1.1",
+              "19.conv_state.2.0",
+              "19.conv_state.2.1",
+              "19.recurrent_state.0",
+              "19.recurrent_state.1",
+              "19.recurrent_state.2",
+              "19.recurrent_state.3",
+              "19.recurrent_state.4",
+              "2.conv_state.0.0",
+              "2.conv_state.0.1",
+              "2.conv_state.1.0",
+              "2.conv_state.1.1",
+              "2.conv_state.2.0",
+              "2.conv_state.2.1",
+              "2.recurrent_state.0",
+              "2.recurrent_state.2",
+              "2.recurrent_state.3",
+              "20.conv_state.0.0",
+              "20.conv_state.0.1",
+              "20.conv_state.1.0",
+              "20.conv_state.1.1",
+              "20.conv_state.2.0",
+              "20.conv_state.2.1",
+              "20.recurrent_state.0",
+              "20.recurrent_state.1",
+              "20.recurrent_state.2",
+              "20.recurrent_state.3",
+              "20.recurrent_state.4",
+              "21.conv_state.0.0",
+              "21.conv_state.0.1",
+              "21.conv_state.1.0",
+              "21.conv_state.1.1",
+              "21.conv_state.2.0",
+              "21.conv_state.2.1",
+              "21.recurrent_state.2",
+              "21.recurrent_state.3",
+              "21.recurrent_state.4",
+              "22.conv_state.0.0",
+              "22.conv_state.0.1",
+              "22.conv_state.1.0",
+              "22.conv_state.1.1",
+              "22.conv_state.2.0",
+              "22.conv_state.2.1",
+              "22.recurrent_state.1",
+              "22.recurrent_state.2",
+              "22.recurrent_state.3",
+              "23.conv_state.0.0",
+              "23.conv_state.0.1",
+              "23.conv_state.1.0",
+              "23.conv_state.1.1",
+              "23.conv_state.2.0",
+              "23.conv_state.2.1",
+              "3.conv_state.0.0",
+              "3.conv_state.0.1",
+              "3.conv_state.1.0",
+              "3.conv_state.1.1",
+              "3.conv_state.2.0",
+              "3.conv_state.2.1",
+              "3.recurrent_state.1",
+              "4.conv_state.0.0",
+              "4.conv_state.0.1",
+              "4.conv_state.1.0",
+              "4.conv_state.1.1",
+              "4.conv_state.2.0",
+              "4.conv_state.2.1",
+              "4.recurrent_state.0",
+              "4.recurrent_state.1",
+              "4.recurrent_state.3",
+              "5.conv_state.0.0",
+              "5.conv_state.0.1",
+              "5.conv_state.1.0",
+              "5.conv_state.1.1",
+              "5.conv_state.2.0",
+              "5.conv_state.2.1",
+              "5.recurrent_state.0",
+              "5.recurrent_state.2",
+              "6.conv_state.0.0",
+              "6.conv_state.0.1",
+              "6.conv_state.1.0",
+              "6.conv_state.1.1",
+              "6.conv_state.2.0",
+              "6.conv_state.2.1",
+              "6.recurrent_state.0",
+              "6.recurrent_state.3",
+              "7.conv_state.0.0",
+              "7.conv_state.0.1",
+              "7.conv_state.1.0",
+              "7.conv_state.1.1",
+              "7.conv_state.2.0",
+              "7.conv_state.2.1",
+              "7.recurrent_state.0",
+              "7.recurrent_state.3",
+              "8.conv_state.0.0",
+              "8.conv_state.0.1",
+              "8.conv_state.1.0",
+              "8.conv_state.1.1",
+              "8.conv_state.2.0",
+              "8.conv_state.2.1",
+              "8.recurrent_state.1",
+              "8.recurrent_state.3",
+              "9.conv_state.0.0",
+              "9.conv_state.0.1",
+              "9.conv_state.1.0",
+              "9.conv_state.1.1",
+              "9.conv_state.2.0",
+              "9.conv_state.2.1",
+              "9.recurrent_state.1",
+              "9.recurrent_state.2",
+              "9.recurrent_state.3"
+            ],
+            "max_abs": 74.3125
+          },
+          "cache_cursor": 6,
+          "whole_cache_cursor": 6
+        }
+      }
+    },
+    "skip_expert_padding": {
+      "whole": {
+        "calls": 24,
+        "nonchronological": 0,
+        "convolution_backends": [
+          "fla_triton_decode",
+          "fla_triton_prefill"
+        ]
+      },
+      "splits": {
+        "prefill_decode": {
+          "chunks": [
+            2,
+            1,
+            1,
+            1,
+            1
+          ],
+          "packing": {
+            "calls": 120,
+            "nonchronological": 0,
+            "convolution_backends": [
+              "fla_triton_decode",
+              "fla_triton_prefill"
+            ]
+          },
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              6,
+              32000
+            ],
+            "max_abs": 0.03125,
+            "mean_abs": 0.0025377250276505947,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "first_exact_difference": {
+            "layer": 0,
+            "stage": "router_logits",
+            "exact": false,
+            "first_changed_token": 3,
+            "first_outside_tolerance_token": null,
+            "comparison": {
+              "pass_": true,
+              "shape": [
+                1,
+                6,
+                4
+              ],
+              "max_abs": 0.00048828125,
+              "mean_abs": 2.8133392333984375e-05,
+              "within_fraction": 1.0,
+              "top1_agreement": 1.0
+            }
+          },
+          "first_outside_tolerance": null,
+          "routing": {
+            "layer_tokens": 144,
+            "set_agreement": 1.0,
+            "order_agreement": 1.0,
+            "changed_sets": 0,
+            "same_set_different_order": 0,
+            "first_set_change": null,
+            "first_rank_only_change": null,
+            "set_changes": []
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 251,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.015625
+          },
+          "cache_cursor": 6,
+          "whole_cache_cursor": 6
+        },
+        "two_chunks": {
+          "chunks": [
+            2,
+            4
+          ],
+          "packing": {
+            "calls": 48,
+            "nonchronological": 0,
+            "convolution_backends": [
+              "fla_triton_decode",
+              "fla_triton_prefill"
+            ]
+          },
+          "logits": {
+            "pass_": false,
+            "shape": [
+              1,
+              6,
+              32000
+            ],
+            "max_abs": 0.9296875,
+            "mean_abs": 0.048889029771089554,
+            "within_fraction": 0.990109384059906,
+            "top1_agreement": 1.0
+          },
+          "first_exact_difference": {
+            "layer": 0,
+            "stage": "attention_output",
+            "exact": false,
+            "first_changed_token": 3,
+            "first_outside_tolerance_token": null,
+            "comparison": {
+              "pass_": true,
+              "shape": [
+                1,
+                6,
+                2048
+              ],
+              "max_abs": 0.009912490844726562,
+              "mean_abs": 0.0007388901431113482,
+              "within_fraction": 1.0,
+              "top1_agreement": 0.8333333134651184
+            }
+          },
+          "first_outside_tolerance": {
+            "layer": 1,
+            "stage": "attention_output",
+            "exact": false,
+            "first_changed_token": 2,
+            "first_outside_tolerance_token": 4,
+            "comparison": {
+              "pass_": false,
+              "shape": [
+                1,
+                6,
+                2048
+              ],
+              "max_abs": 0.369140625,
+              "mean_abs": 0.00455063721165061,
+              "within_fraction": 0.9998372197151184,
+              "top1_agreement": 1.0
+            }
+          },
+          "routing": {
+            "layer_tokens": 144,
+            "set_agreement": 0.9791666666666666,
+            "order_agreement": 0.9652777777777778,
+            "changed_sets": 3,
+            "same_set_different_order": 2,
+            "first_set_change": {
+              "layer": 5,
+              "token": 2,
+              "whole": [
+                2,
+                1
+              ],
+              "split": [
+                2,
+                0
+              ],
+              "whole_probability_margin": 0.002323731780052185,
+              "split_probability_margin": 0.010165929794311523,
+              "whole_logit_margin": 0.009521484375,
+              "split_logit_margin": 0.041961669921875
+            },
+            "first_rank_only_change": {
+              "layer": 7,
+              "token": 4,
+              "whole": [
+                0,
+                2
+              ],
+              "split": [
+                2,
+                0
+              ]
+            },
+            "set_changes": [
+              {
+                "layer": 5,
+                "token": 2,
+                "whole": [
+                  2,
+                  1
+                ],
+                "split": [
+                  2,
+                  0
+                ],
+                "whole_probability_margin": 0.002323731780052185,
+                "split_probability_margin": 0.010165929794311523,
+                "whole_logit_margin": 0.009521484375,
+                "split_logit_margin": 0.041961669921875
+              },
+              {
+                "layer": 8,
+                "token": 2,
+                "whole": [
+                  0,
+                  3
+                ],
+                "split": [
+                  0,
+                  2
+                ],
+                "whole_probability_margin": 0.0064536333084106445,
+                "split_probability_margin": 0.030317649245262146,
+                "whole_logit_margin": 0.025482177734375,
+                "split_logit_margin": 0.12005615234375
+              },
+              {
+                "layer": 15,
+                "token": 4,
+                "whole": [
+                  1,
+                  0
+                ],
+                "split": [
+                  1,
+                  2
+                ],
+                "whole_probability_margin": 0.0034624040126800537,
+                "split_probability_margin": 0.0068535953760147095,
+                "whole_logit_margin": 0.013671875,
+                "split_logit_margin": 0.0272216796875
+              }
+            ]
+          },
+          "cache": {
+            "pass_": false,
+            "tensor_count": 251,
+            "missing": [],
+            "unexpected": [
+              "8.recurrent_state.2"
+            ],
+            "mismatched": [
+              "0.recurrent_state.0",
+              "0.recurrent_state.3",
+              "1.conv_state.0.0",
+              "1.conv_state.0.1",
+              "1.conv_state.1.0",
+              "1.conv_state.1.1",
+              "1.conv_state.2.0",
+              "1.conv_state.2.1",
+              "1.recurrent_state.2",
+              "1.recurrent_state.3",
+              "10.conv_state.0.0",
+              "10.conv_state.0.1",
+              "10.conv_state.1.0",
+              "10.conv_state.1.1",
+              "10.conv_state.2.0",
+              "10.conv_state.2.1",
+              "10.recurrent_state.1",
+              "10.recurrent_state.3",
+              "11.conv_state.0.0",
+              "11.conv_state.0.1",
+              "11.conv_state.1.0",
+              "11.conv_state.1.1",
+              "11.conv_state.2.0",
+              "11.conv_state.2.1",
+              "11.recurrent_state.3",
+              "12.conv_state.0.0",
+              "12.conv_state.0.1",
+              "12.conv_state.1.0",
+              "12.conv_state.1.1",
+              "12.conv_state.2.0",
+              "12.conv_state.2.1",
+              "12.recurrent_state.3",
+              "13.conv_state.0.0",
+              "13.conv_state.0.1",
+              "13.conv_state.1.0",
+              "13.conv_state.1.1",
+              "13.conv_state.2.0",
+              "13.conv_state.2.1",
+              "13.recurrent_state.2",
+              "14.conv_state.0.0",
+              "14.conv_state.0.1",
+              "14.conv_state.1.0",
+              "14.conv_state.1.1",
+              "14.conv_state.2.0",
+              "14.conv_state.2.1",
+              "15.conv_state.0.0",
+              "15.conv_state.0.1",
+              "15.conv_state.1.0",
+              "15.conv_state.1.1",
+              "15.conv_state.2.0",
+              "15.conv_state.2.1",
+              "15.recurrent_state.0",
+              "15.recurrent_state.1",
+              "15.recurrent_state.2",
+              "16.conv_state.0.0",
+              "16.conv_state.0.1",
+              "16.conv_state.1.0",
+              "16.conv_state.1.1",
+              "16.conv_state.2.0",
+              "16.conv_state.2.1",
+              "17.conv_state.0.0",
+              "17.conv_state.0.1",
+              "17.conv_state.1.0",
+              "17.conv_state.1.1",
+              "17.conv_state.2.0",
+              "17.conv_state.2.1",
+              "17.recurrent_state.0",
+              "17.recurrent_state.1",
+              "17.recurrent_state.2",
+              "17.recurrent_state.3",
+              "17.recurrent_state.4",
+              "18.conv_state.0.0",
+              "18.conv_state.0.1",
+              "18.conv_state.1.0",
+              "18.conv_state.1.1",
+              "18.conv_state.2.0",
+              "18.conv_state.2.1",
+              "18.recurrent_state.3",
+              "19.conv_state.0.0",
+              "19.conv_state.0.1",
+              "19.conv_state.1.0",
+              "19.conv_state.1.1",
+              "19.conv_state.2.0",
+              "19.conv_state.2.1",
+              "19.recurrent_state.1",
+              "19.recurrent_state.2",
+              "2.conv_state.0.0",
+              "2.conv_state.0.1",
+              "2.conv_state.1.0",
+              "2.conv_state.1.1",
+              "2.conv_state.2.0",
+              "2.conv_state.2.1",
+              "2.recurrent_state.0",
+              "2.recurrent_state.2",
+              "2.recurrent_state.3",
+              "20.conv_state.0.0",
+              "20.conv_state.0.1",
+              "20.conv_state.1.0",
+              "20.conv_state.1.1",
+              "20.conv_state.2.0",
+              "20.conv_state.2.1",
+              "20.recurrent_state.0",
+              "20.recurrent_state.2",
+              "20.recurrent_state.3",
+              "21.conv_state.0.0",
+              "21.conv_state.0.1",
+              "21.conv_state.1.0",
+              "21.conv_state.1.1",
+              "21.conv_state.2.0",
+              "21.conv_state.2.1",
+              "21.recurrent_state.0",
+              "21.recurrent_state.2",
+              "21.recurrent_state.3",
+              "21.recurrent_state.4",
+              "22.conv_state.0.0",
+              "22.conv_state.0.1",
+              "22.conv_state.1.0",
+              "22.conv_state.1.1",
+              "22.conv_state.2.0",
+              "22.conv_state.2.1",
+              "22.recurrent_state.1",
+              "22.recurrent_state.2",
+              "23.conv_state.0.0",
+              "23.conv_state.0.1",
+              "23.conv_state.1.0",
+              "23.conv_state.1.1",
+              "23.conv_state.2.0",
+              "23.conv_state.2.1",
+              "23.recurrent_state.2",
+              "3.conv_state.0.0",
+              "3.conv_state.0.1",
+              "3.conv_state.1.0",
+              "3.conv_state.1.1",
+              "3.conv_state.2.0",
+              "3.conv_state.2.1",
+              "3.recurrent_state.1",
+              "4.conv_state.0.0",
+              "4.conv_state.0.1",
+              "4.conv_state.1.0",
+              "4.conv_state.1.1",
+              "4.conv_state.2.0",
+              "4.conv_state.2.1",
+              "4.recurrent_state.0",
+              "4.recurrent_state.1",
+              "5.conv_state.0.0",
+              "5.conv_state.0.1",
+              "5.conv_state.1.0",
+              "5.conv_state.1.1",
+              "5.conv_state.2.0",
+              "5.conv_state.2.1",
+              "5.recurrent_state.0",
+              "5.recurrent_state.1",
+              "5.recurrent_state.2",
+              "6.conv_state.0.0",
+              "6.conv_state.0.1",
+              "6.conv_state.1.0",
+              "6.conv_state.1.1",
+              "6.conv_state.2.0",
+              "6.conv_state.2.1",
+              "6.recurrent_state.0",
+              "6.recurrent_state.3",
+              "7.conv_state.0.0",
+              "7.conv_state.0.1",
+              "7.conv_state.1.0",
+              "7.conv_state.1.1",
+              "7.conv_state.2.0",
+              "7.conv_state.2.1",
+              "7.recurrent_state.0",
+              "7.recurrent_state.3",
+              "8.conv_state.0.0",
+              "8.conv_state.0.1",
+              "8.conv_state.1.0",
+              "8.conv_state.1.1",
+              "8.conv_state.2.0",
+              "8.conv_state.2.1",
+              "8.recurrent_state.0",
+              "8.recurrent_state.1",
+              "8.recurrent_state.3",
+              "9.conv_state.0.0",
+              "9.conv_state.0.1",
+              "9.conv_state.1.0",
+              "9.conv_state.1.1",
+              "9.conv_state.2.0",
+              "9.conv_state.2.1",
+              "9.recurrent_state.2",
+              "9.recurrent_state.3"
+            ],
+            "max_abs": 20.5625
+          },
+          "cache_cursor": 6,
+          "whole_cache_cursor": 6
+        },
+        "tokenwise": {
+          "chunks": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "packing": {
+            "calls": 144,
+            "nonchronological": 0,
+            "convolution_backends": [
+              "fla_triton_decode"
+            ]
+          },
+          "logits": {
+            "pass_": true,
+            "shape": [
+              1,
+              6,
+              32000
+            ],
+            "max_abs": 0.0234375,
+            "mean_abs": 0.0025841942988336086,
+            "within_fraction": 1.0,
+            "top1_agreement": 1.0
+          },
+          "first_exact_difference": {
+            "layer": 0,
+            "stage": "router_logits",
+            "exact": false,
+            "first_changed_token": 0,
+            "first_outside_tolerance_token": null,
+            "comparison": {
+              "pass_": true,
+              "shape": [
+                1,
+                6,
+                4
+              ],
+              "max_abs": 0.00048828125,
+              "mean_abs": 7.009506225585938e-05,
+              "within_fraction": 1.0,
+              "top1_agreement": 1.0
+            }
+          },
+          "first_outside_tolerance": null,
+          "routing": {
+            "layer_tokens": 144,
+            "set_agreement": 1.0,
+            "order_agreement": 1.0,
+            "changed_sets": 0,
+            "same_set_different_order": 0,
+            "first_set_change": null,
+            "first_rank_only_change": null,
+            "set_changes": []
+          },
+          "cache": {
+            "pass_": true,
+            "tensor_count": 251,
+            "missing": [],
+            "unexpected": [],
+            "mismatched": [],
+            "max_abs": 0.03125
+          },
+          "cache_cursor": 6,
+          "whole_cache_cursor": 6
+        }
+      },
+      "same_schedule_vs_original": {
+        "whole": {
+          "pass_": true,
+          "shape": [
+            1,
+            6,
+            32000
+          ],
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "within_fraction": 1.0,
+          "top1_agreement": 1.0
+        },
+        "prefill_decode": {
+          "pass_": false,
+          "shape": [
+            1,
+            6,
+            32000
+          ],
+          "max_abs": 1.6337890625,
+          "mean_abs": 0.05985677242279053,
+          "within_fraction": 0.9898853898048401,
+          "top1_agreement": 1.0
+        },
+        "two_chunks": {
+          "pass_": false,
+          "shape": [
+            1,
+            6,
+            32000
+          ],
+          "max_abs": 0.94140625,
+          "mean_abs": 0.06587110459804535,
+          "within_fraction": 0.9967864751815796,
+          "top1_agreement": 1.0
+        },
+        "tokenwise": {
+          "pass_": false,
+          "shape": [
+            1,
+            6,
+            32000
+          ],
+          "max_abs": 1.880859375,
+          "mean_abs": 0.06119740754365921,
+          "within_fraction": 0.9887291789054871,
+          "top1_agreement": 1.0
+        }
+      }
+    }
+  },
+  "fixed_route_probe": {
+    "layer": 0,
+    "expert": 3,
+    "token": 3,
+    "fixed_top2": [
+      [
+        0,
+        3
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        0,
+        3
+      ]
+    ],
+    "gates": {
+      "unmodified_padding_reproduces_anchor": true,
+      "valid_only_experts_match_torch_oracle": true
+    },
+    "arms": {
+      "a3_both": {
+        "whole": {
+          "experts": [
+            {
+              "expert": 0,
+              "tokens": [
+                0,
+                1,
+                4,
+                5
+              ],
+              "output": {
+                "pass_": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0
+              },
+              "cache_exact": true
+            },
+            {
+              "expert": 1,
+              "tokens": [
+                2
+              ],
+              "output": {
+                "pass_": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0
+              },
+              "cache_exact": true
+            },
+            {
+              "expert": 2,
+              "tokens": [
+                2,
+                3
+              ],
+              "output": {
+                "pass_": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0
+              },
+              "cache_exact": true
+            },
+            {
+              "expert": 3,
+              "tokens": [
+                0,
+                1,
+                3,
+                4,
+                5
+              ],
+              "output": {
+                "pass_": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0
+              },
+              "cache_exact": true
+            }
+          ],
+          "anchor_window": [
+            -1,
+            0,
+            1,
+            3
+          ],
+          "anchor_output": {
+            "pass_": true,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          }
+        },
+        "prefill_decode": {
+          "experts": [
+            {
+              "expert": 0,
+              "tokens": [
+                0,
+                1,
+                4,
+                5
+              ],
+              "output": {
+                "pass_": false,
+                "max_abs": 51.96212387084961,
+                "mean_abs": 0.20906484127044678
+              },
+              "cache_exact": false
+            },
+            {
+              "expert": 1,
+              "tokens": [
+                2
+              ],
+              "output": {
+                "pass_": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0
+              },
+              "cache_exact": false
+            },
+            {
+              "expert": 2,
+              "tokens": [
+                2,
+                3
+              ],
+              "output": {
+                "pass_": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0
+              },
+              "cache_exact": false
+            },
+            {
+              "expert": 3,
+              "tokens": [
+                0,
+                1,
+                3,
+                4,
+                5
+              ],
+              "output": {
+                "pass_": false,
+                "max_abs": 32.5625,
+                "mean_abs": 0.1725461333990097
+              },
+              "cache_exact": false
+            }
+          ],
+          "anchor_window": [
+            0,
+            1,
+            -1,
+            3
+          ],
+          "anchor_output": {
+            "pass_": false,
+            "max_abs": 32.5625,
+            "mean_abs": 0.45275822281837463
+          }
+        },
+        "two_chunks": {
+          "experts": [
+            {
+              "expert": 0,
+              "tokens": [
+                0,
+                1,
+                4,
+                5
+              ],
+              "output": {
+                "pass_": false,
+                "max_abs": 51.96212387084961,
+                "mean_abs": 0.20906484127044678
+              },
+              "cache_exact": false
+            },
+            {
+              "expert": 1,
+              "tokens": [
+                2
+              ],
+              "output": {
+                "pass_": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0
+              },
+              "cache_exact": true
+            },
+            {
+              "expert": 2,
+              "tokens": [
+                2,
+                3
+              ],
+              "output": {
+                "pass_": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0
+              },
+              "cache_exact": true
+            },
+            {
+              "expert": 3,
+              "tokens": [
+                0,
+                1,
+                3,
+                4,
+                5
+              ],
+              "output": {
+                "pass_": false,
+                "max_abs": 32.5625,
+                "mean_abs": 0.1725461333990097
+              },
+              "cache_exact": false
+            }
+          ],
+          "anchor_window": [
+            0,
+            1,
+            -1,
+            3
+          ],
+          "anchor_output": {
+            "pass_": false,
+            "max_abs": 32.5625,
+            "mean_abs": 0.45275822281837463
+          }
+        },
+        "tokenwise": {
+          "experts": [
+            {
+              "expert": 0,
+              "tokens": [
+                0,
+                1,
+                4,
+                5
+              ],
+              "output": {
+                "pass_": false,
+                "max_abs": 51.96212387084961,
+                "mean_abs": 0.20906484127044678
+              },
+              "cache_exact": false
+            },
+            {
+              "expert": 1,
+              "tokens": [
+                2
+              ],
+              "output": {
+                "pass_": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0
+              },
+              "cache_exact": false
+            },
+            {
+              "expert": 2,
+              "tokens": [
+                2,
+                3
+              ],
+              "output": {
+                "pass_": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0
+              },
+              "cache_exact": false
+            },
+            {
+              "expert": 3,
+              "tokens": [
+                0,
+                1,
+                3,
+                4,
+                5
+              ],
+              "output": {
+                "pass_": false,
+                "max_abs": 32.5625,
+                "mean_abs": 0.1725461333990097
+              },
+              "cache_exact": false
+            }
+          ],
+          "anchor_window": [
+            0,
+            1,
+            -1,
+            3
+          ],
+          "anchor_output": {
+            "pass_": false,
+            "max_abs": 32.5625,
+            "mean_abs": 0.45275822281837463
+          }
+        }
+      },
+      "skip_expert_padding": {
+        "whole": {
+          "experts": [
+            {
+              "expert": 0,
+              "tokens": [
+                0,
+                1,
+                4,
+                5
+              ],
+              "output": {
+                "pass_": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0
+              },
+              "cache_exact": true
+            },
+            {
+              "expert": 1,
+              "tokens": [
+                2
+              ],
+              "output": {
+                "pass_": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0
+              },
+              "cache_exact": true
+            },
+            {
+              "expert": 2,
+              "tokens": [
+                2,
+                3
+              ],
+              "output": {
+                "pass_": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0
+              },
+              "cache_exact": true
+            },
+            {
+              "expert": 3,
+              "tokens": [
+                0,
+                1,
+                3,
+                4,
+                5
+              ],
+              "output": {
+                "pass_": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0
+              },
+              "cache_exact": true
+            }
+          ],
+          "anchor_window": [
+            -1,
+            0,
+            1,
+            3
+          ],
+          "anchor_output": {
+            "pass_": true,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          }
+        },
+        "prefill_decode": {
+          "experts": [
+            {
+              "expert": 0,
+              "tokens": [
+                0,
+                1,
+                4,
+                5
+              ],
+              "output": {
+                "pass_": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0
+              },
+              "cache_exact": true
+            },
+            {
+              "expert": 1,
+              "tokens": [
+                2
+              ],
+              "output": {
+                "pass_": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0
+              },
+              "cache_exact": true
+            },
+            {
+              "expert": 2,
+              "tokens": [
+                2,
+                3
+              ],
+              "output": {
+                "pass_": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0
+              },
+              "cache_exact": true
+            },
+            {
+              "expert": 3,
+              "tokens": [
+                0,
+                1,
+                3,
+                4,
+                5
+              ],
+              "output": {
+                "pass_": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0
+              },
+              "cache_exact": true
+            }
+          ],
+          "anchor_window": [
+            -1,
+            0,
+            1,
+            3
+          ],
+          "anchor_output": {
+            "pass_": true,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          }
+        },
+        "two_chunks": {
+          "experts": [
+            {
+              "expert": 0,
+              "tokens": [
+                0,
+                1,
+                4,
+                5
+              ],
+              "output": {
+                "pass_": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0
+              },
+              "cache_exact": true
+            },
+            {
+              "expert": 1,
+              "tokens": [
+                2
+              ],
+              "output": {
+                "pass_": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0
+              },
+              "cache_exact": true
+            },
+            {
+              "expert": 2,
+              "tokens": [
+                2,
+                3
+              ],
+              "output": {
+                "pass_": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0
+              },
+              "cache_exact": true
+            },
+            {
+              "expert": 3,
+              "tokens": [
+                0,
+                1,
+                3,
+                4,
+                5
+              ],
+              "output": {
+                "pass_": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0
+              },
+              "cache_exact": true
+            }
+          ],
+          "anchor_window": [
+            -1,
+            0,
+            1,
+            3
+          ],
+          "anchor_output": {
+            "pass_": true,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          }
+        },
+        "tokenwise": {
+          "experts": [
+            {
+              "expert": 0,
+              "tokens": [
+                0,
+                1,
+                4,
+                5
+              ],
+              "output": {
+                "pass_": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0
+              },
+              "cache_exact": true
+            },
+            {
+              "expert": 1,
+              "tokens": [
+                2
+              ],
+              "output": {
+                "pass_": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0
+              },
+              "cache_exact": true
+            },
+            {
+              "expert": 2,
+              "tokens": [
+                2,
+                3
+              ],
+              "output": {
+                "pass_": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0
+              },
+              "cache_exact": true
+            },
+            {
+              "expert": 3,
+              "tokens": [
+                0,
+                1,
+                3,
+                4,
+                5
+              ],
+              "output": {
+                "pass_": true,
+                "max_abs": 0.0,
+                "mean_abs": 0.0
+              },
+              "cache_exact": true
+            }
+          ],
+          "anchor_window": [
+            -1,
+            0,
+            1,
+            3
+          ],
+          "anchor_output": {
+            "pass_": true,
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          }
+        }
+      }
+    }
+  },
+  "mean_abs_logit_error_reduction": {
+    "prefill_decode": 0.05860515171661973,
+    "two_chunks": 0.018967997282743454,
+    "tokenwise": 0.058779912535101175
+  },
+  "candidate_logit_gate": false,
+  "diagnosis": "A.3.1 padding intervention measured. A.4 remains a separate gate.",
+  "elapsed_seconds": 147.82299520499998
+}
