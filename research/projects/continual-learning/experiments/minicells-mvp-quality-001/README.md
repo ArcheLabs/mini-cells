@@ -76,3 +76,40 @@ If the protocol needs correction, use a new version and output directory.
 
 Local software tests use CPU fixtures. A product quality verdict requires
 the actual T4 held-out artifact.
+
+## Published result
+
+**Engineering PASS · Product FAIL.** The Kaggle T4 run completed 193 questions
+and 842 evaluation records, including all 560 held-out records. All declared
+result hashes matched upon download. Eight distinct recurrent state hashes
+were recorded. There were no execution errors, fallbacks or selection/execution
+mismatches. [Published artifacts](https://github.com/ArcheLabs/mini-cells/tree/8a078286380a0f95a55bacfdf80193274f943d9e/artifacts/experiments/minicells-mvp-quality-001/2a749bd93a77).
+
+| Held-out arm | Related-answer mean NLL | Difference vs A | Paired 95% CI | Numeric exact match |
+| --- | ---: | ---: | --- | ---: |
+| A | 5.763 | reference | — | 0/128 |
+| B | 6.675 | +0.912 | [0.702, 1.118] | 0/128 |
+| C | 6.337 | +0.574 | [0.380, 0.764] | 0/128 |
+| D | 6.430 | +0.667 | [0.464, 0.873] | 0/128 |
+
+NLL covers the 104 related held-out questions. Exact match covers all 128.
+Every held-out generation, including the single-Cell ablations, reached
+the eight-token ceiling without returning a valid integer answer. A
+post-run scan of raw outputs also found zero occurrences of the complete
+gold number as a digit sequence. The frozen exact-match contrast is zero,
+with a degenerate empirical bootstrap interval of [0, 0]. This establishes
+failure under the tested generation protocol. A floor across arms limits
+the ability of this metric to distinguish selection from model or prompt
+behavior.
+
+Automatic routing achieved Recall@2 18.75%, Precision@2 11.54%, Hit@2
+22.12%, MRR 0.330, and NDCG@2 0.157. The uniform random Top-2 reference
+for Recall@2 is 25% by construction. Both relevant Cells were selected
+on 1/24 cross-Cell questions, and the no-threshold configuration selected
+two Cells on all 24 unrelated questions. Teacher-forced performance also
+declined under oracle selection on single-Cell questions (B − A
++1.226 NLL, 95% CI [1.013, 1.442]). Pair versus best single on cross-Cell
+questions was +0.235 NLL (95% CI [−0.013, 0.461]). These results provide
+no evidence of complementary gains or of a benefit from automatic
+selection. They leave the contributions of write, retention, read and
+fusion unresolved.
