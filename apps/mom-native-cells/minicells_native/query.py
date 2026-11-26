@@ -65,27 +65,8 @@ def select_cells(runtime, scores):
     return ranking, selected
 
 
-@torch.inference_mode()
-def run_query(runtime, prompt, cells, max_new_tokens, temperature, weights=None, *, token_ids=None, probe=None):
-    started = time.perf_counter()
+def resolve_selection(runtime, reader, tokens, mode, candidates, weights=None, probe=None):
     phase = probe.phase if probe else lambda *_: nullcontext()
-    if not isinstance(prompt, str) or not prompt.strip():
-        raise ValueError("Query prompt must be nonempty text")
-    if type(max_new_tokens) is not int or not 1 <= max_new_tokens <= 512:
-        raise ValueError("max_new_tokens must be between 1 and 512")
-    if not math.isfinite(temperature) or not 0 <= temperature <= 2:
-        raise ValueError("temperature must be between 0 and 2")
-    mode, candidates = runtime._candidate_ids(cells)
-    backbone = runtime._backbone
-    tokens = (backbone.tokenizer.encode(f"Question: {prompt}\nAnswer:", add_special_tokens=False)
-              if token_ids is None else token_ids)
-    if not tokens or len(tokens) + max_new_tokens > 2048:
-        raise ValueError("Query and generation must fit within 2048 tokens")
-    reader = FusionReader(backbone)
-    cuda = torch.device(backbone.device).type == "cuda"
-    if cuda:
-        torch.cuda.reset_peak_memory_stats(backbone.device)
-
     scores, fallback, ranking = {}, None, []
     scoring_started = time.perf_counter()
     if mode == "auto":
@@ -112,12 +93,17 @@ def run_query(runtime, prompt, cells, max_new_tokens, temperature, weights=None,
             fallback = "explicit_no_cells"
     selection = time.perf_counter() - selection_started
 
-    generation_started = time.perf_counter()
-    if probe:
-        probe.selected = list(selected)
+    return selected, scores, ranking, fallback, weights, scoring, selection
+
+
+def working_step(runtime, reader, selected, weights=None, probe=None):
+    backbone = runtime._backbone
+    phase = probe.phase if probe else lambda *_: nullcontext()
     with phase("selected_cell_load"):
         caches = (reader.start(runtime.cells._state(cell) for cell in selected)
                   if selected else [backbone.stream({})])
+    if probe:
+        probe.executed = list(selected)
     if selected and weights is None:
         def step(ids):
             with phase("fusion_forward"):
@@ -125,6 +111,37 @@ def run_query(runtime, prompt, cells, max_new_tokens, temperature, weights=None,
     else:
         def step(ids):
             return backbone.step(ids, caches, weights if selected else [1.0])
+    return step, caches
+
+
+@torch.inference_mode()
+def run_query(runtime, prompt, cells, max_new_tokens, temperature, weights=None, *, token_ids=None, probe=None):
+    started = time.perf_counter()
+    phase = probe.phase if probe else lambda *_: nullcontext()
+    if not isinstance(prompt, str) or not prompt.strip():
+        raise ValueError("Query prompt must be nonempty text")
+    if type(max_new_tokens) is not int or not 1 <= max_new_tokens <= 512:
+        raise ValueError("max_new_tokens must be between 1 and 512")
+    if not math.isfinite(temperature) or not 0 <= temperature <= 2:
+        raise ValueError("temperature must be between 0 and 2")
+    mode, candidates = runtime._candidate_ids(cells)
+    backbone = runtime._backbone
+    tokens = (backbone.tokenizer.encode(f"Question: {prompt}\nAnswer:", add_special_tokens=False)
+              if token_ids is None else token_ids)
+    if not tokens or len(tokens) + max_new_tokens > 2048:
+        raise ValueError("Query and generation must fit within 2048 tokens")
+    reader = FusionReader(backbone)
+    cuda = torch.device(backbone.device).type == "cuda"
+    if cuda:
+        torch.cuda.reset_peak_memory_stats(backbone.device)
+
+    selected, scores, ranking, fallback, weights, scoring, selection = resolve_selection(
+        runtime, reader, tokens, mode, candidates, weights, probe)
+
+    generation_started = time.perf_counter()
+    if probe:
+        probe.selected = list(selected)
+    step, caches = working_step(runtime, reader, selected, weights, probe)
     # Keep the same working caches across chunks and generation. The prefill path
     # handles queries longer than T4's recurrent limit without using Chunk kernels.
     final_start = ((len(tokens) - 1) // 64) * 64
