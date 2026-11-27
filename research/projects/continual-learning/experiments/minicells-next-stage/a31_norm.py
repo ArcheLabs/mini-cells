@@ -69,11 +69,12 @@ def config(module, tensor):
     best = getattr(kernel, "best_config", None)
     block = getattr(best, "kwargs", None)
     bt = block.get("BT") if block else None
-    return dict(kernel=getattr(kernel.fn, "__name__", type(kernel.fn).__name__),
+    return dict(kernel=getattr(getattr(kernel, "base_fn", kernel.fn), "__name__", type(kernel.fn).__name__),
                 D=dimension, T=rows, NB=math.ceil(rows / 2048) if dimension <= 512 else None,
                 BD=min(65536 // tensor.element_size(), 1 << (dimension - 1).bit_length()),
                 BT=bt, launch_grid=([math.ceil(rows / bt)] if bt else [rows] if dimension > 512 else None),
                 num_warps=getattr(best, "num_warps", None), num_stages=getattr(best, "num_stages", None),
+                num_ctas=getattr(best, "num_ctas", None),
                 autocast=torch.is_autocast_enabled("cuda"))
 
 
