@@ -69,6 +69,15 @@ def publishable(out, fmt, result, started):
             lines.append(f"| {n} | {level['robust_recalled']} | {single['n']} |")
         lines += ["", "Capacity uses both wordings and, for 3 or more facts, both target orders.",
                   "Per-arm results and paired differences are in `statistics.json`."]
+    reference = result.get("reference_capacity")
+    if reference:
+        lines += ["", "| Facts stored | Full groups | Cell groups | Full facts | Cell facts |",
+                  "| --- | ---: | ---: | ---: | ---: |"]
+        for n, stage in reference.items():
+            full, cell = stage["full"], stage["cell"]
+            groups, facts = stage["groups"], stage["target_facts"]
+            lines.append(f"| {n} | {full['groups_passed']}/{groups} | {cell['groups_passed']}/{groups} "
+                         f"| {full['facts_passed']}/{facts} | {cell['facts_passed']}/{facts} |")
     if result.get("next_action"):
         lines += ["", result["next_action"]]
     (out / "report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")

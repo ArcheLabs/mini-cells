@@ -29,8 +29,8 @@ CONFIG = dict(facts=FACTS, seed=SEED, bootstrap_seed=BOOTSTRAP_SEED,
               score="teacher-forced summed log probability", bos=False, dataset_sha256=DATASET_SHA256)
 
 
-def make_dataset(tokenizer):
-    rng = random.Random(SEED)
+def make_dataset(tokenizer, *, seed=SEED, facts_count=FACTS):
+    rng = random.Random(seed)
     used = set()
     facts = []
 
@@ -73,7 +73,7 @@ def make_dataset(tokenizer):
         used.update((name, a, b))
         facts.append(dict(index=len(facts), project=name, values=values, texts=texts, queries=targets,
                           write_tokens={key: ids(text) for key, text in texts.items()}))
-        if len(facts) == FACTS:
+        if len(facts) == facts_count:
             return facts
     raise RuntimeError("Unable to construct the frozen equal-token fixture")
 
