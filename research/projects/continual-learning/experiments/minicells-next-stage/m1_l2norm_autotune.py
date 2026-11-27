@@ -259,6 +259,7 @@ def main():
                 raise RuntimeError(f"{role}: {load_json(path) if path.exists() else child.returncode}")
         evaluate(out, result)
     except BundleUnavailable as exc:
+        print(f"A3_BUNDLE_BLOCKED {exc}", flush=True)
         result.update(status="BLOCKED", diagnosis=str(exc))
     except Exception as exc:
         result.update(diagnosis=f"{type(exc).__name__}: {exc}")

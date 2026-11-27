@@ -7,7 +7,6 @@ import json
 import os
 from pathlib import Path
 import re
-import shutil
 import subprocess
 import sys
 import time
@@ -33,6 +32,7 @@ BUNDLE_SHA256 = "b07fcb2f0fe5efe9836608fa1ff54faae2bd81eb0402a35b75ae1d0c2c34580
 PROCESSES = ("P0", "P2", "P3")
 REPEATS = 10
 CAPTURE_REPEATS = 3
+KAGGLE_DOWNLOAD_VERSION = "2.2.5"
 
 
 class BundleUnavailable(RuntimeError):
@@ -41,6 +41,50 @@ class BundleUnavailable(RuntimeError):
 
 def select_bundle(paths, expected=BUNDLE_SHA256):
     return next((path for path in paths if path.is_file() and digest_file(path) == expected), None)
+
+
+def kaggle_download_token():
+    token = os.getenv("KAGGLE_API_TOKEN", "").strip()
+    if token:
+        return token
+    try:
+        from kaggle_secrets import UserSecretsClient
+
+        token = UserSecretsClient().get_secret("KAGGLE_API_TOKEN").strip()
+    except Exception:
+        raise BundleUnavailable("Kaggle download requires the attached KAGGLE_API_TOKEN Secret.") from None
+    if not token:
+        raise BundleUnavailable("KAGGLE_API_TOKEN Secret is empty.")
+    return token
+
+
+def download_historical_output(work, version):
+    token = kaggle_download_token()
+    target = work / "historical-output"
+    target.mkdir()
+    package = work / "kaggle-download-cli"
+    # Keep credentials out of the installer, command line and published artifacts.
+    env = {key: val for key, val in os.environ.items()
+           if key not in ("KAGGLE_API_TOKEN", "KAGGLE_KEY", "GITHUB_TOKEN", "HF_TOKEN")}
+    try:
+        subprocess.run([sys.executable, "-m", "pip", "install", "--disable-pip-version-check", "--quiet",
+                        "--target", str(package), f"kaggle=={KAGGLE_DOWNLOAD_VERSION}"], env=env,
+                       check=True, timeout=120, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except (OSError, subprocess.SubprocessError) as exc:
+        raise BundleUnavailable(f"Could not prepare version-aware Kaggle download CLI: {type(exc).__name__}") from None
+    env.update(KAGGLE_API_TOKEN=token, PYTHONPATH=str(package))
+    command = [sys.executable, "-c", "from kaggle.cli import main; main()", "kernels", "output", version,
+               "--file-pattern", r"(?:.*/)?prefix[.]cell$", "-q", "-p", str(target)]
+    try:
+        subprocess.run(command, env=env, check=True, timeout=240, capture_output=True, text=True)
+    except subprocess.CalledProcessError as exc:
+        # Report a classified HTTP status only. Server responses may include signed URLs.
+        error = re.search(r"\b(401|403|404|429)\b", str(exc.stderr))
+        status = f"HTTP {error.group(1)}" if error else f"exit {exc.returncode}"
+        raise BundleUnavailable(f"Kaggle historical output download failed ({status}).") from None
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        raise BundleUnavailable(f"Kaggle historical output download failed: {type(exc).__name__}.") from None
+    return target
 
 
 def recover_bundle(out, local_path, version, *, mounted_root=Path("/kaggle/input")):
@@ -54,23 +98,25 @@ def recover_bundle(out, local_path, version, *, mounted_root=Path("/kaggle/input
     if bundle is None and not local_path and version:
         if not re.fullmatch(r"[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/[1-9][0-9]*", version):
             raise BundleUnavailable("Use a fixed Kaggle owner/notebook/version number")
-        cli = shutil.which("kaggle")
-        if cli is None:
-            raise BundleUnavailable("Kaggle CLI unavailable. Attach the versioned Saved Output as input.")
-        target = out / "work" / "historical-output"
-        target.mkdir()
-        try:
-            subprocess.run([cli, "kernels", "output", version, "--file-pattern", r"(?:.*/)?prefix[.]cell$",
-                            "-p", str(target)], check=True, timeout=240)
-        except (OSError, subprocess.SubprocessError) as exc:
-            raise BundleUnavailable(f"Historical Kaggle output download failed: {type(exc).__name__}") from exc
-        bundle = select_bundle(sorted(target.rglob("prefix.cell")))
+        print("A3_BUNDLE_RECOVERY versioned Kaggle Saved Output", flush=True)
+        target = download_historical_output(out / "work", version)
+        candidates = sorted(target.rglob("prefix.cell"))
+        bundle = select_bundle(candidates)
         source = "versioned_cli_output"
     if bundle is None:
-        raise BundleUnavailable("A3 prefix.cell unavailable or SHA-256 mismatch. Attach the exact A3 Saved Output.")
+        if local_path and not candidates[0].is_file():
+            raise BundleUnavailable("A3_BUNDLE_PATH does not name a readable file.")
+        if candidates:
+            raise BundleUnavailable(
+                f"A3 Bundle SHA-256 mismatch in {len(candidates)} candidate file(s). Use A3 run 1349bcc11ee1.")
+        if source == "versioned_cli_output":
+            raise BundleUnavailable("The requested Kaggle Saved Output does not contain prefix.cell.")
+        raise BundleUnavailable(
+            "No mounted A3 prefix.cell found. Set A3_KAGGLE_REF=owner/notebook/version to download with the Secret.")
     write(out / "bundle_provenance.json",
           dict(a3_commit=A3_COMMIT, sha256=BUNDLE_SHA256, recovery_method=source,
-               kaggle_version=version if source == "versioned_cli_output" else None))
+               kaggle_version=version if source == "versioned_cli_output" else None,
+               kaggle_cli_version=KAGGLE_DOWNLOAD_VERSION if source == "versioned_cli_output" else None))
     write(out / "work" / "archive.json", dict(path=str(bundle.resolve())))
 
 

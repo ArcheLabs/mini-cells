@@ -4,6 +4,8 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from types import SimpleNamespace
 import json
+import subprocess
+import sys
 import unittest
 from unittest.mock import patch
 
@@ -72,9 +74,18 @@ class L2NormIsolationTest(unittest.TestCase):
             payload = b"exact historical bundle"
             expected = sha256(payload).hexdigest()
 
+            token = "fake-kaggle-secret"
+
             def download(cmd, **kwargs):
-                self.assertEqual(cmd[1:4], ["kernels", "output", "owner/notebook/7"])
-                self.assertEqual(cmd[5], r"(?:.*/)?prefix[.]cell$")
+                self.assertNotIn(token, cmd)
+                if "pip" in cmd:
+                    self.assertNotIn("KAGGLE_API_TOKEN", kwargs["env"])
+                    self.assertIn("kaggle==2.2.5", cmd)
+                    return
+                self.assertEqual(cmd[3:6], ["kernels", "output", "owner/notebook/7"])
+                self.assertEqual(cmd[7], r"(?:.*/)?prefix[.]cell$")
+                self.assertEqual(kwargs["env"]["KAGGLE_API_TOKEN"], token)
+                self.assertTrue(kwargs["capture_output"])
                 (Path(cmd[-1]) / "prefix.cell").write_bytes(payload)
 
             def select(paths):
@@ -83,7 +94,7 @@ class L2NormIsolationTest(unittest.TestCase):
             choose = experiment.select_bundle
             with (patch.object(experiment, "select_bundle", side_effect=select),
                   patch.object(experiment, "BUNDLE_SHA256", expected),
-                  patch.object(experiment.shutil, "which", return_value="kaggle"),
+                  patch.object(experiment, "kaggle_download_token", return_value=token),
                   patch.object(experiment.subprocess, "run", side_effect=download)):
                 experiment.recover_bundle(root, None, "owner/notebook/7",
                                           mounted_root=root / "read-only")
@@ -95,10 +106,32 @@ class L2NormIsolationTest(unittest.TestCase):
         with TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / "work").mkdir()
-            with patch.object(experiment.shutil, "which", return_value="kaggle"),                  patch.object(experiment.subprocess, "run") as cli:
+            with patch.object(experiment, "download_historical_output") as cli:
                 with self.assertRaisesRegex(experiment.BundleUnavailable, "fixed Kaggle"):
                     experiment.recover_bundle(root, None, "owner/notebook", mounted_root=root)
                 cli.assert_not_called()
+
+    def test_reads_kaggle_secret_without_exporting_in_parent(self):
+        token = "fake-secret"
+        secrets = SimpleNamespace(UserSecretsClient=lambda: SimpleNamespace(
+            get_secret=lambda name: token if name == "KAGGLE_API_TOKEN" else None))
+        with (patch.dict(sys.modules, {"kaggle_secrets": secrets}),
+              patch.dict(experiment.os.environ, {}, clear=True)):
+            self.assertEqual(experiment.kaggle_download_token(), token)
+            self.assertNotIn("KAGGLE_API_TOKEN", experiment.os.environ)
+
+    def test_cli_failure_reports_status_without_publishing_response(self):
+        with TemporaryDirectory() as tmp:
+            def commands(cmd, **kwargs):
+                if "kernels" in cmd:
+                    raise subprocess.CalledProcessError(1, cmd, stderr="403 Forbidden; signed-url-secret")
+
+            with (patch.object(experiment, "kaggle_download_token", return_value="token"),
+                  patch.object(experiment.subprocess, "run", side_effect=commands)):
+                with self.assertRaises(experiment.BundleUnavailable) as ctx:
+                    experiment.download_historical_output(Path(tmp), "owner/notebook/7")
+            self.assertIn("HTTP 403", str(ctx.exception))
+            self.assertNotIn("signed-url", str(ctx.exception))
 
 
 if __name__ == "__main__":
