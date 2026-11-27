@@ -14,6 +14,7 @@ SOURCE = "https://github.com/ArcheLabs/mini-cells.git"
 BRANCH = "codex/minicells-m0-m1"
 ROOT = "research/projects/continual-learning/experiments/minicells-next-stage"
 APP = "apps/mom-native-cells"
+OUTPUT = Path("/kaggle/working")
 JOBS = {
     "m0": ("minicells-m0-developer-preview", "m0_acceptance.py", "minicells.m0.developer-preview.v1"),
     "m1": ("minicells-m1-001-value-swap", "m1_value_swap.py", "minicells.m1.value-swap.v1"),
@@ -88,10 +89,10 @@ def main():
         except (OSError, RuntimeError, ValueError, subprocess.SubprocessError) as exc:
             setup_error = f"{type(exc).__name__}: {exc}"
 
-        failures = []
+        failures, publications = [], []
         for key, (name, script, fmt) in jobs.items():
             label = f"{name}-{run_id}"
-            out = Path("/kaggle/working") / label
+            out = OUTPUT / label
             action_error = setup_error
             if action_error is None:
                 try:
@@ -128,6 +129,11 @@ def main():
             if decision["engineering_status"] != "PASS":
                 failures.append(label)
 
+            publications.append((name, label, out, fmt, decision["status"]))
+
+        # The shared publisher switches the checkout to a result branch.
+        # Finish every requested GPU lane while the candidate still owns HEAD.
+        for name, label, out, fmt, status in publications:
             relative = f"results/{label}"
             artifact = f"artifacts/experiments/{name}/{run_id}"
             branch = f"kaggle/{label}"
@@ -138,7 +144,7 @@ def main():
                 spec = ExperimentSpec(relative, artifact, files, branch, fmt)
                 bundle = prepare_artifacts(repo, label, spec, version_id)
                 push_results(repo, bundle, label, branch, "GITHUB_TOKEN", "origin/main")
-                print(f"Published: {branch} ({decision['status']})", flush=True)
+                print(f"Published: {branch} ({status})", flush=True)
             except (OSError, RuntimeError, subprocess.SubprocessError) as exc:
                 failures.append(label)
                 print(f"Publication failed for {label}: {type(exc).__name__}: {exc}", flush=True)

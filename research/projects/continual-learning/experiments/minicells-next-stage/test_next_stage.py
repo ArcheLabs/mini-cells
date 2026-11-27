@@ -1,6 +1,9 @@
 """CPU integration for the independent M0 and M1 delivery lanes."""
 import json
+import os
 from pathlib import Path
+import shutil
+import sys
 from tempfile import TemporaryDirectory
 from types import SimpleNamespace
 import unittest
@@ -14,6 +17,7 @@ from minicells_native.backend import Backbone
 from minicells_native.errors import IncompatibleModelError, InvalidCellSelectionError
 from minicells_native.recurrent import PREVIEW_PROFILE, no_padding_transitions
 from common import write
+import kaggle_next_stage as launcher
 import m0_acceptance as m0
 import m1_value_swap as m1
 
@@ -165,6 +169,49 @@ class ValueSwapTest(unittest.TestCase):
         self.assertGreater(scores["gold_nll"], 0)
         self.assertAlmostEqual(scores["margin"], scores["candidates"]["A"]["logp"] -
                                scores["candidates"]["B"]["logp"])
+
+
+class LauncherTest(unittest.TestCase):
+    def test_both_jobs_finish_before_publisher_switches_checkout(self):
+        events = []
+
+        def subprocess_run(*args, **kwargs):
+            if args[:2] == ("git", "clone"):
+                source = Path(args[-1]) / launcher.ROOT
+                source.mkdir(parents=True)
+                for _, script, _ in launcher.JOBS.values():
+                    (source / script).touch()
+            elif "-m" in args and "wheel" in args:
+                (Path(args[-1]) / "minicells_native_sdk-0.1.0-test.whl").touch()
+            elif "-u" in args:
+                script, out = map(Path, args[-2:])
+                self.assertTrue(script.exists())
+                key = next(key for key, (_, filename, _) in launcher.JOBS.items() if filename == script.name)
+                out.mkdir(parents=True, exist_ok=True)
+                fmt = launcher.JOBS[key][2]
+                write(out / "decision.json", dict(format=fmt, status="PASS", engineering_status="PASS"))
+                events.append(key)
+
+        def push(repo, bundle, label, branch, *_):
+            events.append(branch.split("/")[-1].rsplit("-", 1)[0])
+            shutil.rmtree(repo / launcher.ROOT, ignore_errors=True)
+
+        publisher = SimpleNamespace(
+            ExperimentSpec=lambda *args: args,
+            load_github_token=lambda _: None,
+            prepare_artifacts=lambda repo, label, spec, version_id: repo / spec[1],
+            push_results=push,
+        )
+        with TemporaryDirectory() as temp, patch.dict(sys.modules, {
+            "scripts.research.publish_experiment_results": publisher,
+        }), patch.dict(os.environ, {"MINICELLS_NEXT_STAGE": "both"}), \
+                patch.object(launcher, "OUTPUT", Path(temp)), \
+                patch.object(launcher, "run", side_effect=subprocess_run), \
+                patch.object(launcher, "full_suite"), patch.object(launcher, "t4_uuid", return_value="mock"), \
+                patch.object(launcher, "version", return_value="mock"), \
+                patch.object(launcher.subprocess, "check_output", return_value="candidate"):
+            launcher.main()
+        self.assertEqual(events, ["m0", "m1", launcher.JOBS["m0"][0], launcher.JOBS["m1"][0]])
 
 
 if __name__ == "__main__":
