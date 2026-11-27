@@ -81,6 +81,7 @@ class L2NormIsolationTest(unittest.TestCase):
                 if "pip" in cmd:
                     self.assertNotIn("KAGGLE_API_TOKEN", kwargs["env"])
                     self.assertIn("kaggle==2.2.5", cmd)
+                    self.assertIn("six==1.17.0", cmd)
                     return
                 self.assertEqual(cmd[3:6], ["kernels", "output", "owner/notebook/7"])
                 self.assertEqual(cmd[7], r"(?:.*/)?prefix[.]cell$")

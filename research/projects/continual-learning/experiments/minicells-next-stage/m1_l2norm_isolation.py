@@ -68,7 +68,7 @@ def download_historical_output(work, version):
            if key not in ("KAGGLE_API_TOKEN", "KAGGLE_KEY", "GITHUB_TOKEN", "HF_TOKEN")}
     try:
         subprocess.run([sys.executable, "-m", "pip", "install", "--disable-pip-version-check", "--quiet",
-                        "--target", str(package), f"kaggle=={KAGGLE_DOWNLOAD_VERSION}"], env=env,
+                        "--target", str(package), f"kaggle=={KAGGLE_DOWNLOAD_VERSION}", "six==1.17.0"], env=env,
                        check=True, timeout=120, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     except (OSError, subprocess.SubprocessError) as exc:
         raise BundleUnavailable(f"Could not prepare version-aware Kaggle download CLI: {type(exc).__name__}") from None
