@@ -39,6 +39,8 @@ def publishable(out, fmt, result, started):
     result["elapsed_seconds"] = time.monotonic() - started
     write(out / "result.json", result)
     keys = ("status", "engineering_status", "diagnosis", "next_action")
+    if "state_equivalence" in result:
+        keys += ("state_equivalence", "bridge_status", "capacity_status")
     write(out / "decision.json", dict(format=fmt, **{k: result[k] for k in keys if k in result}))
     lines = [f"# {result['experiment']}", "", f"**{result['status']}**", "", result["diagnosis"]]
     if result.get("gates"):
@@ -78,6 +80,16 @@ def publishable(out, fmt, result, started):
             groups, facts = stage["groups"], stage["target_facts"]
             lines.append(f"| {n} | {full['groups_passed']}/{groups} | {cell['groups_passed']}/{groups} "
                          f"| {full['facts_passed']}/{facts} | {cell['facts_passed']}/{facts} |")
+    if "state_equivalence" in result:
+        lines += ["", f"- State equivalence — {result['state_equivalence']}",
+                  f"- Bridge — {result['bridge_status']}", f"- Capacity — {result['capacity_status']}"]
+    r1 = result.get("r1_bridge")
+    if r1:
+        lines += ["", "| Arm | A Live | B Legacy | C Conv | D Cursor | E Full |",
+                  "| --- | ---: | ---: | ---: | ---: | ---: |"]
+        for arm, summary in r1["arms"].items():
+            rates = [f"{data['flips']}/{data['n']}" for data in summary["paths"].values()]
+            lines.append("| " + " | ".join([arm, *rates]) + " |")
     if result.get("next_action"):
         lines += ["", result["next_action"]]
     (out / "report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")

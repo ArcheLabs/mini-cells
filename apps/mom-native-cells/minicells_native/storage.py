@@ -30,11 +30,13 @@ class Cell:
     updated_at: str
     tokens_written: int
     parent_cell_id: str | None
+    state_completeness: str = "recurrent_only"
 
     @classmethod
     def from_manifest(cls, meta):
         return cls(meta["cell_id"], meta["name"], meta["revision"], meta["created_at"],
-                   meta["updated_at"], meta["tokens_written"], meta.get("parent_cell_id"))
+                   meta["updated_at"], meta["tokens_written"], meta.get("parent_cell_id"),
+                   meta.get("state_completeness", "recurrent_only"))
 
 
 def revision(meta):
@@ -123,11 +125,13 @@ class CellManager:
         self._get(cell_id)
         return self._store.read(cell_id)[1]
 
-    def create(self, name):
+    def create(self, name, *, full_state=False):
         with self._runtime._operation():
             if not isinstance(name, str) or not 1 <= len(name.strip()) <= 120:
                 raise ValueError("Cell name must contain 1–120 characters")
-            return self._register(self._store.create(name.strip()))
+            if type(full_state) is not bool or full_state and not self._runtime._preview:
+                raise ValueError("Full-state Cells require the pinned Developer Preview")
+            return self._register(self._store.create(name.strip(), full_state=full_state))
 
     def get(self, cell_id):
         with self._runtime._operation():

@@ -161,6 +161,10 @@ class Backbone:
         self.identity["execution_profile"] = PREVIEW_PROFILE
 
     def stream(self, tensors):
+        from .full_state import FullState
+
+        if isinstance(tensors, FullState):
+            return tensors.restore(self)
         if not tensors:
             return self.cache_type()
         layers = []
