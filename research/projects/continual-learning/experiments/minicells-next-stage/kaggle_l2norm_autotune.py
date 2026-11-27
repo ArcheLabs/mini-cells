@@ -17,9 +17,9 @@ APP = "apps/mom-native-cells"
 OUTPUT = Path("/kaggle/working")
 NAME = "minicells-m1-002a-r1-a3-1-l2norm-autotune"
 FORMAT = "minicells.m1.full-state.l2norm-autotune.v1"
-# Leave both unset when the historical A3 Notebook Output is mounted as input.
+# A mounted or explicit A3 archive takes priority over the CLI fallback.
 A3_BUNDLE_PATH = ""
-A3_KAGGLE_REF = ""  # Optional fixed owner/notebook/version number for Kaggle CLI recovery.
+A3_KAGGLE_REF = "bingjiangli/minicells/417"  # Original A3 Saved Output.
 REQUIRED = {"decision.json", "manifest.json", "result.json", "report.md",
             "bundle_provenance.json", "autotuning.json", "live_bounds_cross_prefix.json"}
 COMPARISON_FILES = {"comparisons.json", "boundary-P0.safetensors",
@@ -79,7 +79,7 @@ def main():
             run(sys.executable, "-u", str(repo / ROOT / "m1_l2norm_autotune.py"), str(out), cwd=temp,
                 env={**os.environ, "CUDA_VISIBLE_DEVICES": gpu,
                      "A3_BUNDLE_PATH": A3_BUNDLE_PATH or os.getenv("A3_BUNDLE_PATH", ""),
-                     "A3_KAGGLE_REF": A3_KAGGLE_REF or os.getenv("A3_KAGGLE_REF", "")}, timeout=3600)
+                     "A3_KAGGLE_REF": os.getenv("A3_KAGGLE_REF") or A3_KAGGLE_REF}, timeout=3600)
         except (OSError, RuntimeError, ValueError, subprocess.SubprocessError) as exc:
             action_error = f"{type(exc).__name__}: {exc}"
 
