@@ -71,10 +71,14 @@ def build_dataset(tokenizer):
 
 def live_factory(backbone, tokens):
     full = step_prefix(backbone, backbone.stream({}), tokens)
-    layers, cursor = full.to_legacy_cache(), full.get_seq_length()
+    # FLA 0.2.2 exports a tuple but only restores layers from a list.
+    layers, cursor = list(full.to_legacy_cache()), full.get_seq_length()
 
     def fresh():
-        return backbone.cache_type.from_legacy_cache(deepcopy(layers), seen_tokens=cursor)
+        cache = backbone.cache_type.from_legacy_cache(deepcopy(layers), seen_tokens=cursor)
+        if len(cache) != len(layers) or cache.get_seq_length() != cursor:
+            raise RuntimeError("Live cache copy lost layer state or cursor")
+        return cache
 
     return fresh
 
@@ -123,6 +127,12 @@ def evaluate_target(mc, index, level, group, position, full_original):
     for name, record, written in (("cell_original", original, "A"), ("cell_swapped", swapped, "B")):
         conditions[name], row["state"][name] = cell_condition(mc, f"{label}-{written}", record, fact, written)
     if level == 1:
+        for name, record, written in (("full_original", original, "A"), ("full_swapped", swapped, "B")):
+            direct = read_condition(
+                backbone, lambda: step_prefix(backbone, backbone.stream({}), record["tokens"]), fact, written)
+            if direct != conditions[name]:
+                raise RuntimeError(f"Copied full-context scores diverged from continuous scoring for {label}-{written}")
+        row["full_copy_matches_continuous"] = True
         conditions["no_memory"] = read_condition(backbone, lambda: backbone.stream({}), fact, None)
     row["wordings"] = {text: {name: results[text] for name, results in conditions.items()}
                        for text in fact["queries"]}

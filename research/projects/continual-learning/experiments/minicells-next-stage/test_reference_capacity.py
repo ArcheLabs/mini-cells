@@ -10,7 +10,7 @@ import torch
 from minicells_native import MiniCells
 
 import m1_reference_capacity as exp
-from test_next_stage import TinyBackbone
+from test_next_stage import Cache, TinyBackbone
 
 
 class ReferenceCapacityTest(unittest.TestCase):
@@ -24,6 +24,30 @@ class ReferenceCapacityTest(unittest.TestCase):
                         queries={q: dict(query_ids=[3, 4], candidates={"A": [8, 10], "B": [11, 12]})
                                  for q in ("q1", "q2")})
         return [fact(i) for i in range(count)]
+
+    @torch.inference_mode()
+    def test_live_cache_handles_fla_tuple_export_and_list_restore(self):
+        class FLACache(Cache):
+            def to_legacy_cache(self):
+                return tuple(self.layers)
+
+            @classmethod
+            def from_legacy_cache(cls, layers, seen_tokens):
+                return super().from_legacy_cache(layers if isinstance(layers, list) else [], seen_tokens)
+
+        backbone = TinyBackbone()
+        backbone.cache_type = FLACache
+        backbone.stream = lambda _state: FLACache()
+        clone = exp.live_factory(backbone, [2, 3, 4])
+        live = exp.step_prefix(backbone, FLACache(), [2, 3, 4])
+        first = clone()
+        self.assertEqual(first.get_seq_length(), live.get_seq_length())
+        self.assertEqual(len(first), len(live))
+        original = live.layers[0]["recurrent_state"][0]
+        restored = first.layers[0]["recurrent_state"][0]
+        torch.testing.assert_close(restored, original, rtol=0, atol=0)
+        restored.zero_()
+        torch.testing.assert_close(clone().layers[0]["recurrent_state"][0], original, rtol=0, atol=0)
 
     @torch.inference_mode()
     def test_every_target_gets_two_fresh_cells(self):
@@ -43,6 +67,10 @@ class ReferenceCapacityTest(unittest.TestCase):
                 with MiniCells._from_backbone(backbone, Path(temp) / "registry") as mc:
                     rows = [exp.evaluate_target(mc, 1, 3, group, pos, full) for pos in range(3)]
                     self.assertEqual(mc.cells.list(), [])
+                    single = exp.assemble(facts[:1], backbone.tokenizer)
+                    live = exp.live_factory(backbone, single["original"]["tokens"])
+                    receipt = exp.evaluate_target(mc, 1, 1, single, 0, live)
+                    self.assertTrue(receipt["full_copy_matches_continuous"])
         self.assertEqual([row["position"] for row in rows], [1, 2, 3])
         states = [tuple(row["state"].values()) for row in rows]
         self.assertEqual(len({state["cell_id"] for pair in states for state in pair}), 6)
