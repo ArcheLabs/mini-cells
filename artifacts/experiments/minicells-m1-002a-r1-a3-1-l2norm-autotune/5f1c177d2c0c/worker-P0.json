@@ -1,0 +1,4906 @@
+{
+  "pid": 166,
+  "gpu_uuid": "GPU-c561fa49-b805-e6d9-e995-25ff5d46fa1d",
+  "driver": "580.178.04",
+  "environment": {
+    "runtime": {
+      "commit": "c94d757d129046513a653745f954131a3b462fd0",
+      "python": "3.13.16",
+      "gpu": "Tesla T4",
+      "capability": [
+        7,
+        5
+      ],
+      "cuda": "13.0",
+      "packages": {
+        "torch": "2.11.0+cu130",
+        "triton": "3.6.0",
+        "flash-linear-attention": "0.2.2",
+        "transformers": "4.51.3",
+        "minicells-native-sdk": "0.1.0"
+      }
+    },
+    "model": {
+      "model_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+      "model_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+      "architecture": "mom-gated-deltanet",
+      "mom_revision": "125038087b71b635c171cec857bd0f21d10955b6",
+      "tokenizer_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+      "tokenizer_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+      "tokenizer_hash": "90e3e115a745594abd2167554dcf472ea00d4852465c03b5482309d9036f4c49",
+      "tokenizer_files": {
+        "special_tokens_map.json": "4452b845ab9ca2afa863f59f1411a959e8a32bb4334e264b0e71d5d17dd4dcb9",
+        "tokenizer.json": "a2699839c243202a04a90537576fc719283f638e90fe80feb469888275289575",
+        "tokenizer_config.json": "cc3fdc5126e4d2e3a3934bc29779bf811c2eeefb60237017cddfd03acf9a7562"
+      },
+      "config_hash": "b99c19cdd75493abb6dfe0d5e991ebaac8d5af963b75c0ea2f73a6f496204341",
+      "weights_sha256": "08820287a91c2bc10f1fafe8b149dbf027ae51768530027c711dc240f7d53771",
+      "dtype": "float16",
+      "num_hidden_layers": 24,
+      "num_memories": 4,
+      "shared_memory": true,
+      "topk": 2,
+      "torch": "2.11.0+cu130",
+      "triton": "3.6.0",
+      "transformers": "4.51.3",
+      "flash-linear-attention": "0.2.2",
+      "execution_profile": "t4-fp16-recurrent-v1",
+      "parameters": 1552884000
+    }
+  },
+  "source": {
+    "function": "fla.modules.l2norm.l2norm",
+    "filename": "l2norm.py",
+    "line": 253,
+    "signature": "(x: torch.Tensor, eps: float = 1e-06, output_dtype: Optional[torch.dtype] = None) -> torch.Tensor",
+    "source_file_sha256": "7ec3623a1539bf5eed74b511be23175e9028f9c225d5800b40c3e40d624903e6",
+    "forward_source_sha256": "08178dc969aa948074dab276ea401c5aca835e5cfb83409ce3873561a3c50a47",
+    "normalization_dimension": -1,
+    "accumulation_dtype": "float32",
+    "accumulation_evidence": "Pinned Triton source casts loaded values to tl.float32 before tl.sum."
+  },
+  "bundle_sha256": "b07fcb2f0fe5efe9836608fa1ff54faae2bd81eb0402a35b75ae1d0c2c345804",
+  "cache_env": null,
+  "effective_cache_knob": false,
+  "effective_autotuner_disk_cache": false,
+  "autotune_key": [
+    "D",
+    "NB"
+  ],
+  "fixed_config": {
+    "BT": 32,
+    "num_warps": 4,
+    "num_ctas": 1,
+    "num_stages": 3
+  },
+  "instrumentation": {
+    "summary": {
+      "passed": true,
+      "failures": [],
+      "first_divergent_token": null,
+      "first_divergent_layer": null,
+      "first_divergent_state_field": null,
+      "fields_without_historical_bound": []
+    },
+    "fields": [
+      {
+        "field": "pre.0.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.0.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.0.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.0.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.0.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.0.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.0.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.0.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.0.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.0.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.0.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.1.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.1.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.1.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.1.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.1.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.1.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.1.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.1.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.1.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.1.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.1.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.10.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.10.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.10.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.10.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.10.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.10.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.10.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.10.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.10.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.10.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.10.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.11.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.11.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.11.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.11.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.11.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.11.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.11.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.11.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.11.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.11.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.12.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.12.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.12.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.12.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.12.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.12.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.12.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.12.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.12.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.12.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.12.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.13.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.13.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.13.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.13.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.13.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.13.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.13.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.13.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.13.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.13.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.13.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.14.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.14.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.14.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.14.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.14.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.14.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.14.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.14.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.14.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.14.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.14.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.15.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.15.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.15.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.15.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.15.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.15.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.15.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.15.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.15.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.15.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.15.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.16.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.16.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.16.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.16.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.16.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.16.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.16.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.16.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.16.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.16.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.16.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.17.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.17.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.17.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.17.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.17.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.17.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.17.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.17.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.17.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.17.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.17.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.18.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.18.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.18.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.18.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.18.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.18.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.18.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.18.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.18.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.18.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.18.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.19.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.19.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.19.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.19.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.19.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.19.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.19.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.19.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.19.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.19.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.19.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.2.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.2.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.2.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.2.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.2.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.2.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.2.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.2.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.2.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.2.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.2.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.20.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.20.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.20.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.20.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.20.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.20.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.20.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.20.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.20.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.20.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.20.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.21.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.21.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.21.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.21.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.21.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.21.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.21.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.21.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.21.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.21.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.21.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.22.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.22.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.22.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.22.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.22.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.22.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.22.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.22.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.22.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.22.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.22.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.23.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.23.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.23.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.23.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.23.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.23.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.23.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.23.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.23.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.23.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.23.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.3.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.3.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.3.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.3.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.3.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.3.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.3.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.3.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.3.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.3.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.3.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.4.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.4.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.4.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.4.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.4.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.4.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.4.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.4.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.4.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.4.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.4.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.5.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.5.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.5.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.5.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.5.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.5.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.5.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.5.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.5.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.5.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.5.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.6.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.6.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.6.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.6.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.6.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.6.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.6.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.6.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.6.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.6.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.6.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.7.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.7.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.7.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.7.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.7.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.7.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.7.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.7.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.7.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.7.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.7.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.8.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.8.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.8.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.8.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.8.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.8.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.8.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.8.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.8.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.8.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.8.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.9.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.9.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.9.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.9.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.9.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.9.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.9.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.9.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.9.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.9.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "pre.9.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "query.candidate_logp",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.021847963333129883,
+        "status": "PASS"
+      },
+      {
+        "field": "query.hidden",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.14453125,
+        "status": "PASS"
+      },
+      {
+        "field": "query.layer.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00048828125,
+        "status": "PASS"
+      },
+      {
+        "field": "query.layer.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.03125,
+        "status": "PASS"
+      },
+      {
+        "field": "query.layer.10",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.375,
+        "status": "PASS"
+      },
+      {
+        "field": "query.layer.11",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.375,
+        "status": "PASS"
+      },
+      {
+        "field": "query.layer.12",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.25,
+        "status": "PASS"
+      },
+      {
+        "field": "query.layer.13",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.25,
+        "status": "PASS"
+      },
+      {
+        "field": "query.layer.14",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.25,
+        "status": "PASS"
+      },
+      {
+        "field": "query.layer.15",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.25,
+        "status": "PASS"
+      },
+      {
+        "field": "query.layer.16",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.25,
+        "status": "PASS"
+      },
+      {
+        "field": "query.layer.17",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.25,
+        "status": "PASS"
+      },
+      {
+        "field": "query.layer.18",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.5,
+        "status": "PASS"
+      },
+      {
+        "field": "query.layer.19",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.5,
+        "status": "PASS"
+      },
+      {
+        "field": "query.layer.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.03125,
+        "status": "PASS"
+      },
+      {
+        "field": "query.layer.20",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.5,
+        "status": "PASS"
+      },
+      {
+        "field": "query.layer.21",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.75,
+        "status": "PASS"
+      },
+      {
+        "field": "query.layer.22",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 1.0,
+        "status": "PASS"
+      },
+      {
+        "field": "query.layer.23",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 1.5,
+        "status": "PASS"
+      },
+      {
+        "field": "query.layer.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.03125,
+        "status": "PASS"
+      },
+      {
+        "field": "query.layer.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0625,
+        "status": "PASS"
+      },
+      {
+        "field": "query.layer.5",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0625,
+        "status": "PASS"
+      },
+      {
+        "field": "query.layer.6",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.125,
+        "status": "PASS"
+      },
+      {
+        "field": "query.layer.7",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.125,
+        "status": "PASS"
+      },
+      {
+        "field": "query.layer.8",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.125,
+        "status": "PASS"
+      },
+      {
+        "field": "query.layer.9",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.25,
+        "status": "PASS"
+      },
+      {
+        "field": "query.logits",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.17578125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.0.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "post.0.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "post.0.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "post.0.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "post.0.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "post.0.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "post.0.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "post.0.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "post.0.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "post.0.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "post.0.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "post.1.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0009765625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.1.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "post.1.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0009765625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.1.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "post.1.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0009765625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.1.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "post.1.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 3.826618194580078e-05,
+        "status": "PASS"
+      },
+      {
+        "field": "post.1.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0,
+        "status": "PASS"
+      },
+      {
+        "field": "post.1.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00016009807586669922,
+        "status": "PASS"
+      },
+      {
+        "field": "post.1.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00026163458824157715,
+        "status": "PASS"
+      },
+      {
+        "field": "post.1.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0003247857093811035,
+        "status": "PASS"
+      },
+      {
+        "field": "post.10.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.10.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.10.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.10.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.10.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.10.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.10.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0006516575813293457,
+        "status": "PASS"
+      },
+      {
+        "field": "post.10.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0008053779602050781,
+        "status": "PASS"
+      },
+      {
+        "field": "post.10.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0010828375816345215,
+        "status": "PASS"
+      },
+      {
+        "field": "post.10.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0007892847061157227,
+        "status": "PASS"
+      },
+      {
+        "field": "post.10.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0008077621459960938,
+        "status": "PASS"
+      },
+      {
+        "field": "post.11.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.11.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.11.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.11.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.11.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.003662109375,
+        "status": "PASS"
+      },
+      {
+        "field": "post.11.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.11.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0006348639726638794,
+        "status": "PASS"
+      },
+      {
+        "field": "post.11.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0002678483724594116,
+        "status": "PASS"
+      },
+      {
+        "field": "post.11.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0006032586097717285,
+        "status": "PASS"
+      },
+      {
+        "field": "post.11.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0012097358703613281,
+        "status": "PASS"
+      },
+      {
+        "field": "post.11.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0016772747039794922,
+        "status": "PASS"
+      },
+      {
+        "field": "post.12.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0048828125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.12.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.12.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.12.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.12.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00439453125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.12.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.005859375,
+        "status": "PASS"
+      },
+      {
+        "field": "post.12.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0018318891525268555,
+        "status": "PASS"
+      },
+      {
+        "field": "post.12.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.003008544445037842,
+        "status": "PASS"
+      },
+      {
+        "field": "post.12.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.001314997673034668,
+        "status": "PASS"
+      },
+      {
+        "field": "post.12.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0016238689422607422,
+        "status": "PASS"
+      },
+      {
+        "field": "post.12.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0010689496994018555,
+        "status": "PASS"
+      },
+      {
+        "field": "post.13.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0048828125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.13.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.13.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0078125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.13.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.13.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.005859375,
+        "status": "PASS"
+      },
+      {
+        "field": "post.13.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.13.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0007525980472564697,
+        "status": "PASS"
+      },
+      {
+        "field": "post.13.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.000963062047958374,
+        "status": "PASS"
+      },
+      {
+        "field": "post.13.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0013225749135017395,
+        "status": "PASS"
+      },
+      {
+        "field": "post.13.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00117570161819458,
+        "status": "PASS"
+      },
+      {
+        "field": "post.13.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0007070451974868774,
+        "status": "PASS"
+      },
+      {
+        "field": "post.14.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0078125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.14.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0078125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.14.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0048828125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.14.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0029296875,
+        "status": "PASS"
+      },
+      {
+        "field": "post.14.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.009765625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.14.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.14.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0006849169731140137,
+        "status": "PASS"
+      },
+      {
+        "field": "post.14.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.000637643039226532,
+        "status": "PASS"
+      },
+      {
+        "field": "post.14.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.001134037971496582,
+        "status": "PASS"
+      },
+      {
+        "field": "post.14.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0009577572345733643,
+        "status": "PASS"
+      },
+      {
+        "field": "post.14.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0006825700402259827,
+        "status": "PASS"
+      },
+      {
+        "field": "post.15.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0048828125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.15.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.15.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0078125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.15.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.15.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.15.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.15.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0007325410842895508,
+        "status": "PASS"
+      },
+      {
+        "field": "post.15.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0006765127182006836,
+        "status": "PASS"
+      },
+      {
+        "field": "post.15.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0013079643249511719,
+        "status": "PASS"
+      },
+      {
+        "field": "post.15.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0009915828704833984,
+        "status": "PASS"
+      },
+      {
+        "field": "post.15.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0006985664367675781,
+        "status": "PASS"
+      },
+      {
+        "field": "post.16.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0078125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.16.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0078125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.16.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.004150390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.16.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.16.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.005859375,
+        "status": "PASS"
+      },
+      {
+        "field": "post.16.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0029296875,
+        "status": "PASS"
+      },
+      {
+        "field": "post.16.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.000630110502243042,
+        "status": "PASS"
+      },
+      {
+        "field": "post.16.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0006810873746871948,
+        "status": "PASS"
+      },
+      {
+        "field": "post.16.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.001001596450805664,
+        "status": "PASS"
+      },
+      {
+        "field": "post.16.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0014763474464416504,
+        "status": "PASS"
+      },
+      {
+        "field": "post.16.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0018788576126098633,
+        "status": "PASS"
+      },
+      {
+        "field": "post.17.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0078125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.17.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.17.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0078125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.17.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.17.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00537109375,
+        "status": "PASS"
+      },
+      {
+        "field": "post.17.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.17.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0010395646095275879,
+        "status": "PASS"
+      },
+      {
+        "field": "post.17.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0029822327196598053,
+        "status": "PASS"
+      },
+      {
+        "field": "post.17.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0007564425468444824,
+        "status": "PASS"
+      },
+      {
+        "field": "post.17.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0013631880283355713,
+        "status": "PASS"
+      },
+      {
+        "field": "post.17.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0012218356132507324,
+        "status": "PASS"
+      },
+      {
+        "field": "post.18.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.005615234375,
+        "status": "PASS"
+      },
+      {
+        "field": "post.18.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.18.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0048828125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.18.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.005859375,
+        "status": "PASS"
+      },
+      {
+        "field": "post.18.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0048828125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.18.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.005126953125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.18.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.001017928123474121,
+        "status": "PASS"
+      },
+      {
+        "field": "post.18.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0006414055824279785,
+        "status": "PASS"
+      },
+      {
+        "field": "post.18.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0005591511726379395,
+        "status": "PASS"
+      },
+      {
+        "field": "post.18.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0008976757526397705,
+        "status": "PASS"
+      },
+      {
+        "field": "post.18.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0012214183807373047,
+        "status": "PASS"
+      },
+      {
+        "field": "post.19.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.19.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.19.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0078125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.19.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.19.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0048828125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.19.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.19.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0009507238864898682,
+        "status": "PASS"
+      },
+      {
+        "field": "post.19.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0009799301624298096,
+        "status": "PASS"
+      },
+      {
+        "field": "post.19.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00046133995056152344,
+        "status": "PASS"
+      },
+      {
+        "field": "post.19.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.000695839524269104,
+        "status": "PASS"
+      },
+      {
+        "field": "post.19.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.001366734504699707,
+        "status": "PASS"
+      },
+      {
+        "field": "post.2.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.2.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0009765625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.2.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.2.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.001953125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.2.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.2.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.001953125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.2.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0004085749387741089,
+        "status": "PASS"
+      },
+      {
+        "field": "post.2.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.000250205397605896,
+        "status": "PASS"
+      },
+      {
+        "field": "post.2.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00031951069831848145,
+        "status": "PASS"
+      },
+      {
+        "field": "post.2.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0003744363784790039,
+        "status": "PASS"
+      },
+      {
+        "field": "post.2.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0006249696016311646,
+        "status": "PASS"
+      },
+      {
+        "field": "post.20.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.015625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.20.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0078125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.20.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.004150390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.20.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.20.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.005859375,
+        "status": "PASS"
+      },
+      {
+        "field": "post.20.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.20.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0007132887840270996,
+        "status": "PASS"
+      },
+      {
+        "field": "post.20.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0011849850416183472,
+        "status": "PASS"
+      },
+      {
+        "field": "post.20.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0012723207473754883,
+        "status": "PASS"
+      },
+      {
+        "field": "post.20.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0010163187980651855,
+        "status": "PASS"
+      },
+      {
+        "field": "post.20.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.001699209213256836,
+        "status": "PASS"
+      },
+      {
+        "field": "post.21.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0078125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.21.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.21.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0078125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.21.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.21.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.005859375,
+        "status": "PASS"
+      },
+      {
+        "field": "post.21.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.21.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.001852273941040039,
+        "status": "PASS"
+      },
+      {
+        "field": "post.21.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0009686946868896484,
+        "status": "PASS"
+      },
+      {
+        "field": "post.21.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0010266304016113281,
+        "status": "PASS"
+      },
+      {
+        "field": "post.21.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.001252591609954834,
+        "status": "PASS"
+      },
+      {
+        "field": "post.21.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0011806488037109375,
+        "status": "PASS"
+      },
+      {
+        "field": "post.22.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0078125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.22.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0078125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.22.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.005859375,
+        "status": "PASS"
+      },
+      {
+        "field": "post.22.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.22.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0078125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.22.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.004638671875,
+        "status": "PASS"
+      },
+      {
+        "field": "post.22.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0014421939849853516,
+        "status": "PASS"
+      },
+      {
+        "field": "post.22.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0006221085786819458,
+        "status": "PASS"
+      },
+      {
+        "field": "post.22.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0008950233459472656,
+        "status": "PASS"
+      },
+      {
+        "field": "post.22.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0006743967533111572,
+        "status": "PASS"
+      },
+      {
+        "field": "post.22.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0011397600173950195,
+        "status": "PASS"
+      },
+      {
+        "field": "post.23.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0078125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.23.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0078125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.23.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.015625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.23.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.23.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.015625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.23.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0078125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.23.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0014302730560302734,
+        "status": "PASS"
+      },
+      {
+        "field": "post.23.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00039064884185791016,
+        "status": "PASS"
+      },
+      {
+        "field": "post.23.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.001010119915008545,
+        "status": "PASS"
+      },
+      {
+        "field": "post.23.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0006141960620880127,
+        "status": "PASS"
+      },
+      {
+        "field": "post.23.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.002153754234313965,
+        "status": "PASS"
+      },
+      {
+        "field": "post.3.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.3.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.3.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.001953125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.3.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.001953125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.3.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.001953125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.3.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0009765625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.3.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00029790401458740234,
+        "status": "PASS"
+      },
+      {
+        "field": "post.3.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.000675499439239502,
+        "status": "PASS"
+      },
+      {
+        "field": "post.3.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00015872158110141754,
+        "status": "PASS"
+      },
+      {
+        "field": "post.3.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0005628764629364014,
+        "status": "PASS"
+      },
+      {
+        "field": "post.3.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0019475221633911133,
+        "status": "PASS"
+      },
+      {
+        "field": "post.4.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.001953125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.4.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.001953125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.4.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.4.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.001953125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.4.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.001953125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.4.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.001953125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.4.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0002667754888534546,
+        "status": "PASS"
+      },
+      {
+        "field": "post.4.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0005471110343933105,
+        "status": "PASS"
+      },
+      {
+        "field": "post.4.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0004607588052749634,
+        "status": "PASS"
+      },
+      {
+        "field": "post.4.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0003116130828857422,
+        "status": "PASS"
+      },
+      {
+        "field": "post.4.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0008372068405151367,
+        "status": "PASS"
+      },
+      {
+        "field": "post.5.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.5.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.5.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.001953125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.5.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.001953125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.5.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.001953125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.5.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.5.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0007545351982116699,
+        "status": "PASS"
+      },
+      {
+        "field": "post.5.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0005564689636230469,
+        "status": "PASS"
+      },
+      {
+        "field": "post.5.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0009245872497558594,
+        "status": "PASS"
+      },
+      {
+        "field": "post.5.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0006210654973983765,
+        "status": "PASS"
+      },
+      {
+        "field": "post.5.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.000651925802230835,
+        "status": "PASS"
+      },
+      {
+        "field": "post.6.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0029296875,
+        "status": "PASS"
+      },
+      {
+        "field": "post.6.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.001953125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.6.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.6.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.001953125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.6.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.6.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.6.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0016036033630371094,
+        "status": "PASS"
+      },
+      {
+        "field": "post.6.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0004783123731613159,
+        "status": "PASS"
+      },
+      {
+        "field": "post.6.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0004439353942871094,
+        "status": "PASS"
+      },
+      {
+        "field": "post.6.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0005761981010437012,
+        "status": "PASS"
+      },
+      {
+        "field": "post.6.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0007855892181396484,
+        "status": "PASS"
+      },
+      {
+        "field": "post.7.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.7.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.7.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.7.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.001953125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.7.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.7.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.001953125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.7.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0008355379104614258,
+        "status": "PASS"
+      },
+      {
+        "field": "post.7.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0011780261993408203,
+        "status": "PASS"
+      },
+      {
+        "field": "post.7.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0007982552051544189,
+        "status": "PASS"
+      },
+      {
+        "field": "post.7.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0008885562419891357,
+        "status": "PASS"
+      },
+      {
+        "field": "post.7.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0008362531661987305,
+        "status": "PASS"
+      },
+      {
+        "field": "post.8.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.8.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.8.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0078125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.8.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.001953125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.8.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.8.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.8.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0010811388492584229,
+        "status": "PASS"
+      },
+      {
+        "field": "post.8.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0014109611511230469,
+        "status": "PASS"
+      },
+      {
+        "field": "post.8.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0010216236114501953,
+        "status": "PASS"
+      },
+      {
+        "field": "post.8.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0013611316680908203,
+        "status": "PASS"
+      },
+      {
+        "field": "post.8.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0008785128593444824,
+        "status": "PASS"
+      },
+      {
+        "field": "post.9.conv_state.0.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.9.conv_state.0.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.9.conv_state.1.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.005859375,
+        "status": "PASS"
+      },
+      {
+        "field": "post.9.conv_state.1.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00244140625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.9.conv_state.2.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0048828125,
+        "status": "PASS"
+      },
+      {
+        "field": "post.9.conv_state.2.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.00390625,
+        "status": "PASS"
+      },
+      {
+        "field": "post.9.recurrent_state.0",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0012072324752807617,
+        "status": "PASS"
+      },
+      {
+        "field": "post.9.recurrent_state.1",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0015540719032287598,
+        "status": "PASS"
+      },
+      {
+        "field": "post.9.recurrent_state.2",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0027711689472198486,
+        "status": "PASS"
+      },
+      {
+        "field": "post.9.recurrent_state.3",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0018117427825927734,
+        "status": "PASS"
+      },
+      {
+        "field": "post.9.recurrent_state.4",
+        "max_absolute": 0.0,
+        "max_relative": 0.0,
+        "cosine": 1.0,
+        "bound": 0.0024129152297973633,
+        "status": "PASS"
+      }
+    ]
+  },
+  "modes": {
+    "natural": {
+      "calls": {
+        "Q": {
+          "arguments": {
+            "eps": 1e-06,
+            "output_dtype": null
+          },
+          "kernel": {
+            "kernel": "l2norm_fwd_kernel",
+            "D": 256,
+            "T": 544,
+            "NB": 1,
+            "BD": 256,
+            "BT": 32,
+            "launch_grid": [
+              17
+            ],
+            "num_warps": 16,
+            "num_stages": 3,
+            "num_ctas": 1,
+            "autocast": false
+          },
+          "stream": 0,
+          "first_recurrent_routed_slot": 0
+        },
+        "K": {
+          "arguments": {
+            "eps": 1e-06,
+            "output_dtype": null
+          },
+          "kernel": {
+            "kernel": "l2norm_fwd_kernel",
+            "D": 256,
+            "T": 544,
+            "NB": 1,
+            "BD": 256,
+            "BT": 32,
+            "launch_grid": [
+              17
+            ],
+            "num_warps": 16,
+            "num_stages": 3,
+            "num_ctas": 1,
+            "autocast": false
+          },
+          "stream": 0,
+          "first_recurrent_routed_slot": 0
+        }
+      },
+      "tensors": {
+        "Q_PRE_NORM": {
+          "shape": [
+            4,
+            1,
+            34,
+            4,
+            256
+          ],
+          "dtype": "torch.float16",
+          "stride": [
+            34816,
+            34816,
+            1024,
+            256,
+            1
+          ],
+          "storage_offset": 0,
+          "device": "cuda:0",
+          "contiguous": true,
+          "layout": "torch.strided",
+          "memory_format": "contiguous",
+          "data_ptr_alignment_256": 0,
+          "sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898"
+        },
+        "Q_POST_NORM": {
+          "shape": [
+            4,
+            1,
+            34,
+            4,
+            256
+          ],
+          "dtype": "torch.float16",
+          "stride": [
+            34816,
+            34816,
+            1024,
+            256,
+            1
+          ],
+          "storage_offset": 0,
+          "device": "cuda:0",
+          "contiguous": true,
+          "layout": "torch.strided",
+          "memory_format": "contiguous",
+          "data_ptr_alignment_256": 0,
+          "sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1"
+        },
+        "K_PRE_NORM": {
+          "shape": [
+            4,
+            1,
+            34,
+            4,
+            256
+          ],
+          "dtype": "torch.float16",
+          "stride": [
+            34816,
+            34816,
+            1024,
+            256,
+            1
+          ],
+          "storage_offset": 0,
+          "device": "cuda:0",
+          "contiguous": true,
+          "layout": "torch.strided",
+          "memory_format": "contiguous",
+          "data_ptr_alignment_256": 0,
+          "sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041"
+        },
+        "K_POST_NORM": {
+          "shape": [
+            4,
+            1,
+            34,
+            4,
+            256
+          ],
+          "dtype": "torch.float16",
+          "stride": [
+            34816,
+            34816,
+            1024,
+            256,
+            1
+          ],
+          "storage_offset": 0,
+          "device": "cuda:0",
+          "contiguous": true,
+          "layout": "torch.strided",
+          "memory_format": "contiguous",
+          "data_ptr_alignment_256": 0,
+          "sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914"
+        },
+        "Q_RECURRENT": {
+          "shape": [
+            1,
+            34,
+            4,
+            256
+          ],
+          "dtype": "torch.float16",
+          "stride": [
+            34816,
+            1024,
+            256,
+            1
+          ],
+          "storage_offset": 0,
+          "device": "cuda:0",
+          "contiguous": true,
+          "layout": "torch.strided",
+          "memory_format": "contiguous",
+          "data_ptr_alignment_256": 0,
+          "sha256": "1f20fd670a283c58e3668a7dc9685d65145c2012c142fd0706a30cbf73bf4ade"
+        },
+        "K_RECURRENT": {
+          "shape": [
+            1,
+            34,
+            4,
+            256
+          ],
+          "dtype": "torch.float16",
+          "stride": [
+            34816,
+            1024,
+            256,
+            1
+          ],
+          "storage_offset": 0,
+          "device": "cuda:0",
+          "contiguous": true,
+          "layout": "torch.strided",
+          "memory_format": "contiguous",
+          "data_ptr_alignment_256": 0,
+          "sha256": "1bd9017c9d26be3878680d96ad3497c3dbedc336c8cecf00e789993f318e5637"
+        }
+      }
+    },
+    "fixed": {
+      "calls": {
+        "Q": {
+          "arguments": {
+            "eps": 1e-06,
+            "output_dtype": null
+          },
+          "kernel": {
+            "kernel": "l2norm_fwd_kernel",
+            "D": 256,
+            "T": 544,
+            "NB": 1,
+            "BD": 256,
+            "BT": 32,
+            "launch_grid": [
+              17
+            ],
+            "num_warps": 4,
+            "num_stages": 3,
+            "num_ctas": 1,
+            "autocast": false
+          },
+          "stream": 0,
+          "first_recurrent_routed_slot": 0
+        },
+        "K": {
+          "arguments": {
+            "eps": 1e-06,
+            "output_dtype": null
+          },
+          "kernel": {
+            "kernel": "l2norm_fwd_kernel",
+            "D": 256,
+            "T": 544,
+            "NB": 1,
+            "BD": 256,
+            "BT": 32,
+            "launch_grid": [
+              17
+            ],
+            "num_warps": 4,
+            "num_stages": 3,
+            "num_ctas": 1,
+            "autocast": false
+          },
+          "stream": 0,
+          "first_recurrent_routed_slot": 0
+        }
+      },
+      "tensors": {
+        "Q_PRE_NORM": {
+          "shape": [
+            4,
+            1,
+            34,
+            4,
+            256
+          ],
+          "dtype": "torch.float16",
+          "stride": [
+            34816,
+            34816,
+            1024,
+            256,
+            1
+          ],
+          "storage_offset": 0,
+          "device": "cuda:0",
+          "contiguous": true,
+          "layout": "torch.strided",
+          "memory_format": "contiguous",
+          "data_ptr_alignment_256": 0,
+          "sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898"
+        },
+        "Q_POST_NORM": {
+          "shape": [
+            4,
+            1,
+            34,
+            4,
+            256
+          ],
+          "dtype": "torch.float16",
+          "stride": [
+            34816,
+            34816,
+            1024,
+            256,
+            1
+          ],
+          "storage_offset": 0,
+          "device": "cuda:0",
+          "contiguous": true,
+          "layout": "torch.strided",
+          "memory_format": "contiguous",
+          "data_ptr_alignment_256": 0,
+          "sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1"
+        },
+        "K_PRE_NORM": {
+          "shape": [
+            4,
+            1,
+            34,
+            4,
+            256
+          ],
+          "dtype": "torch.float16",
+          "stride": [
+            34816,
+            34816,
+            1024,
+            256,
+            1
+          ],
+          "storage_offset": 0,
+          "device": "cuda:0",
+          "contiguous": true,
+          "layout": "torch.strided",
+          "memory_format": "contiguous",
+          "data_ptr_alignment_256": 0,
+          "sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041"
+        },
+        "K_POST_NORM": {
+          "shape": [
+            4,
+            1,
+            34,
+            4,
+            256
+          ],
+          "dtype": "torch.float16",
+          "stride": [
+            34816,
+            34816,
+            1024,
+            256,
+            1
+          ],
+          "storage_offset": 0,
+          "device": "cuda:0",
+          "contiguous": true,
+          "layout": "torch.strided",
+          "memory_format": "contiguous",
+          "data_ptr_alignment_256": 0,
+          "sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914"
+        },
+        "Q_RECURRENT": {
+          "shape": [
+            1,
+            34,
+            4,
+            256
+          ],
+          "dtype": "torch.float16",
+          "stride": [
+            34816,
+            1024,
+            256,
+            1
+          ],
+          "storage_offset": 0,
+          "device": "cuda:0",
+          "contiguous": true,
+          "layout": "torch.strided",
+          "memory_format": "contiguous",
+          "data_ptr_alignment_256": 0,
+          "sha256": "1f20fd670a283c58e3668a7dc9685d65145c2012c142fd0706a30cbf73bf4ade"
+        },
+        "K_RECURRENT": {
+          "shape": [
+            1,
+            34,
+            4,
+            256
+          ],
+          "dtype": "torch.float16",
+          "stride": [
+            34816,
+            1024,
+            256,
+            1
+          ],
+          "storage_offset": 0,
+          "device": "cuda:0",
+          "contiguous": true,
+          "layout": "torch.strided",
+          "memory_format": "contiguous",
+          "data_ptr_alignment_256": 0,
+          "sha256": "1bd9017c9d26be3878680d96ad3497c3dbedc336c8cecf00e789993f318e5637"
+        }
+      }
+    }
+  }
+}

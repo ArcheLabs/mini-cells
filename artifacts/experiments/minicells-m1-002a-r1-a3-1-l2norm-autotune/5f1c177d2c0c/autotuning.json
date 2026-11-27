@@ -1,0 +1,1388 @@
+{
+  "P0": {
+    "pid": 166,
+    "gpu_uuid": "GPU-c561fa49-b805-e6d9-e995-25ff5d46fa1d",
+    "driver": "580.178.04",
+    "environment": {
+      "runtime": {
+        "commit": "c94d757d129046513a653745f954131a3b462fd0",
+        "python": "3.13.16",
+        "gpu": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ],
+        "cuda": "13.0",
+        "packages": {
+          "torch": "2.11.0+cu130",
+          "triton": "3.6.0",
+          "flash-linear-attention": "0.2.2",
+          "transformers": "4.51.3",
+          "minicells-native-sdk": "0.1.0"
+        }
+      },
+      "model": {
+        "model_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+        "model_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+        "architecture": "mom-gated-deltanet",
+        "mom_revision": "125038087b71b635c171cec857bd0f21d10955b6",
+        "tokenizer_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+        "tokenizer_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+        "tokenizer_hash": "90e3e115a745594abd2167554dcf472ea00d4852465c03b5482309d9036f4c49",
+        "tokenizer_files": {
+          "special_tokens_map.json": "4452b845ab9ca2afa863f59f1411a959e8a32bb4334e264b0e71d5d17dd4dcb9",
+          "tokenizer.json": "a2699839c243202a04a90537576fc719283f638e90fe80feb469888275289575",
+          "tokenizer_config.json": "cc3fdc5126e4d2e3a3934bc29779bf811c2eeefb60237017cddfd03acf9a7562"
+        },
+        "config_hash": "b99c19cdd75493abb6dfe0d5e991ebaac8d5af963b75c0ea2f73a6f496204341",
+        "weights_sha256": "08820287a91c2bc10f1fafe8b149dbf027ae51768530027c711dc240f7d53771",
+        "dtype": "float16",
+        "num_hidden_layers": 24,
+        "num_memories": 4,
+        "shared_memory": true,
+        "topk": 2,
+        "torch": "2.11.0+cu130",
+        "triton": "3.6.0",
+        "transformers": "4.51.3",
+        "flash-linear-attention": "0.2.2",
+        "execution_profile": "t4-fp16-recurrent-v1",
+        "parameters": 1552884000
+      }
+    },
+    "source": {
+      "function": "fla.modules.l2norm.l2norm",
+      "filename": "l2norm.py",
+      "line": 253,
+      "signature": "(x: torch.Tensor, eps: float = 1e-06, output_dtype: Optional[torch.dtype] = None) -> torch.Tensor",
+      "source_file_sha256": "7ec3623a1539bf5eed74b511be23175e9028f9c225d5800b40c3e40d624903e6",
+      "forward_source_sha256": "08178dc969aa948074dab276ea401c5aca835e5cfb83409ce3873561a3c50a47",
+      "normalization_dimension": -1,
+      "accumulation_dtype": "float32",
+      "accumulation_evidence": "Pinned Triton source casts loaded values to tl.float32 before tl.sum."
+    },
+    "bundle_sha256": "b07fcb2f0fe5efe9836608fa1ff54faae2bd81eb0402a35b75ae1d0c2c345804",
+    "cache_env": null,
+    "effective_cache_knob": false,
+    "effective_autotuner_disk_cache": false,
+    "autotune_key": [
+      "D",
+      "NB"
+    ],
+    "fixed_config": {
+      "BT": 32,
+      "num_warps": 4,
+      "num_ctas": 1,
+      "num_stages": 3
+    },
+    "modes": {
+      "natural": {
+        "calls": {
+          "Q": {
+            "arguments": {
+              "eps": 1e-06,
+              "output_dtype": null
+            },
+            "kernel": {
+              "kernel": "l2norm_fwd_kernel",
+              "D": 256,
+              "T": 544,
+              "NB": 1,
+              "BD": 256,
+              "BT": 32,
+              "launch_grid": [
+                17
+              ],
+              "num_warps": 16,
+              "num_stages": 3,
+              "num_ctas": 1,
+              "autocast": false
+            },
+            "stream": 0,
+            "first_recurrent_routed_slot": 0
+          },
+          "K": {
+            "arguments": {
+              "eps": 1e-06,
+              "output_dtype": null
+            },
+            "kernel": {
+              "kernel": "l2norm_fwd_kernel",
+              "D": 256,
+              "T": 544,
+              "NB": 1,
+              "BD": 256,
+              "BT": 32,
+              "launch_grid": [
+                17
+              ],
+              "num_warps": 16,
+              "num_stages": 3,
+              "num_ctas": 1,
+              "autocast": false
+            },
+            "stream": 0,
+            "first_recurrent_routed_slot": 0
+          }
+        },
+        "tensors": {
+          "Q_PRE_NORM": {
+            "shape": [
+              4,
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898"
+          },
+          "Q_POST_NORM": {
+            "shape": [
+              4,
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1"
+          },
+          "K_PRE_NORM": {
+            "shape": [
+              4,
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041"
+          },
+          "K_POST_NORM": {
+            "shape": [
+              4,
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914"
+          },
+          "Q_RECURRENT": {
+            "shape": [
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "1f20fd670a283c58e3668a7dc9685d65145c2012c142fd0706a30cbf73bf4ade"
+          },
+          "K_RECURRENT": {
+            "shape": [
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "1bd9017c9d26be3878680d96ad3497c3dbedc336c8cecf00e789993f318e5637"
+          }
+        }
+      },
+      "fixed": {
+        "calls": {
+          "Q": {
+            "arguments": {
+              "eps": 1e-06,
+              "output_dtype": null
+            },
+            "kernel": {
+              "kernel": "l2norm_fwd_kernel",
+              "D": 256,
+              "T": 544,
+              "NB": 1,
+              "BD": 256,
+              "BT": 32,
+              "launch_grid": [
+                17
+              ],
+              "num_warps": 4,
+              "num_stages": 3,
+              "num_ctas": 1,
+              "autocast": false
+            },
+            "stream": 0,
+            "first_recurrent_routed_slot": 0
+          },
+          "K": {
+            "arguments": {
+              "eps": 1e-06,
+              "output_dtype": null
+            },
+            "kernel": {
+              "kernel": "l2norm_fwd_kernel",
+              "D": 256,
+              "T": 544,
+              "NB": 1,
+              "BD": 256,
+              "BT": 32,
+              "launch_grid": [
+                17
+              ],
+              "num_warps": 4,
+              "num_stages": 3,
+              "num_ctas": 1,
+              "autocast": false
+            },
+            "stream": 0,
+            "first_recurrent_routed_slot": 0
+          }
+        },
+        "tensors": {
+          "Q_PRE_NORM": {
+            "shape": [
+              4,
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898"
+          },
+          "Q_POST_NORM": {
+            "shape": [
+              4,
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1"
+          },
+          "K_PRE_NORM": {
+            "shape": [
+              4,
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041"
+          },
+          "K_POST_NORM": {
+            "shape": [
+              4,
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914"
+          },
+          "Q_RECURRENT": {
+            "shape": [
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "1f20fd670a283c58e3668a7dc9685d65145c2012c142fd0706a30cbf73bf4ade"
+          },
+          "K_RECURRENT": {
+            "shape": [
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "1bd9017c9d26be3878680d96ad3497c3dbedc336c8cecf00e789993f318e5637"
+          }
+        }
+      }
+    }
+  },
+  "P2": {
+    "pid": 420,
+    "gpu_uuid": "GPU-c561fa49-b805-e6d9-e995-25ff5d46fa1d",
+    "driver": "580.178.04",
+    "environment": {
+      "runtime": {
+        "commit": "c94d757d129046513a653745f954131a3b462fd0",
+        "python": "3.13.16",
+        "gpu": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ],
+        "cuda": "13.0",
+        "packages": {
+          "torch": "2.11.0+cu130",
+          "triton": "3.6.0",
+          "flash-linear-attention": "0.2.2",
+          "transformers": "4.51.3",
+          "minicells-native-sdk": "0.1.0"
+        }
+      },
+      "model": {
+        "model_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+        "model_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+        "architecture": "mom-gated-deltanet",
+        "mom_revision": "125038087b71b635c171cec857bd0f21d10955b6",
+        "tokenizer_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+        "tokenizer_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+        "tokenizer_hash": "90e3e115a745594abd2167554dcf472ea00d4852465c03b5482309d9036f4c49",
+        "tokenizer_files": {
+          "special_tokens_map.json": "4452b845ab9ca2afa863f59f1411a959e8a32bb4334e264b0e71d5d17dd4dcb9",
+          "tokenizer.json": "a2699839c243202a04a90537576fc719283f638e90fe80feb469888275289575",
+          "tokenizer_config.json": "cc3fdc5126e4d2e3a3934bc29779bf811c2eeefb60237017cddfd03acf9a7562"
+        },
+        "config_hash": "b99c19cdd75493abb6dfe0d5e991ebaac8d5af963b75c0ea2f73a6f496204341",
+        "weights_sha256": "08820287a91c2bc10f1fafe8b149dbf027ae51768530027c711dc240f7d53771",
+        "dtype": "float16",
+        "num_hidden_layers": 24,
+        "num_memories": 4,
+        "shared_memory": true,
+        "topk": 2,
+        "torch": "2.11.0+cu130",
+        "triton": "3.6.0",
+        "transformers": "4.51.3",
+        "flash-linear-attention": "0.2.2",
+        "execution_profile": "t4-fp16-recurrent-v1",
+        "parameters": 1552884000
+      }
+    },
+    "source": {
+      "function": "fla.modules.l2norm.l2norm",
+      "filename": "l2norm.py",
+      "line": 253,
+      "signature": "(x: torch.Tensor, eps: float = 1e-06, output_dtype: Optional[torch.dtype] = None) -> torch.Tensor",
+      "source_file_sha256": "7ec3623a1539bf5eed74b511be23175e9028f9c225d5800b40c3e40d624903e6",
+      "forward_source_sha256": "08178dc969aa948074dab276ea401c5aca835e5cfb83409ce3873561a3c50a47",
+      "normalization_dimension": -1,
+      "accumulation_dtype": "float32",
+      "accumulation_evidence": "Pinned Triton source casts loaded values to tl.float32 before tl.sum."
+    },
+    "bundle_sha256": "b07fcb2f0fe5efe9836608fa1ff54faae2bd81eb0402a35b75ae1d0c2c345804",
+    "cache_env": null,
+    "effective_cache_knob": false,
+    "effective_autotuner_disk_cache": false,
+    "autotune_key": [
+      "D",
+      "NB"
+    ],
+    "fixed_config": {
+      "BT": 32,
+      "num_warps": 4,
+      "num_ctas": 1,
+      "num_stages": 3
+    },
+    "modes": {
+      "natural": {
+        "calls": {
+          "Q": {
+            "arguments": {
+              "eps": 1e-06,
+              "output_dtype": null
+            },
+            "kernel": {
+              "kernel": "l2norm_fwd_kernel",
+              "D": 256,
+              "T": 544,
+              "NB": 1,
+              "BD": 256,
+              "BT": 16,
+              "launch_grid": [
+                34
+              ],
+              "num_warps": 4,
+              "num_stages": 3,
+              "num_ctas": 1,
+              "autocast": false
+            },
+            "stream": 0,
+            "first_recurrent_routed_slot": 0
+          },
+          "K": {
+            "arguments": {
+              "eps": 1e-06,
+              "output_dtype": null
+            },
+            "kernel": {
+              "kernel": "l2norm_fwd_kernel",
+              "D": 256,
+              "T": 544,
+              "NB": 1,
+              "BD": 256,
+              "BT": 16,
+              "launch_grid": [
+                34
+              ],
+              "num_warps": 4,
+              "num_stages": 3,
+              "num_ctas": 1,
+              "autocast": false
+            },
+            "stream": 0,
+            "first_recurrent_routed_slot": 0
+          }
+        },
+        "tensors": {
+          "Q_PRE_NORM": {
+            "shape": [
+              4,
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898"
+          },
+          "Q_POST_NORM": {
+            "shape": [
+              4,
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1"
+          },
+          "K_PRE_NORM": {
+            "shape": [
+              4,
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041"
+          },
+          "K_POST_NORM": {
+            "shape": [
+              4,
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914"
+          },
+          "Q_RECURRENT": {
+            "shape": [
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "1f20fd670a283c58e3668a7dc9685d65145c2012c142fd0706a30cbf73bf4ade"
+          },
+          "K_RECURRENT": {
+            "shape": [
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "1bd9017c9d26be3878680d96ad3497c3dbedc336c8cecf00e789993f318e5637"
+          }
+        }
+      },
+      "fixed": {
+        "calls": {
+          "Q": {
+            "arguments": {
+              "eps": 1e-06,
+              "output_dtype": null
+            },
+            "kernel": {
+              "kernel": "l2norm_fwd_kernel",
+              "D": 256,
+              "T": 544,
+              "NB": 1,
+              "BD": 256,
+              "BT": 32,
+              "launch_grid": [
+                17
+              ],
+              "num_warps": 4,
+              "num_stages": 3,
+              "num_ctas": 1,
+              "autocast": false
+            },
+            "stream": 0,
+            "first_recurrent_routed_slot": 0
+          },
+          "K": {
+            "arguments": {
+              "eps": 1e-06,
+              "output_dtype": null
+            },
+            "kernel": {
+              "kernel": "l2norm_fwd_kernel",
+              "D": 256,
+              "T": 544,
+              "NB": 1,
+              "BD": 256,
+              "BT": 32,
+              "launch_grid": [
+                17
+              ],
+              "num_warps": 4,
+              "num_stages": 3,
+              "num_ctas": 1,
+              "autocast": false
+            },
+            "stream": 0,
+            "first_recurrent_routed_slot": 0
+          }
+        },
+        "tensors": {
+          "Q_PRE_NORM": {
+            "shape": [
+              4,
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898"
+          },
+          "Q_POST_NORM": {
+            "shape": [
+              4,
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1"
+          },
+          "K_PRE_NORM": {
+            "shape": [
+              4,
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041"
+          },
+          "K_POST_NORM": {
+            "shape": [
+              4,
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914"
+          },
+          "Q_RECURRENT": {
+            "shape": [
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "1f20fd670a283c58e3668a7dc9685d65145c2012c142fd0706a30cbf73bf4ade"
+          },
+          "K_RECURRENT": {
+            "shape": [
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "1bd9017c9d26be3878680d96ad3497c3dbedc336c8cecf00e789993f318e5637"
+          }
+        }
+      }
+    }
+  },
+  "P3": {
+    "pid": 464,
+    "gpu_uuid": "GPU-c561fa49-b805-e6d9-e995-25ff5d46fa1d",
+    "driver": "580.178.04",
+    "environment": {
+      "runtime": {
+        "commit": "c94d757d129046513a653745f954131a3b462fd0",
+        "python": "3.13.16",
+        "gpu": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ],
+        "cuda": "13.0",
+        "packages": {
+          "torch": "2.11.0+cu130",
+          "triton": "3.6.0",
+          "flash-linear-attention": "0.2.2",
+          "transformers": "4.51.3",
+          "minicells-native-sdk": "0.1.0"
+        }
+      },
+      "model": {
+        "model_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+        "model_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+        "architecture": "mom-gated-deltanet",
+        "mom_revision": "125038087b71b635c171cec857bd0f21d10955b6",
+        "tokenizer_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+        "tokenizer_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+        "tokenizer_hash": "90e3e115a745594abd2167554dcf472ea00d4852465c03b5482309d9036f4c49",
+        "tokenizer_files": {
+          "special_tokens_map.json": "4452b845ab9ca2afa863f59f1411a959e8a32bb4334e264b0e71d5d17dd4dcb9",
+          "tokenizer.json": "a2699839c243202a04a90537576fc719283f638e90fe80feb469888275289575",
+          "tokenizer_config.json": "cc3fdc5126e4d2e3a3934bc29779bf811c2eeefb60237017cddfd03acf9a7562"
+        },
+        "config_hash": "b99c19cdd75493abb6dfe0d5e991ebaac8d5af963b75c0ea2f73a6f496204341",
+        "weights_sha256": "08820287a91c2bc10f1fafe8b149dbf027ae51768530027c711dc240f7d53771",
+        "dtype": "float16",
+        "num_hidden_layers": 24,
+        "num_memories": 4,
+        "shared_memory": true,
+        "topk": 2,
+        "torch": "2.11.0+cu130",
+        "triton": "3.6.0",
+        "transformers": "4.51.3",
+        "flash-linear-attention": "0.2.2",
+        "execution_profile": "t4-fp16-recurrent-v1",
+        "parameters": 1552884000
+      }
+    },
+    "source": {
+      "function": "fla.modules.l2norm.l2norm",
+      "filename": "l2norm.py",
+      "line": 253,
+      "signature": "(x: torch.Tensor, eps: float = 1e-06, output_dtype: Optional[torch.dtype] = None) -> torch.Tensor",
+      "source_file_sha256": "7ec3623a1539bf5eed74b511be23175e9028f9c225d5800b40c3e40d624903e6",
+      "forward_source_sha256": "08178dc969aa948074dab276ea401c5aca835e5cfb83409ce3873561a3c50a47",
+      "normalization_dimension": -1,
+      "accumulation_dtype": "float32",
+      "accumulation_evidence": "Pinned Triton source casts loaded values to tl.float32 before tl.sum."
+    },
+    "bundle_sha256": "b07fcb2f0fe5efe9836608fa1ff54faae2bd81eb0402a35b75ae1d0c2c345804",
+    "cache_env": null,
+    "effective_cache_knob": false,
+    "effective_autotuner_disk_cache": false,
+    "autotune_key": [
+      "D",
+      "NB"
+    ],
+    "fixed_config": {
+      "BT": 32,
+      "num_warps": 4,
+      "num_ctas": 1,
+      "num_stages": 3
+    },
+    "modes": {
+      "natural": {
+        "calls": {
+          "Q": {
+            "arguments": {
+              "eps": 1e-06,
+              "output_dtype": null
+            },
+            "kernel": {
+              "kernel": "l2norm_fwd_kernel",
+              "D": 256,
+              "T": 544,
+              "NB": 1,
+              "BD": 256,
+              "BT": 8,
+              "launch_grid": [
+                68
+              ],
+              "num_warps": 8,
+              "num_stages": 3,
+              "num_ctas": 1,
+              "autocast": false
+            },
+            "stream": 0,
+            "first_recurrent_routed_slot": 0
+          },
+          "K": {
+            "arguments": {
+              "eps": 1e-06,
+              "output_dtype": null
+            },
+            "kernel": {
+              "kernel": "l2norm_fwd_kernel",
+              "D": 256,
+              "T": 544,
+              "NB": 1,
+              "BD": 256,
+              "BT": 8,
+              "launch_grid": [
+                68
+              ],
+              "num_warps": 8,
+              "num_stages": 3,
+              "num_ctas": 1,
+              "autocast": false
+            },
+            "stream": 0,
+            "first_recurrent_routed_slot": 0
+          }
+        },
+        "tensors": {
+          "Q_PRE_NORM": {
+            "shape": [
+              4,
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898"
+          },
+          "Q_POST_NORM": {
+            "shape": [
+              4,
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1"
+          },
+          "K_PRE_NORM": {
+            "shape": [
+              4,
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041"
+          },
+          "K_POST_NORM": {
+            "shape": [
+              4,
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914"
+          },
+          "Q_RECURRENT": {
+            "shape": [
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "1f20fd670a283c58e3668a7dc9685d65145c2012c142fd0706a30cbf73bf4ade"
+          },
+          "K_RECURRENT": {
+            "shape": [
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "1bd9017c9d26be3878680d96ad3497c3dbedc336c8cecf00e789993f318e5637"
+          }
+        }
+      },
+      "fixed": {
+        "calls": {
+          "Q": {
+            "arguments": {
+              "eps": 1e-06,
+              "output_dtype": null
+            },
+            "kernel": {
+              "kernel": "l2norm_fwd_kernel",
+              "D": 256,
+              "T": 544,
+              "NB": 1,
+              "BD": 256,
+              "BT": 32,
+              "launch_grid": [
+                17
+              ],
+              "num_warps": 4,
+              "num_stages": 3,
+              "num_ctas": 1,
+              "autocast": false
+            },
+            "stream": 0,
+            "first_recurrent_routed_slot": 0
+          },
+          "K": {
+            "arguments": {
+              "eps": 1e-06,
+              "output_dtype": null
+            },
+            "kernel": {
+              "kernel": "l2norm_fwd_kernel",
+              "D": 256,
+              "T": 544,
+              "NB": 1,
+              "BD": 256,
+              "BT": 32,
+              "launch_grid": [
+                17
+              ],
+              "num_warps": 4,
+              "num_stages": 3,
+              "num_ctas": 1,
+              "autocast": false
+            },
+            "stream": 0,
+            "first_recurrent_routed_slot": 0
+          }
+        },
+        "tensors": {
+          "Q_PRE_NORM": {
+            "shape": [
+              4,
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898"
+          },
+          "Q_POST_NORM": {
+            "shape": [
+              4,
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1"
+          },
+          "K_PRE_NORM": {
+            "shape": [
+              4,
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041"
+          },
+          "K_POST_NORM": {
+            "shape": [
+              4,
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914"
+          },
+          "Q_RECURRENT": {
+            "shape": [
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "1f20fd670a283c58e3668a7dc9685d65145c2012c142fd0706a30cbf73bf4ade"
+          },
+          "K_RECURRENT": {
+            "shape": [
+              1,
+              34,
+              4,
+              256
+            ],
+            "dtype": "torch.float16",
+            "stride": [
+              34816,
+              1024,
+              256,
+              1
+            ],
+            "storage_offset": 0,
+            "device": "cuda:0",
+            "contiguous": true,
+            "layout": "torch.strided",
+            "memory_format": "contiguous",
+            "data_ptr_alignment_256": 0,
+            "sha256": "1bd9017c9d26be3878680d96ad3497c3dbedc336c8cecf00e789993f318e5637"
+          }
+        }
+      }
+    }
+  }
+}
