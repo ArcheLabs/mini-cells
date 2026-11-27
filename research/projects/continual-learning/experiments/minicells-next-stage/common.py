@@ -52,6 +52,16 @@ def publishable(out, fmt, result, started):
                   f"- Mean paired margin difference — {stats['paired_mean']:.5g}",
                   f"- Fact-bootstrap 95% interval — [{low:.5g}, {high:.5g}]",
                   f"- No-memory side-preference p — {stats['no_memory_side_bias_p']:.5g}"]
+    capacity = result.get("capacity_summary")
+    if capacity:
+        single = capacity["baseline"]["target_only"]
+        lines += ["", "| Facts stored | Targets recalled in all conditions | Total targets |",
+                  "| --- | ---: | ---: |",
+                  f"| 1 | {single['recalled']} | {single['n']} |"]
+        for n, level in capacity["levels"].items():
+            lines.append(f"| {n} | {level['robust_recalled']} | {single['n']} |")
+        lines += ["", "Capacity uses both wordings and, for 3 or more facts, both target orders.",
+                  "Per-arm results and paired differences are in `statistics.json`."]
     if result.get("next_action"):
         lines += ["", result["next_action"]]
     (out / "report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
