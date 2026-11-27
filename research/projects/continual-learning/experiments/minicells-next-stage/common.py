@@ -52,6 +52,13 @@ def publishable(out, fmt, result, started):
                   f"- Mean paired margin difference — {stats['paired_mean']:.5g}",
                   f"- Fact-bootstrap 95% interval — [{low:.5g}, {high:.5g}]",
                   f"- No-memory side-preference p — {stats['no_memory_side_bias_p']:.5g}"]
+    bridge = result.get("bridge_summary")
+    if bridge:
+        lines += ["", "| Bridge arm | Full-context swaps | Cell swaps |",
+                  "| --- | ---: | ---: |"]
+        for name, arm in bridge["arms"].items():
+            lines.append(f"| {name} | {arm['full_flips']}/{arm['n']} | {arm['cell_flips']}/{arm['n']} |")
+        lines += ["", f"Capacity stage — {result['capacity_status']}"]
     capacity = result.get("capacity_summary")
     if capacity:
         single = capacity["baseline"]["target_only"]
