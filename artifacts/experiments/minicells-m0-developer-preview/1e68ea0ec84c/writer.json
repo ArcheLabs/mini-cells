@@ -1,0 +1,150 @@
+{
+  "pid": 141,
+  "baseline": {
+    "response": {
+      "text": "The registry marker is the first character of",
+      "mode": "manual",
+      "candidate_cell_ids": [],
+      "selected_cell_ids": [],
+      "cell_scores": {},
+      "fallback_reason": "explicit_no_cells",
+      "latency": 3.8580773170000384,
+      "generation_tokens": 8,
+      "diagnostics": {
+        "scoring_seconds": 4.940000053466065e-07,
+        "selection_seconds": 9.520000503471238e-07,
+        "fusion_and_generation_seconds": 3.8575138910000533,
+        "peak_gpu_bytes": 3245427200,
+        "selection_top_k": 1,
+        "selection_threshold": null,
+        "ranked_cell_ids": [],
+        "selection_experimental": false,
+        "fusion_mode": "native",
+        "unscored_cell_ids": []
+      }
+    },
+    "calls": [
+      12,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  "short": {
+    "response": {
+      "text": "The registry marker is the name of the",
+      "mode": "manual",
+      "candidate_cell_ids": [
+        "cdd8478d-2694-4549-aebf-6fbd591f872f"
+      ],
+      "selected_cell_ids": [
+        "cdd8478d-2694-4549-aebf-6fbd591f872f"
+      ],
+      "cell_scores": {},
+      "fallback_reason": null,
+      "latency": 2.747275668000043,
+      "generation_tokens": 8,
+      "diagnostics": {
+        "scoring_seconds": 4.720000106317457e-07,
+        "selection_seconds": 1.1460000450824737e-06,
+        "fusion_and_generation_seconds": 2.746838174000004,
+        "peak_gpu_bytes": 3374882816,
+        "selection_top_k": 1,
+        "selection_threshold": null,
+        "ranked_cell_ids": [],
+        "selection_experimental": false,
+        "fusion_mode": "native",
+        "unscored_cell_ids": []
+      }
+    },
+    "calls": [
+      12,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  "long": {
+    "response": {
+      "text": "The registry marker is the first letter of",
+      "mode": "manual",
+      "candidate_cell_ids": [
+        "cdd8478d-2694-4549-aebf-6fbd591f872f"
+      ],
+      "selected_cell_ids": [
+        "cdd8478d-2694-4549-aebf-6fbd591f872f"
+      ],
+      "cell_scores": {},
+      "fallback_reason": null,
+      "latency": 4.67648338999993,
+      "generation_tokens": 8,
+      "diagnostics": {
+        "scoring_seconds": 3.8600001062150113e-07,
+        "selection_seconds": 9.390000741404947e-07,
+        "fusion_and_generation_seconds": 4.6755135180000025,
+        "peak_gpu_bytes": 3632201728,
+        "selection_top_k": 1,
+        "selection_threshold": null,
+        "ranked_cell_ids": [],
+        "selection_experimental": false,
+        "fusion_mode": "native",
+        "unscored_cell_ids": []
+      }
+    },
+    "calls": [
+      64,
+      64,
+      38,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  "repeated_read_stable": true,
+  "registry_hashes": {
+    "84ef74b3-07d9-477f-87f8-6edbba7f634b": "c5844873666fa92c9240b0acc420241cfc32dbea3932c84f878b17f59590c430",
+    "cdd8478d-2694-4549-aebf-6fbd591f872f": "2eea1bdbb29ac86c7fa4f5b47b73fb0943b59de9091bb8c885bb9c51dd1372ce"
+  },
+  "imported_cell_id": "cdd8478d-2694-4549-aebf-6fbd591f872f",
+  "bundle_sha256": "2eea1bdbb29ac86c7fa4f5b47b73fb0943b59de9091bb8c885bb9c51dd1372ce",
+  "fork_id": "aee0c1bb-0501-4143-bf8f-944ac3522370",
+  "identity": {
+    "model_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+    "model_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+    "architecture": "mom-gated-deltanet",
+    "mom_revision": "125038087b71b635c171cec857bd0f21d10955b6",
+    "tokenizer_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+    "tokenizer_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+    "tokenizer_hash": "90e3e115a745594abd2167554dcf472ea00d4852465c03b5482309d9036f4c49",
+    "tokenizer_files": {
+      "special_tokens_map.json": "4452b845ab9ca2afa863f59f1411a959e8a32bb4334e264b0e71d5d17dd4dcb9",
+      "tokenizer.json": "a2699839c243202a04a90537576fc719283f638e90fe80feb469888275289575",
+      "tokenizer_config.json": "cc3fdc5126e4d2e3a3934bc29779bf811c2eeefb60237017cddfd03acf9a7562"
+    },
+    "config_hash": "b99c19cdd75493abb6dfe0d5e991ebaac8d5af963b75c0ea2f73a6f496204341",
+    "weights_sha256": "08820287a91c2bc10f1fafe8b149dbf027ae51768530027c711dc240f7d53771",
+    "dtype": "float16",
+    "num_hidden_layers": 24,
+    "num_memories": 4,
+    "shared_memory": true,
+    "topk": 2,
+    "torch": "2.11.0+cu130",
+    "triton": "3.6.0",
+    "transformers": "4.51.3",
+    "flash-linear-attention": "0.2.2",
+    "execution_profile": "t4-fp16-recurrent-v1",
+    "parameters": 1552884000
+  }
+}

@@ -1,0 +1,174 @@
+
+==================================== ERRORS ====================================
+_ ERROR collecting tests/research/01-foundations/test_language_depth_ablation.py _
+ImportError while importing test module '/tmp/minicells-next-stage-6r83ie_d/source/tests/research/01-foundations/test_language_depth_ablation.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/research/01-foundations/test_language_depth_ablation.py:8: in <module>
+    from research.minicells.language_depth_ablation import (
+E   ModuleNotFoundError: No module named 'research.minicells'
+_ ERROR collecting tests/research/02-self-organization/test_proposal_utility_resumable.py _
+tests/research/02-self-organization/test_proposal_utility_resumable.py:16: in <module>
+    spec.loader.exec_module(resume)
+<frozen importlib._bootstrap_external>:1023: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:1160: in get_code
+    ???
+<frozen importlib._bootstrap_external>:1218: in get_data
+    ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/tmp/minicells-next-stage-6r83ie_d/source/tests/research/scripts/run_proposal_utility_discovery_resumable.py'
+__ ERROR collecting tests/research/06-native-clm/test_native_clm_jam_demo.py ___
+tests/research/06-native-clm/test_native_clm_jam_demo.py:18: in <module>
+    SPEC.loader.exec_module(MODULE)
+<frozen importlib._bootstrap_external>:1023: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:1160: in get_code
+    ???
+<frozen importlib._bootstrap_external>:1218: in get_data
+    ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/tmp/minicells-next-stage-6r83ie_d/source/scripts/research/run_native_clm_jam_demo.py'
+__________ ERROR collecting tests/research/jct001/test_engineering.py __________
+import file mismatch:
+imported module 'test_engineering' has this __file__ attribute:
+  /tmp/minicells-next-stage-6r83ie_d/source/tests/research/clm002/test_engineering.py
+which is not the same as the test file we want to collect:
+  /tmp/minicells-next-stage-6r83ie_d/source/tests/research/jct001/test_engineering.py
+HINT: remove __pycache__ / .pyc files and/or use a unique basename for your test file modules
+__________ ERROR collecting tests/research/jct001/test_publication.py __________
+import file mismatch:
+imported module 'test_publication' has this __file__ attribute:
+  /tmp/minicells-next-stage-6r83ie_d/source/tests/research/clm001_qfirst/test_publication.py
+which is not the same as the test file we want to collect:
+  /tmp/minicells-next-stage-6r83ie_d/source/tests/research/jct001/test_publication.py
+HINT: remove __pycache__ / .pyc files and/or use a unique basename for your test file modules
+_____ ERROR collecting tests/research/path_first_fast001/test_automatic.py _____
+import file mismatch:
+imported module 'test_automatic' has this __file__ attribute:
+  /tmp/minicells-next-stage-6r83ie_d/source/tests/research/clm001_qfirst/test_automatic.py
+which is not the same as the test file we want to collect:
+  /tmp/minicells-next-stage-6r83ie_d/source/tests/research/path_first_fast001/test_automatic.py
+HINT: remove __pycache__ / .pyc files and/or use a unique basename for your test file modules
+______ ERROR collecting tests/research/path_first_pd001/test_mechanism.py ______
+import file mismatch:
+imported module 'test_mechanism' has this __file__ attribute:
+  /tmp/minicells-next-stage-6r83ie_d/source/tests/research/clm002_fast/test_mechanism.py
+which is not the same as the test file we want to collect:
+  /tmp/minicells-next-stage-6r83ie_d/source/tests/research/path_first_pd001/test_mechanism.py
+HINT: remove __pycache__ / .pyc files and/or use a unique basename for your test file modules
+_________ ERROR collecting tests/research/r3mf_d1/test_publication.py __________
+import file mismatch:
+imported module 'test_publication' has this __file__ attribute:
+  /tmp/minicells-next-stage-6r83ie_d/source/tests/research/clm001_qfirst/test_publication.py
+which is not the same as the test file we want to collect:
+  /tmp/minicells-next-stage-6r83ie_d/source/tests/research/r3mf_d1/test_publication.py
+HINT: remove __pycache__ / .pyc files and/or use a unique basename for your test file modules
+_________ ERROR collecting tests/test_clm_conversion_kill_test_001.py __________
+ImportError while importing test module '/tmp/minicells-next-stage-6r83ie_d/source/tests/test_clm_conversion_kill_test_001.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_clm_conversion_kill_test_001.py:7: in <module>
+    from scripts.research.clm_conversion_kill_test_001.dataset import (
+E   ModuleNotFoundError: No module named 'scripts.research.clm_conversion_kill_test_001'
+_____________ ERROR collecting tests/test_cow_clm_001_protocol.py ______________
+ImportError while importing test module '/tmp/minicells-next-stage-6r83ie_d/source/tests/test_cow_clm_001_protocol.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_cow_clm_001_protocol.py:8: in <module>
+    from scripts.research.cow_clm_001.dataset import capability_rows, knowledge_rows
+E   ModuleNotFoundError: No module named 'scripts.research.cow_clm_001'
+___________ ERROR collecting tests/test_granite_hybrid_clm_result.py ___________
+tests/test_granite_hybrid_clm_result.py:11: in <module>
+    SPEC.loader.exec_module(MODULE)
+<frozen importlib._bootstrap_external>:1023: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:1160: in get_code
+    ???
+<frozen importlib._bootstrap_external>:1218: in get_data
+    ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/tmp/minicells-next-stage-6r83ie_d/source/scripts/research/granite_hybrid_clm_v01/validate_result.py'
+____________ ERROR collecting tests/test_language_plastic_tissue.py ____________
+import file mismatch:
+imported module 'test_language_plastic_tissue' has this __file__ attribute:
+  /tmp/minicells-next-stage-6r83ie_d/source/tests/research/02-self-organization/test_language_plastic_tissue.py
+which is not the same as the test file we want to collect:
+  /tmp/minicells-next-stage-6r83ie_d/source/tests/test_language_plastic_tissue.py
+HINT: remove __pycache__ / .pyc files and/or use a unique basename for your test file modules
+_______________ ERROR collecting tests/test_minicells_runtime.py _______________
+ImportError while importing test module '/tmp/minicells-next-stage-6r83ie_d/source/tests/test_minicells_runtime.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_minicells_runtime.py:8: in <module>
+    from minicells_runtime import MultiCellRuntime
+E   ImportError: cannot import name 'MultiCellRuntime' from 'minicells_runtime' (/tmp/minicells-next-stage-6r83ie_d/source/shared/python/minicells_runtime/__init__.py)
+_ ERROR collecting tests/unit/continual_learning/test_clm_0_4_mini_calibration.py _
+import file mismatch:
+imported module 'test_clm_0_4_mini_calibration' has this __file__ attribute:
+  /tmp/minicells-next-stage-6r83ie_d/source/tests/smoke/test_clm_0_4_mini_calibration.py
+which is not the same as the test file we want to collect:
+  /tmp/minicells-next-stage-6r83ie_d/source/tests/unit/continual_learning/test_clm_0_4_mini_calibration.py
+HINT: remove __pycache__ / .pyc files and/or use a unique basename for your test file modules
+________________ ERROR collecting tests/unit/core/test_data.py _________________
+import file mismatch:
+imported module 'test_data' has this __file__ attribute:
+  /tmp/minicells-next-stage-6r83ie_d/source/tests/research/path_first_fast001/test_data.py
+which is not the same as the test file we want to collect:
+  /tmp/minicells-next-stage-6r83ie_d/source/tests/unit/core/test_data.py
+HINT: remove __pycache__ / .pyc files and/or use a unique basename for your test file modules
+=============================== warnings summary ===============================
+../../../usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:64
+  /usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:64: PyparsingDeprecationWarning: 'oneOf' deprecated - use 'one_of'
+    prop = Group((name + Suppress("=") + comma_separated(value)) | oneOf(_CONSTANTS))
+
+../../../usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:85
+../../../usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:85
+../../../usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:85
+../../../usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:85
+../../../usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:85
+../../../usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:85
+  /usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:85: PyparsingDeprecationWarning: 'parseString' deprecated - use 'parse_string'
+    parse = parser.parseString(pattern)
+
+../../../usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:89
+../../../usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:89
+../../../usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:89
+../../../usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:89
+../../../usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:89
+../../../usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:89
+  /usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:89: PyparsingDeprecationWarning: 'resetCache' deprecated - use 'reset_cache'
+    parser.resetCache()
+
+../../../usr/local/lib/python3.13/dist-packages/matplotlib/_mathtext.py:45
+  /usr/local/lib/python3.13/dist-packages/matplotlib/_mathtext.py:45: PyparsingDeprecationWarning: 'enablePackrat' deprecated - use 'enable_packrat'
+    ParserElement.enablePackrat()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+ERROR tests/research/01-foundations/test_language_depth_ablation.py
+ERROR tests/research/02-self-organization/test_proposal_utility_resumable.py
+ERROR tests/research/06-native-clm/test_native_clm_jam_demo.py - FileNotFound...
+ERROR tests/research/jct001/test_engineering.py
+ERROR tests/research/jct001/test_publication.py
+ERROR tests/research/path_first_fast001/test_automatic.py
+ERROR tests/research/path_first_pd001/test_mechanism.py
+ERROR tests/research/r3mf_d1/test_publication.py
+ERROR tests/test_clm_conversion_kill_test_001.py
+ERROR tests/test_cow_clm_001_protocol.py
+ERROR tests/test_granite_hybrid_clm_result.py - FileNotFoundError: [Errno 2] ...
+ERROR tests/test_language_plastic_tissue.py
+ERROR tests/test_minicells_runtime.py
+ERROR tests/unit/continual_learning/test_clm_0_4_mini_calibration.py
+ERROR tests/unit/core/test_data.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 15 errors during collection !!!!!!!!!!!!!!!!!!!
+14 warnings, 15 errors in 11.46s
