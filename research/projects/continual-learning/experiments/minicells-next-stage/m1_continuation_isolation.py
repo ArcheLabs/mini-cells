@@ -67,10 +67,9 @@ def trace_fingerprint(result):
             for phase in ("pre", "post")}
 
 
-def produce(mc, texts, work):
+def produce(mc, texts, work, *, require_historical_count=True):
     """Capture at the SDK write boundary and retain that exact original live object."""
-    backbone = mc._backbone
-    cell = mc.cells.create("A2 original", full_state=True)
+    cell = mc.cells.create("Original live snapshot", full_state=True)
     captured = []
     capture = FullState.capture
 
@@ -84,7 +83,8 @@ def produce(mc, texts, work):
     if len(captured) != 1:
         raise RuntimeError("Expected exactly one capture from the original Live Cache")
     native, expected = captured.pop()
-    if expected["layer_count"] != PRE_LAYERS or len(expected["tensor_sha256"]) != PRE_TENSORS:
+    if (expected["layer_count"] != PRE_LAYERS
+            or (require_historical_count and len(expected["tensor_sha256"]) != PRE_TENSORS)):
         raise ValueError("The frozen prefix no longer yields 24 layers and 263 tensors")
     mc.cells.export(cell.id, work / "prefix.cell")
     digest = digest_file(work / "prefix.cell")
