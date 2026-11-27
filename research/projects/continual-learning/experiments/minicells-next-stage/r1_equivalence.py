@@ -18,8 +18,8 @@ def live(backbone, writes):
     return cache
 
 
-def trace(backbone, factory, query):
-    cache = factory()
+def trace(backbone, factory, query, *, primary_cache=None):
+    cache = factory() if primary_cache is None else primary_cache
     previous = FullState.capture(backbone, cache)
     tensors = {f"pre.{key}": value for key, value in previous.tensors.items()}
     prefix = query["tokens"]
@@ -28,12 +28,12 @@ def trace(backbone, factory, query):
         for index, layer in enumerate(backbone.model.model.layers):
             def observe(_module, _inputs, output, index=index):
                 hidden = output[0] if isinstance(output, tuple) else output
-                tensors[f"query.layer.{index}"] = hidden[0].detach().cpu().contiguous()
+                tensors[f"query.layer.{index}"] = hidden[0].detach().to("cpu", copy=True).contiguous()
             handle = layer.register_forward_hook(observe)
             hooks.callback(handle.remove)
         hidden = backbone.step(prefix + candidate[:-1], [cache], [1.0])
-    tensors["query.hidden"] = hidden[0].detach().cpu().contiguous()
-    tensors["query.logits"] = backbone.model.lm_head(hidden[0]).detach().cpu().contiguous()
+    tensors["query.hidden"] = hidden[0].detach().to("cpu", copy=True).contiguous()
+    tensors["query.logits"] = backbone.model.lm_head(hidden[0]).detach().to("cpu", copy=True).contiguous()
     final = FullState.capture(backbone, cache)
     tensors.update({f"post.{key}": value for key, value in final.tensors.items()})
     logp = scores(backbone, factory, query)
