@@ -1,0 +1,144 @@
+{
+  "phase": "P2",
+  "pid": 372,
+  "gpu_uuid": "GPU-b25e2225-3953-ee21-0dea-7af49e1be2d0",
+  "source": {
+    "function": "fla.modules.l2norm.l2norm",
+    "filename": "l2norm.py",
+    "line": 253,
+    "signature": "(x: torch.Tensor, eps: float = 1e-06, output_dtype: Optional[torch.dtype] = None) -> torch.Tensor",
+    "source_file_sha256": "7ec3623a1539bf5eed74b511be23175e9028f9c225d5800b40c3e40d624903e6",
+    "forward_source_sha256": "08178dc969aa948074dab276ea401c5aca835e5cfb83409ce3873561a3c50a47",
+    "normalization_dimension": -1,
+    "accumulation_dtype": "float32",
+    "accumulation_evidence": "Pinned Triton source casts loaded values to tl.float32 before tl.sum."
+  },
+  "fixed_config": {
+    "BT": 32,
+    "num_warps": 4,
+    "num_ctas": 1,
+    "num_stages": 3
+  },
+  "launches": [
+    {
+      "segment": "query/P2-1",
+      "D": 256,
+      "T": 136,
+      "NB": 1,
+      "BD": 256,
+      "BT": 32,
+      "num_warps": 4,
+      "num_stages": 3,
+      "num_ctas": 1,
+      "calls": 144
+    },
+    {
+      "segment": "query/P2-1",
+      "D": 256,
+      "T": 544,
+      "NB": 1,
+      "BD": 256,
+      "BT": 32,
+      "num_warps": 4,
+      "num_stages": 3,
+      "num_ctas": 1,
+      "calls": 144
+    },
+    {
+      "segment": "query/P2-2",
+      "D": 256,
+      "T": 136,
+      "NB": 1,
+      "BD": 256,
+      "BT": 32,
+      "num_warps": 4,
+      "num_stages": 3,
+      "num_ctas": 1,
+      "calls": 144
+    },
+    {
+      "segment": "query/P2-2",
+      "D": 256,
+      "T": 544,
+      "NB": 1,
+      "BD": 256,
+      "BT": 32,
+      "num_warps": 4,
+      "num_stages": 3,
+      "num_ctas": 1,
+      "calls": 144
+    },
+    {
+      "segment": "query/P2-3",
+      "D": 256,
+      "T": 136,
+      "NB": 1,
+      "BD": 256,
+      "BT": 32,
+      "num_warps": 4,
+      "num_stages": 3,
+      "num_ctas": 1,
+      "calls": 144
+    },
+    {
+      "segment": "query/P2-3",
+      "D": 256,
+      "T": 544,
+      "NB": 1,
+      "BD": 256,
+      "BT": 32,
+      "num_warps": 4,
+      "num_stages": 3,
+      "num_ctas": 1,
+      "calls": 144
+    },
+    {
+      "segment": "warmup",
+      "D": 256,
+      "T": 116,
+      "NB": 1,
+      "BD": 256,
+      "BT": 32,
+      "num_warps": 4,
+      "num_stages": 3,
+      "num_ctas": 1,
+      "calls": 48
+    },
+    {
+      "segment": "warmup",
+      "D": 256,
+      "T": 136,
+      "NB": 1,
+      "BD": 256,
+      "BT": 32,
+      "num_warps": 4,
+      "num_stages": 3,
+      "num_ctas": 1,
+      "calls": 48
+    },
+    {
+      "segment": "warmup",
+      "D": 256,
+      "T": 464,
+      "NB": 1,
+      "BD": 256,
+      "BT": 32,
+      "num_warps": 4,
+      "num_stages": 3,
+      "num_ctas": 1,
+      "calls": 48
+    },
+    {
+      "segment": "warmup",
+      "D": 256,
+      "T": 544,
+      "NB": 1,
+      "BD": 256,
+      "BT": 32,
+      "num_warps": 4,
+      "num_stages": 3,
+      "num_ctas": 1,
+      "calls": 48
+    }
+  ]
+}
