@@ -18,7 +18,7 @@ from minicells_native.full_state import FullState
 from m1_reference_capacity import digest_file
 import m1_full_state_bridge as r1
 from m1_full_state_bridge import ARMS, PATHS, summarize
-from r1_equivalence import compare, envelope, trace
+from r1_equivalence import compare, compare_coverage, envelope, trace
 from test_next_stage import Cache, TinyBackbone
 
 
@@ -150,6 +150,20 @@ class FullStateTest(unittest.TestCase):
                         output.writestr(name, source.read(name) + (b" " if name == "cache_structure.json" else b""))
                 with self.assertRaises(CellArchiveCorruptedError):
                     mc.cells.import_cell(bad)
+
+    def test_native_inactive_bank_roundtrips_without_hiding_lost_tensors(self):
+        backbone = Backbone()
+        cache = backbone.stream({})
+        backbone.step([2, 10], [cache], [1.0])
+        populated = FullState.capture(backbone, cache)
+        cache.layers[0]["recurrent_state"][0] = None
+        inactive = FullState.capture(backbone, cache)
+        restored = FullState.capture(backbone, inactive.restore(backbone))
+        coverage = compare_coverage(inactive.structure, restored.structure)
+        self.assertTrue(coverage["passed"])
+        self.assertEqual(coverage["inactive_live_routed_banks"], ["0.recurrent_state.0"])
+        self.assertFalse(compare_coverage(populated.structure, restored.structure)["passed"])
+        self.assertFalse(compare_coverage(inactive.structure, populated.structure)["passed"])
 
     def test_failed_state_gate_does_not_launch_bridge(self):
         with TemporaryDirectory() as tmp:

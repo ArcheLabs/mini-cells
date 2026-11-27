@@ -162,3 +162,35 @@ def cache_audit(structure):
                          attn_nonempty=layer["attn_state"] is not None,
                          ffn_nonempty=layer["ffn_state"] is not None))
     return rows
+
+
+def compare_coverage(live_structure, restored_structure):
+    live_layers = cache_audit(live_structure)
+    restored_layers = cache_audit(restored_structure)
+    failures = []
+    if len(live_layers) != len(restored_layers):
+        failures.append("layer_count")
+    inactive = []
+    for live_layer, restored in zip(live_layers, restored_layers):
+        layer = live_layer["layer"]
+        expected = live_layer["recurrent_banks"]
+        actual = restored["recurrent_banks"]
+        if len(expected) != len(actual):
+            failures.append(f"{layer}.recurrent_state.bank_count")
+        for bank, (present, recovered) in enumerate(zip(expected, actual)):
+            field = f"{layer}.recurrent_state.{bank}"
+            if present != recovered:
+                failures.append(field)
+            if not present:
+                inactive.append(field)
+        if not expected or not expected[-1]:
+            failures.append(f"{layer}.recurrent_state.shared")
+        for qkv, (live_branches, restored_branches) in enumerate(zip(
+                live_layer["qkv_routed_shared"], restored["qkv_routed_shared"], strict=True)):
+            for branch, (present, recovered) in enumerate(zip(live_branches, restored_branches, strict=True)):
+                if not present or not recovered:
+                    failures.append(f"{layer}.conv_state.{qkv}.{branch}")
+        for field in ("attn_nonempty", "ffn_nonempty"):
+            if live_layer[field] != restored[field]:
+                failures.append(f"{layer}.{field}")
+    return dict(passed=not failures, failures=failures, inactive_live_routed_banks=inactive)

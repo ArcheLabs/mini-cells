@@ -20,7 +20,7 @@ from m1_value_swap import score
 from m1_capacity import saved_cell
 from m1_reference_capacity import digest_file
 from r1_equivalence import (
-    cache_audit, check_restored_tensors, compare, ensure_readonly, envelope,
+    cache_audit, check_restored_tensors, compare, compare_coverage, ensure_readonly, envelope,
     live, load_trace, restored_trace, save_trace, trace,
 )
 
@@ -132,11 +132,8 @@ def equivalence(mc, out, phase):
                 audit = cache_audit(actual[0]["pre"])
                 write(out / "state_schema.json", dict(format_version=2, state_schema_version=2,
                                                         structure=actual[0]["pre"], audit=audit))
-                if not all(all(layer["recurrent_banks"]) and all(all(b) for b in layer["qkv_routed_shared"])
-                           for layer in audit):
-                    missing = [str(l["layer"]) for l in audit
-                               if not all(l["recurrent_banks"]) or not all(all(b) for b in l["qkv_routed_shared"])]
-                    record(out, "cache_coverage", dict(passed=False, failures=missing), [], audit=audit)
+                coverage = compare_coverage(ref[0]["pre"], actual[0]["pre"])
+                record(out, "cache_coverage", coverage, [], audit=audit)
                 result, rows = compare(ref, actual, bounds)
                 record(out, "same_process_roundtrip", result, rows, tensor_restore=serialized)
         return
