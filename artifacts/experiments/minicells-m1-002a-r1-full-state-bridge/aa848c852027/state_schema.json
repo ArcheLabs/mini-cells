@@ -1,0 +1,5544 @@
+{
+  "format_version": 2,
+  "state_schema_version": 2,
+  "structure": {
+    "sequence_length": 29,
+    "per_layer_seen_tokens": [
+      29,
+      29,
+      29,
+      29,
+      29,
+      29,
+      29,
+      29,
+      29,
+      29,
+      29,
+      29,
+      29,
+      29,
+      29,
+      29,
+      29,
+      29,
+      29,
+      29,
+      29,
+      29,
+      29,
+      29
+    ],
+    "window_size": null,
+    "layer_count": 24,
+    "memory_bank_count": 5,
+    "layers": [
+      {
+        "attn_state": null,
+        "conv_state": {
+          "kind": "tuple",
+          "items": [
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "0.conv_state.0.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "0.conv_state.0.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "0.conv_state.1.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "0.conv_state.1.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "0.conv_state.2.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "0.conv_state.2.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            }
+          ]
+        },
+        "ffn_state": null,
+        "recurrent_state": {
+          "kind": "list",
+          "items": [
+            {
+              "tensor": "0.recurrent_state.0",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "0.recurrent_state.1",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "0.recurrent_state.2",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "0.recurrent_state.3",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "0.recurrent_state.4",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            }
+          ]
+        }
+      },
+      {
+        "attn_state": null,
+        "conv_state": {
+          "kind": "tuple",
+          "items": [
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "1.conv_state.0.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "1.conv_state.0.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "1.conv_state.1.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "1.conv_state.1.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "1.conv_state.2.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "1.conv_state.2.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            }
+          ]
+        },
+        "ffn_state": null,
+        "recurrent_state": {
+          "kind": "list",
+          "items": [
+            {
+              "tensor": "1.recurrent_state.0",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "1.recurrent_state.1",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "1.recurrent_state.2",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "1.recurrent_state.3",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "1.recurrent_state.4",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            }
+          ]
+        }
+      },
+      {
+        "attn_state": null,
+        "conv_state": {
+          "kind": "tuple",
+          "items": [
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "2.conv_state.0.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "2.conv_state.0.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "2.conv_state.1.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "2.conv_state.1.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "2.conv_state.2.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "2.conv_state.2.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            }
+          ]
+        },
+        "ffn_state": null,
+        "recurrent_state": {
+          "kind": "list",
+          "items": [
+            {
+              "tensor": "2.recurrent_state.0",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "2.recurrent_state.1",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "2.recurrent_state.2",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "2.recurrent_state.3",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "2.recurrent_state.4",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            }
+          ]
+        }
+      },
+      {
+        "attn_state": null,
+        "conv_state": {
+          "kind": "tuple",
+          "items": [
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "3.conv_state.0.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "3.conv_state.0.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "3.conv_state.1.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "3.conv_state.1.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "3.conv_state.2.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "3.conv_state.2.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            }
+          ]
+        },
+        "ffn_state": null,
+        "recurrent_state": {
+          "kind": "list",
+          "items": [
+            {
+              "tensor": "3.recurrent_state.0",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "3.recurrent_state.1",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "3.recurrent_state.2",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "3.recurrent_state.3",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "3.recurrent_state.4",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            }
+          ]
+        }
+      },
+      {
+        "attn_state": null,
+        "conv_state": {
+          "kind": "tuple",
+          "items": [
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "4.conv_state.0.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "4.conv_state.0.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "4.conv_state.1.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "4.conv_state.1.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "4.conv_state.2.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "4.conv_state.2.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            }
+          ]
+        },
+        "ffn_state": null,
+        "recurrent_state": {
+          "kind": "list",
+          "items": [
+            {
+              "tensor": "4.recurrent_state.0",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "4.recurrent_state.1",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "4.recurrent_state.2",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "4.recurrent_state.3",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "4.recurrent_state.4",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            }
+          ]
+        }
+      },
+      {
+        "attn_state": null,
+        "conv_state": {
+          "kind": "tuple",
+          "items": [
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "5.conv_state.0.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "5.conv_state.0.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "5.conv_state.1.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "5.conv_state.1.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "5.conv_state.2.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "5.conv_state.2.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            }
+          ]
+        },
+        "ffn_state": null,
+        "recurrent_state": {
+          "kind": "list",
+          "items": [
+            {
+              "tensor": "5.recurrent_state.0",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "5.recurrent_state.1",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "5.recurrent_state.2",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "5.recurrent_state.3",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "5.recurrent_state.4",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            }
+          ]
+        }
+      },
+      {
+        "attn_state": null,
+        "conv_state": {
+          "kind": "tuple",
+          "items": [
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "6.conv_state.0.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "6.conv_state.0.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "6.conv_state.1.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "6.conv_state.1.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "6.conv_state.2.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "6.conv_state.2.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            }
+          ]
+        },
+        "ffn_state": null,
+        "recurrent_state": {
+          "kind": "list",
+          "items": [
+            {
+              "tensor": "6.recurrent_state.0",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "6.recurrent_state.1",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "6.recurrent_state.2",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "6.recurrent_state.3",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "6.recurrent_state.4",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            }
+          ]
+        }
+      },
+      {
+        "attn_state": null,
+        "conv_state": {
+          "kind": "tuple",
+          "items": [
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "7.conv_state.0.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "7.conv_state.0.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "7.conv_state.1.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "7.conv_state.1.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "7.conv_state.2.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "7.conv_state.2.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            }
+          ]
+        },
+        "ffn_state": null,
+        "recurrent_state": {
+          "kind": "list",
+          "items": [
+            {
+              "tensor": "7.recurrent_state.0",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "7.recurrent_state.1",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "7.recurrent_state.2",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "7.recurrent_state.3",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "7.recurrent_state.4",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            }
+          ]
+        }
+      },
+      {
+        "attn_state": null,
+        "conv_state": {
+          "kind": "tuple",
+          "items": [
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "8.conv_state.0.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "8.conv_state.0.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "8.conv_state.1.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "8.conv_state.1.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "8.conv_state.2.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "8.conv_state.2.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            }
+          ]
+        },
+        "ffn_state": null,
+        "recurrent_state": {
+          "kind": "list",
+          "items": [
+            {
+              "tensor": "8.recurrent_state.0",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "8.recurrent_state.1",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "8.recurrent_state.2",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "8.recurrent_state.3",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "8.recurrent_state.4",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            }
+          ]
+        }
+      },
+      {
+        "attn_state": null,
+        "conv_state": {
+          "kind": "tuple",
+          "items": [
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "9.conv_state.0.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "9.conv_state.0.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "9.conv_state.1.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "9.conv_state.1.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "9.conv_state.2.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "9.conv_state.2.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            }
+          ]
+        },
+        "ffn_state": null,
+        "recurrent_state": {
+          "kind": "list",
+          "items": [
+            {
+              "tensor": "9.recurrent_state.0",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "9.recurrent_state.1",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "9.recurrent_state.2",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "9.recurrent_state.3",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "9.recurrent_state.4",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            }
+          ]
+        }
+      },
+      {
+        "attn_state": null,
+        "conv_state": {
+          "kind": "tuple",
+          "items": [
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "10.conv_state.0.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "10.conv_state.0.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "10.conv_state.1.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "10.conv_state.1.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "10.conv_state.2.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "10.conv_state.2.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            }
+          ]
+        },
+        "ffn_state": null,
+        "recurrent_state": {
+          "kind": "list",
+          "items": [
+            {
+              "tensor": "10.recurrent_state.0",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "10.recurrent_state.1",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "10.recurrent_state.2",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "10.recurrent_state.3",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "10.recurrent_state.4",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            }
+          ]
+        }
+      },
+      {
+        "attn_state": null,
+        "conv_state": {
+          "kind": "tuple",
+          "items": [
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "11.conv_state.0.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "11.conv_state.0.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "11.conv_state.1.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "11.conv_state.1.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "11.conv_state.2.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "11.conv_state.2.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            }
+          ]
+        },
+        "ffn_state": null,
+        "recurrent_state": {
+          "kind": "list",
+          "items": [
+            {
+              "tensor": "11.recurrent_state.0",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            null,
+            {
+              "tensor": "11.recurrent_state.2",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "11.recurrent_state.3",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "11.recurrent_state.4",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            }
+          ]
+        }
+      },
+      {
+        "attn_state": null,
+        "conv_state": {
+          "kind": "tuple",
+          "items": [
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "12.conv_state.0.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "12.conv_state.0.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "12.conv_state.1.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "12.conv_state.1.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "12.conv_state.2.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "12.conv_state.2.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            }
+          ]
+        },
+        "ffn_state": null,
+        "recurrent_state": {
+          "kind": "list",
+          "items": [
+            {
+              "tensor": "12.recurrent_state.0",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "12.recurrent_state.1",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "12.recurrent_state.2",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "12.recurrent_state.3",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "12.recurrent_state.4",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            }
+          ]
+        }
+      },
+      {
+        "attn_state": null,
+        "conv_state": {
+          "kind": "tuple",
+          "items": [
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "13.conv_state.0.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "13.conv_state.0.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "13.conv_state.1.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "13.conv_state.1.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "13.conv_state.2.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "13.conv_state.2.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            }
+          ]
+        },
+        "ffn_state": null,
+        "recurrent_state": {
+          "kind": "list",
+          "items": [
+            {
+              "tensor": "13.recurrent_state.0",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "13.recurrent_state.1",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "13.recurrent_state.2",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "13.recurrent_state.3",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "13.recurrent_state.4",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            }
+          ]
+        }
+      },
+      {
+        "attn_state": null,
+        "conv_state": {
+          "kind": "tuple",
+          "items": [
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "14.conv_state.0.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "14.conv_state.0.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "14.conv_state.1.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "14.conv_state.1.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "14.conv_state.2.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "14.conv_state.2.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            }
+          ]
+        },
+        "ffn_state": null,
+        "recurrent_state": {
+          "kind": "list",
+          "items": [
+            {
+              "tensor": "14.recurrent_state.0",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "14.recurrent_state.1",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "14.recurrent_state.2",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "14.recurrent_state.3",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "14.recurrent_state.4",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            }
+          ]
+        }
+      },
+      {
+        "attn_state": null,
+        "conv_state": {
+          "kind": "tuple",
+          "items": [
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "15.conv_state.0.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "15.conv_state.0.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "15.conv_state.1.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "15.conv_state.1.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "15.conv_state.2.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "15.conv_state.2.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            }
+          ]
+        },
+        "ffn_state": null,
+        "recurrent_state": {
+          "kind": "list",
+          "items": [
+            {
+              "tensor": "15.recurrent_state.0",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "15.recurrent_state.1",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "15.recurrent_state.2",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "15.recurrent_state.3",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "15.recurrent_state.4",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            }
+          ]
+        }
+      },
+      {
+        "attn_state": null,
+        "conv_state": {
+          "kind": "tuple",
+          "items": [
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "16.conv_state.0.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "16.conv_state.0.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "16.conv_state.1.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "16.conv_state.1.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "16.conv_state.2.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "16.conv_state.2.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            }
+          ]
+        },
+        "ffn_state": null,
+        "recurrent_state": {
+          "kind": "list",
+          "items": [
+            {
+              "tensor": "16.recurrent_state.0",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "16.recurrent_state.1",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "16.recurrent_state.2",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "16.recurrent_state.3",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "16.recurrent_state.4",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            }
+          ]
+        }
+      },
+      {
+        "attn_state": null,
+        "conv_state": {
+          "kind": "tuple",
+          "items": [
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "17.conv_state.0.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "17.conv_state.0.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "17.conv_state.1.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "17.conv_state.1.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "17.conv_state.2.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "17.conv_state.2.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            }
+          ]
+        },
+        "ffn_state": null,
+        "recurrent_state": {
+          "kind": "list",
+          "items": [
+            {
+              "tensor": "17.recurrent_state.0",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "17.recurrent_state.1",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "17.recurrent_state.2",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "17.recurrent_state.3",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "17.recurrent_state.4",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            }
+          ]
+        }
+      },
+      {
+        "attn_state": null,
+        "conv_state": {
+          "kind": "tuple",
+          "items": [
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "18.conv_state.0.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "18.conv_state.0.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "18.conv_state.1.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "18.conv_state.1.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "18.conv_state.2.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "18.conv_state.2.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            }
+          ]
+        },
+        "ffn_state": null,
+        "recurrent_state": {
+          "kind": "list",
+          "items": [
+            {
+              "tensor": "18.recurrent_state.0",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "18.recurrent_state.1",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "18.recurrent_state.2",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "18.recurrent_state.3",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "18.recurrent_state.4",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            }
+          ]
+        }
+      },
+      {
+        "attn_state": null,
+        "conv_state": {
+          "kind": "tuple",
+          "items": [
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "19.conv_state.0.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "19.conv_state.0.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "19.conv_state.1.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "19.conv_state.1.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "19.conv_state.2.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "19.conv_state.2.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            }
+          ]
+        },
+        "ffn_state": null,
+        "recurrent_state": {
+          "kind": "list",
+          "items": [
+            {
+              "tensor": "19.recurrent_state.0",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "19.recurrent_state.1",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "19.recurrent_state.2",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "19.recurrent_state.3",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "19.recurrent_state.4",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            }
+          ]
+        }
+      },
+      {
+        "attn_state": null,
+        "conv_state": {
+          "kind": "tuple",
+          "items": [
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "20.conv_state.0.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "20.conv_state.0.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "20.conv_state.1.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "20.conv_state.1.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "20.conv_state.2.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "20.conv_state.2.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            }
+          ]
+        },
+        "ffn_state": null,
+        "recurrent_state": {
+          "kind": "list",
+          "items": [
+            {
+              "tensor": "20.recurrent_state.0",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "20.recurrent_state.1",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "20.recurrent_state.2",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "20.recurrent_state.3",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "20.recurrent_state.4",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            }
+          ]
+        }
+      },
+      {
+        "attn_state": null,
+        "conv_state": {
+          "kind": "tuple",
+          "items": [
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "21.conv_state.0.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "21.conv_state.0.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "21.conv_state.1.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "21.conv_state.1.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "21.conv_state.2.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "21.conv_state.2.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            }
+          ]
+        },
+        "ffn_state": null,
+        "recurrent_state": {
+          "kind": "list",
+          "items": [
+            {
+              "tensor": "21.recurrent_state.0",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "21.recurrent_state.1",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "21.recurrent_state.2",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "21.recurrent_state.3",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "21.recurrent_state.4",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            }
+          ]
+        }
+      },
+      {
+        "attn_state": null,
+        "conv_state": {
+          "kind": "tuple",
+          "items": [
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "22.conv_state.0.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "22.conv_state.0.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "22.conv_state.1.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "22.conv_state.1.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "22.conv_state.2.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "22.conv_state.2.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            }
+          ]
+        },
+        "ffn_state": null,
+        "recurrent_state": {
+          "kind": "list",
+          "items": [
+            {
+              "tensor": "22.recurrent_state.0",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "22.recurrent_state.1",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "22.recurrent_state.2",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "22.recurrent_state.3",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "22.recurrent_state.4",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            }
+          ]
+        }
+      },
+      {
+        "attn_state": null,
+        "conv_state": {
+          "kind": "tuple",
+          "items": [
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "23.conv_state.0.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "23.conv_state.0.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "23.conv_state.1.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "23.conv_state.1.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            },
+            {
+              "kind": "list",
+              "items": [
+                {
+                  "tensor": "23.conv_state.2.0",
+                  "shape": [
+                    4,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                },
+                {
+                  "tensor": "23.conv_state.2.1",
+                  "shape": [
+                    1,
+                    1024,
+                    4
+                  ],
+                  "stride": [
+                    4096,
+                    4,
+                    1
+                  ],
+                  "dtype": "torch.float16",
+                  "layout": "torch.strided"
+                }
+              ]
+            }
+          ]
+        },
+        "ffn_state": null,
+        "recurrent_state": {
+          "kind": "list",
+          "items": [
+            {
+              "tensor": "23.recurrent_state.0",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "23.recurrent_state.1",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "23.recurrent_state.2",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "23.recurrent_state.3",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            },
+            {
+              "tensor": "23.recurrent_state.4",
+              "shape": [
+                1,
+                4,
+                256,
+                256
+              ],
+              "stride": [
+                262144,
+                65536,
+                256,
+                1
+              ],
+              "dtype": "torch.float32",
+              "layout": "torch.strided"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "audit": [
+    {
+      "layer": 0,
+      "recurrent_banks": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "qkv_routed_shared": [
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "attn_nonempty": false,
+      "ffn_nonempty": false
+    },
+    {
+      "layer": 1,
+      "recurrent_banks": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "qkv_routed_shared": [
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "attn_nonempty": false,
+      "ffn_nonempty": false
+    },
+    {
+      "layer": 2,
+      "recurrent_banks": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "qkv_routed_shared": [
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "attn_nonempty": false,
+      "ffn_nonempty": false
+    },
+    {
+      "layer": 3,
+      "recurrent_banks": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "qkv_routed_shared": [
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "attn_nonempty": false,
+      "ffn_nonempty": false
+    },
+    {
+      "layer": 4,
+      "recurrent_banks": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "qkv_routed_shared": [
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "attn_nonempty": false,
+      "ffn_nonempty": false
+    },
+    {
+      "layer": 5,
+      "recurrent_banks": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "qkv_routed_shared": [
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "attn_nonempty": false,
+      "ffn_nonempty": false
+    },
+    {
+      "layer": 6,
+      "recurrent_banks": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "qkv_routed_shared": [
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "attn_nonempty": false,
+      "ffn_nonempty": false
+    },
+    {
+      "layer": 7,
+      "recurrent_banks": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "qkv_routed_shared": [
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "attn_nonempty": false,
+      "ffn_nonempty": false
+    },
+    {
+      "layer": 8,
+      "recurrent_banks": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "qkv_routed_shared": [
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "attn_nonempty": false,
+      "ffn_nonempty": false
+    },
+    {
+      "layer": 9,
+      "recurrent_banks": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "qkv_routed_shared": [
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "attn_nonempty": false,
+      "ffn_nonempty": false
+    },
+    {
+      "layer": 10,
+      "recurrent_banks": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "qkv_routed_shared": [
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "attn_nonempty": false,
+      "ffn_nonempty": false
+    },
+    {
+      "layer": 11,
+      "recurrent_banks": [
+        true,
+        false,
+        true,
+        true,
+        true
+      ],
+      "qkv_routed_shared": [
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "attn_nonempty": false,
+      "ffn_nonempty": false
+    },
+    {
+      "layer": 12,
+      "recurrent_banks": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "qkv_routed_shared": [
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "attn_nonempty": false,
+      "ffn_nonempty": false
+    },
+    {
+      "layer": 13,
+      "recurrent_banks": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "qkv_routed_shared": [
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "attn_nonempty": false,
+      "ffn_nonempty": false
+    },
+    {
+      "layer": 14,
+      "recurrent_banks": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "qkv_routed_shared": [
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "attn_nonempty": false,
+      "ffn_nonempty": false
+    },
+    {
+      "layer": 15,
+      "recurrent_banks": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "qkv_routed_shared": [
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "attn_nonempty": false,
+      "ffn_nonempty": false
+    },
+    {
+      "layer": 16,
+      "recurrent_banks": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "qkv_routed_shared": [
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "attn_nonempty": false,
+      "ffn_nonempty": false
+    },
+    {
+      "layer": 17,
+      "recurrent_banks": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "qkv_routed_shared": [
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "attn_nonempty": false,
+      "ffn_nonempty": false
+    },
+    {
+      "layer": 18,
+      "recurrent_banks": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "qkv_routed_shared": [
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "attn_nonempty": false,
+      "ffn_nonempty": false
+    },
+    {
+      "layer": 19,
+      "recurrent_banks": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "qkv_routed_shared": [
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "attn_nonempty": false,
+      "ffn_nonempty": false
+    },
+    {
+      "layer": 20,
+      "recurrent_banks": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "qkv_routed_shared": [
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "attn_nonempty": false,
+      "ffn_nonempty": false
+    },
+    {
+      "layer": 21,
+      "recurrent_banks": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "qkv_routed_shared": [
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "attn_nonempty": false,
+      "ffn_nonempty": false
+    },
+    {
+      "layer": 22,
+      "recurrent_banks": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "qkv_routed_shared": [
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "attn_nonempty": false,
+      "ffn_nonempty": false
+    },
+    {
+      "layer": 23,
+      "recurrent_banks": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "qkv_routed_shared": [
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "attn_nonempty": false,
+      "ffn_nonempty": false
+    }
+  ]
+}
