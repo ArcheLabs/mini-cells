@@ -1,0 +1,187 @@
+{
+  "experiment": "M1-002A Single-Fact Protocol Bridge",
+  "status": "BRIDGE_GATE_FAILED",
+  "engineering_status": "PASS",
+  "environment": {
+    "commit": "4e9bf9ba12bdc4e13ec61bb427aa82ff1635eb42",
+    "python": "3.13.16",
+    "gpu": "Tesla T4",
+    "capability": [
+      7,
+      5
+    ],
+    "cuda": "13.0",
+    "packages": {
+      "torch": "2.11.0+cu130",
+      "triton": "3.6.0",
+      "flash-linear-attention": "0.2.2",
+      "transformers": "4.51.3",
+      "minicells-native-sdk": "0.1.0"
+    }
+  },
+  "identity": {
+    "model_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+    "model_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+    "architecture": "mom-gated-deltanet",
+    "mom_revision": "125038087b71b635c171cec857bd0f21d10955b6",
+    "tokenizer_id": "linear-moe-hub/MoM-Gated-Deltanet-1.3B",
+    "tokenizer_revision": "5c8be94196cb1827e820077680ac2ee46ac949bc",
+    "tokenizer_hash": "90e3e115a745594abd2167554dcf472ea00d4852465c03b5482309d9036f4c49",
+    "tokenizer_files": {
+      "special_tokens_map.json": "4452b845ab9ca2afa863f59f1411a959e8a32bb4334e264b0e71d5d17dd4dcb9",
+      "tokenizer.json": "a2699839c243202a04a90537576fc719283f638e90fe80feb469888275289575",
+      "tokenizer_config.json": "cc3fdc5126e4d2e3a3934bc29779bf811c2eeefb60237017cddfd03acf9a7562"
+    },
+    "config_hash": "b99c19cdd75493abb6dfe0d5e991ebaac8d5af963b75c0ea2f73a6f496204341",
+    "weights_sha256": "08820287a91c2bc10f1fafe8b149dbf027ae51768530027c711dc240f7d53771",
+    "dtype": "float16",
+    "num_hidden_layers": 24,
+    "num_memories": 4,
+    "shared_memory": true,
+    "topk": 2,
+    "torch": "2.11.0+cu130",
+    "triton": "3.6.0",
+    "transformers": "4.51.3",
+    "flash-linear-attention": "0.2.2",
+    "execution_profile": "t4-fp16-recurrent-v1",
+    "parameters": 1552884000
+  },
+  "bridge_dataset_sha256": "3c3f307fef01bafc4222d28b6f15d2a0876e0cb9dd369654c954027bcba8a0d7",
+  "minimum_flip_rate": 0.8,
+  "capacity_status": "SKIPPED",
+  "bridge_summary": {
+    "arms": {
+      "reference": {
+        "n": 12,
+        "no_memory_original_hits": 4,
+        "full_flips": 12,
+        "full_margin": 24.247211897192756,
+        "cell_flips": 12,
+        "cell_margin": 24.118214110911747
+      },
+      "anchor": {
+        "n": 12,
+        "no_memory_original_hits": 3,
+        "full_flips": 12,
+        "full_margin": 24.28481609953451,
+        "cell_flips": 12,
+        "cell_margin": 24.194055791032344
+      },
+      "encoding": {
+        "n": 12,
+        "no_memory_original_hits": 4,
+        "full_flips": 11,
+        "full_margin": 4.5450846155484514,
+        "cell_flips": 7,
+        "cell_margin": 1.1075846950213115
+      },
+      "candidates": {
+        "n": 12,
+        "no_memory_original_hits": 0,
+        "full_flips": 8,
+        "full_margin": 1.5953775842984517,
+        "cell_flips": 0,
+        "cell_margin": -1.45068359375
+      },
+      "wording": {
+        "n": 12,
+        "no_memory_original_hits": 3,
+        "full_flips": 12,
+        "full_margin": 5.061360662182172,
+        "cell_flips": 0,
+        "cell_margin": 0.13655594984690347
+      },
+      "combined": {
+        "n": 12,
+        "no_memory_original_hits": 0,
+        "full_flips": 6,
+        "full_margin": 1.533203090230624,
+        "cell_flips": 0,
+        "cell_margin": -3.202473978201548
+      }
+    },
+    "contrasts": {
+      "anchor_vs_reference": {
+        "full": {
+          "gains": 0,
+          "losses": 0
+        },
+        "cell": {
+          "gains": 0,
+          "losses": 0
+        }
+      },
+      "encoding_vs_anchor": {
+        "full": {
+          "gains": 0,
+          "losses": 1
+        },
+        "cell": {
+          "gains": 0,
+          "losses": 5
+        }
+      },
+      "candidates_vs_encoding": {
+        "full": {
+          "gains": 0,
+          "losses": 3
+        },
+        "cell": {
+          "gains": 0,
+          "losses": 7
+        }
+      },
+      "wording_vs_encoding": {
+        "full": {
+          "gains": 1,
+          "losses": 0
+        },
+        "cell": {
+          "gains": 0,
+          "losses": 7
+        }
+      },
+      "combined_vs_wording": {
+        "full": {
+          "gains": 0,
+          "losses": 6
+        },
+        "cell": {
+          "gains": 0,
+          "losses": 0
+        }
+      },
+      "combined_vs_candidates": {
+        "full": {
+          "gains": 0,
+          "losses": 2
+        },
+        "cell": {
+          "gains": 0,
+          "losses": 0
+        }
+      }
+    },
+    "gates": {
+      "reference_full": "PASS",
+      "reference_cell": "PASS",
+      "anchor_full": "PASS",
+      "anchor_cell": "PASS",
+      "combined_full": "FAIL",
+      "combined_cell": "FAIL",
+      "combined_no_memory": "PASS"
+    }
+  },
+  "gates": {
+    "reference_full": "PASS",
+    "reference_cell": "PASS",
+    "anchor_full": "PASS",
+    "anchor_cell": "PASS",
+    "combined_full": "FAIL",
+    "combined_cell": "FAIL",
+    "combined_no_memory": "PASS"
+  },
+  "diagnosis": "One or more single-fact bridge controls failed.",
+  "next_action": "Use the isolated protocol comparisons to identify which change lost recall.",
+  "elapsed_seconds": 861.2676964090001
+}
