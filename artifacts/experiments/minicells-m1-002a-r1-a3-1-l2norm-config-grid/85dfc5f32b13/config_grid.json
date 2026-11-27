@@ -1,0 +1,1457 @@
+{
+  "status": "CONFIG_DEPENDENT_OUTPUT",
+  "outcomes": {
+    "Q": "CONFIG_DEPENDENT_OUTPUT",
+    "K": "CONFIG_DEPENDENT_OUTPUT"
+  },
+  "axes": {
+    "Q": [
+      {
+        "BT": 8,
+        "num_warps": 1,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 8,
+          "launch_grid": [
+            68
+          ],
+          "num_warps": 1,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898",
+        "output_sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 8,
+        "num_warps": 2,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 8,
+          "launch_grid": [
+            68
+          ],
+          "num_warps": 2,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898",
+        "output_sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 8,
+        "num_warps": 4,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 8,
+          "launch_grid": [
+            68
+          ],
+          "num_warps": 4,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898",
+        "output_sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 8,
+        "num_warps": 8,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 8,
+          "launch_grid": [
+            68
+          ],
+          "num_warps": 8,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898",
+        "output_sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 8,
+        "num_warps": 16,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 8,
+          "launch_grid": [
+            68
+          ],
+          "num_warps": 16,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898",
+        "output_sha256": "b012e3684105587200df8302a054622a23c0ede113edc7942f5c504ae279f955",
+        "vs_first": {
+          "bitwise_equal": false,
+          "max_absolute": 3.814697265625e-06,
+          "max_relative": 0.0006329113924050633,
+          "cosine": 0.99999999999997,
+          "first_index": [
+            1,
+            0,
+            28,
+            3,
+            29
+          ]
+        }
+      },
+      {
+        "BT": 16,
+        "num_warps": 1,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 16,
+          "launch_grid": [
+            34
+          ],
+          "num_warps": 1,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898",
+        "output_sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 16,
+        "num_warps": 2,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 16,
+          "launch_grid": [
+            34
+          ],
+          "num_warps": 2,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898",
+        "output_sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 16,
+        "num_warps": 4,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 16,
+          "launch_grid": [
+            34
+          ],
+          "num_warps": 4,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898",
+        "output_sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 16,
+        "num_warps": 8,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 16,
+          "launch_grid": [
+            34
+          ],
+          "num_warps": 8,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898",
+        "output_sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 16,
+        "num_warps": 16,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 16,
+          "launch_grid": [
+            34
+          ],
+          "num_warps": 16,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898",
+        "output_sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 32,
+        "num_warps": 1,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 32,
+          "launch_grid": [
+            17
+          ],
+          "num_warps": 1,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898",
+        "output_sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 32,
+        "num_warps": 2,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 32,
+          "launch_grid": [
+            17
+          ],
+          "num_warps": 2,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898",
+        "output_sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 32,
+        "num_warps": 4,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 32,
+          "launch_grid": [
+            17
+          ],
+          "num_warps": 4,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898",
+        "output_sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        },
+        "vs_archived_fixed": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 32,
+        "num_warps": 8,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 32,
+          "launch_grid": [
+            17
+          ],
+          "num_warps": 8,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898",
+        "output_sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 32,
+        "num_warps": 16,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 32,
+          "launch_grid": [
+            17
+          ],
+          "num_warps": 16,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898",
+        "output_sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        },
+        "vs_archived_native": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 64,
+        "num_warps": 1,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 64,
+          "launch_grid": [
+            9
+          ],
+          "num_warps": 1,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898",
+        "output_sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 64,
+        "num_warps": 2,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 64,
+          "launch_grid": [
+            9
+          ],
+          "num_warps": 2,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898",
+        "output_sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 64,
+        "num_warps": 4,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 64,
+          "launch_grid": [
+            9
+          ],
+          "num_warps": 4,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898",
+        "output_sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 64,
+        "num_warps": 8,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 64,
+          "launch_grid": [
+            9
+          ],
+          "num_warps": 8,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898",
+        "output_sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 64,
+        "num_warps": 16,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 64,
+          "launch_grid": [
+            9
+          ],
+          "num_warps": 16,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898",
+        "output_sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 128,
+        "num_warps": 1,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 128,
+          "launch_grid": [
+            5
+          ],
+          "num_warps": 1,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898",
+        "output_sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 128,
+        "num_warps": 2,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 128,
+          "launch_grid": [
+            5
+          ],
+          "num_warps": 2,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898",
+        "output_sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 128,
+        "num_warps": 4,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 128,
+          "launch_grid": [
+            5
+          ],
+          "num_warps": 4,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898",
+        "output_sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 128,
+        "num_warps": 8,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 128,
+          "launch_grid": [
+            5
+          ],
+          "num_warps": 8,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898",
+        "output_sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 128,
+        "num_warps": 16,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 128,
+          "launch_grid": [
+            5
+          ],
+          "num_warps": 16,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "e340fb987c2db1f1feac446b31cbca1ba3f75199d23f1f7e4da8640ce3e66898",
+        "output_sha256": "fdca3887ba228ac10d6cfe65010d9bd764da43cfaab680eb32f678de8e202ca1",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      }
+    ],
+    "K": [
+      {
+        "BT": 8,
+        "num_warps": 1,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 8,
+          "launch_grid": [
+            68
+          ],
+          "num_warps": 1,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041",
+        "output_sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 8,
+        "num_warps": 2,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 8,
+          "launch_grid": [
+            68
+          ],
+          "num_warps": 2,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041",
+        "output_sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 8,
+        "num_warps": 4,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 8,
+          "launch_grid": [
+            68
+          ],
+          "num_warps": 4,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041",
+        "output_sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 8,
+        "num_warps": 8,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 8,
+          "launch_grid": [
+            68
+          ],
+          "num_warps": 8,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041",
+        "output_sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 8,
+        "num_warps": 16,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 8,
+          "launch_grid": [
+            68
+          ],
+          "num_warps": 16,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041",
+        "output_sha256": "f94549d6aec680db89c588e4fc82a5550d112bef69df0f749743b9276cad39b6",
+        "vs_first": {
+          "bitwise_equal": false,
+          "max_absolute": 3.814697265625e-06,
+          "max_relative": 0.0008097165991902834,
+          "cosine": 0.9999999999999687,
+          "first_index": [
+            0,
+            0,
+            31,
+            2,
+            144
+          ]
+        }
+      },
+      {
+        "BT": 16,
+        "num_warps": 1,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 16,
+          "launch_grid": [
+            34
+          ],
+          "num_warps": 1,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041",
+        "output_sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 16,
+        "num_warps": 2,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 16,
+          "launch_grid": [
+            34
+          ],
+          "num_warps": 2,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041",
+        "output_sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 16,
+        "num_warps": 4,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 16,
+          "launch_grid": [
+            34
+          ],
+          "num_warps": 4,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041",
+        "output_sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 16,
+        "num_warps": 8,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 16,
+          "launch_grid": [
+            34
+          ],
+          "num_warps": 8,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041",
+        "output_sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 16,
+        "num_warps": 16,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 16,
+          "launch_grid": [
+            34
+          ],
+          "num_warps": 16,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041",
+        "output_sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 32,
+        "num_warps": 1,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 32,
+          "launch_grid": [
+            17
+          ],
+          "num_warps": 1,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041",
+        "output_sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 32,
+        "num_warps": 2,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 32,
+          "launch_grid": [
+            17
+          ],
+          "num_warps": 2,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041",
+        "output_sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 32,
+        "num_warps": 4,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 32,
+          "launch_grid": [
+            17
+          ],
+          "num_warps": 4,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041",
+        "output_sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        },
+        "vs_archived_fixed": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 32,
+        "num_warps": 8,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 32,
+          "launch_grid": [
+            17
+          ],
+          "num_warps": 8,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041",
+        "output_sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 32,
+        "num_warps": 16,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 32,
+          "launch_grid": [
+            17
+          ],
+          "num_warps": 16,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041",
+        "output_sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        },
+        "vs_archived_native": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 64,
+        "num_warps": 1,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 64,
+          "launch_grid": [
+            9
+          ],
+          "num_warps": 1,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041",
+        "output_sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 64,
+        "num_warps": 2,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 64,
+          "launch_grid": [
+            9
+          ],
+          "num_warps": 2,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041",
+        "output_sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 64,
+        "num_warps": 4,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 64,
+          "launch_grid": [
+            9
+          ],
+          "num_warps": 4,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041",
+        "output_sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 64,
+        "num_warps": 8,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 64,
+          "launch_grid": [
+            9
+          ],
+          "num_warps": 8,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041",
+        "output_sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 64,
+        "num_warps": 16,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 64,
+          "launch_grid": [
+            9
+          ],
+          "num_warps": 16,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041",
+        "output_sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 128,
+        "num_warps": 1,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 128,
+          "launch_grid": [
+            5
+          ],
+          "num_warps": 1,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041",
+        "output_sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 128,
+        "num_warps": 2,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 128,
+          "launch_grid": [
+            5
+          ],
+          "num_warps": 2,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041",
+        "output_sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 128,
+        "num_warps": 4,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 128,
+          "launch_grid": [
+            5
+          ],
+          "num_warps": 4,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041",
+        "output_sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 128,
+        "num_warps": 8,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 128,
+          "launch_grid": [
+            5
+          ],
+          "num_warps": 8,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041",
+        "output_sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      },
+      {
+        "BT": 128,
+        "num_warps": 16,
+        "launch": {
+          "kernel": "l2norm_fwd_kernel",
+          "D": 256,
+          "T": 544,
+          "NB": 1,
+          "BD": 256,
+          "BT": 128,
+          "launch_grid": [
+            5
+          ],
+          "num_warps": 16,
+          "num_stages": 3,
+          "num_ctas": 1,
+          "autocast": false
+        },
+        "input_sha256": "048f320d17de569cf18da5639505db2e98f01863e97b4be027609843520bd041",
+        "output_sha256": "4ecb76949aa78407e95c8cf6c550bfc6913453d3841cb949d17bd5fe32489914",
+        "vs_first": {
+          "bitwise_equal": true,
+          "max_absolute": 0.0,
+          "max_relative": 0.0,
+          "cosine": 1.0,
+          "first_index": null
+        }
+      }
+    ]
+  },
+  "unique_output_hashes": {
+    "Q": 2,
+    "K": 2
+  }
+}
