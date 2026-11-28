@@ -1,0 +1,123 @@
+{
+  "arms": {
+    "reference": {
+      "n": 12,
+      "no_memory_original_hits": 4,
+      "full_flips": 12,
+      "full_margin": 24.247211897192756,
+      "cell_flips": 12,
+      "cell_margin": 24.118214110911747
+    },
+    "anchor": {
+      "n": 12,
+      "no_memory_original_hits": 3,
+      "full_flips": 12,
+      "full_margin": 24.28481609953451,
+      "cell_flips": 12,
+      "cell_margin": 24.194055791032344
+    },
+    "encoding": {
+      "n": 12,
+      "no_memory_original_hits": 4,
+      "full_flips": 11,
+      "full_margin": 4.5450846155484514,
+      "cell_flips": 7,
+      "cell_margin": 1.1075846950213115
+    },
+    "candidates": {
+      "n": 12,
+      "no_memory_original_hits": 0,
+      "full_flips": 8,
+      "full_margin": 1.5953775842984517,
+      "cell_flips": 0,
+      "cell_margin": -1.45068359375
+    },
+    "wording": {
+      "n": 12,
+      "no_memory_original_hits": 3,
+      "full_flips": 12,
+      "full_margin": 5.061360662182172,
+      "cell_flips": 0,
+      "cell_margin": 0.13655594984690347
+    },
+    "combined": {
+      "n": 12,
+      "no_memory_original_hits": 0,
+      "full_flips": 6,
+      "full_margin": 1.533203090230624,
+      "cell_flips": 0,
+      "cell_margin": -3.202473978201548
+    }
+  },
+  "contrasts": {
+    "anchor_vs_reference": {
+      "full": {
+        "gains": 0,
+        "losses": 0
+      },
+      "cell": {
+        "gains": 0,
+        "losses": 0
+      }
+    },
+    "encoding_vs_anchor": {
+      "full": {
+        "gains": 0,
+        "losses": 1
+      },
+      "cell": {
+        "gains": 0,
+        "losses": 5
+      }
+    },
+    "candidates_vs_encoding": {
+      "full": {
+        "gains": 0,
+        "losses": 3
+      },
+      "cell": {
+        "gains": 0,
+        "losses": 7
+      }
+    },
+    "wording_vs_encoding": {
+      "full": {
+        "gains": 1,
+        "losses": 0
+      },
+      "cell": {
+        "gains": 0,
+        "losses": 7
+      }
+    },
+    "combined_vs_wording": {
+      "full": {
+        "gains": 0,
+        "losses": 6
+      },
+      "cell": {
+        "gains": 0,
+        "losses": 0
+      }
+    },
+    "combined_vs_candidates": {
+      "full": {
+        "gains": 0,
+        "losses": 2
+      },
+      "cell": {
+        "gains": 0,
+        "losses": 0
+      }
+    }
+  },
+  "gates": {
+    "reference_full": "PASS",
+    "reference_cell": "PASS",
+    "anchor_full": "PASS",
+    "anchor_cell": "PASS",
+    "combined_full": "FAIL",
+    "combined_cell": "FAIL",
+    "combined_no_memory": "PASS"
+  }
+}
